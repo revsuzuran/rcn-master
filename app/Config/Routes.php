@@ -35,14 +35,32 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
-$routes->post('mantab', 'Home::do_upload_csv');
+$routes->get('/login', 'Login::login');
+$routes->post('/do_auth', 'Login::do_auth');
+// $routes->post('mantab', 'Home::do_upload_csv');
 
+$routes->get('/', 'Rekon::data_rekon_master');
 $routes->get('rekon', 'Rekon::data_rekon_master');
 $routes->get('rekon/add', 'Rekon::add_rekon_master');
 $routes->post('rekon/upload', 'Rekon::upload_data_rekon');
 $routes->post('rekon/save_delimiter', 'Rekon::save_delimiter');
 $routes->post('rekon/save_cleansing', 'Rekon::save_cleansing');
+$routes->get('rekon/add_rekon_next', 'Rekon::add_rekon_next');
+$routes->get('rekon/add_rekon_data_to_compare', 'Rekon::add_rekon_data_to_compare');
+$routes->post('rekon/add_kolom_compare', 'Rekon::add_kolom_compare');
+$routes->post('rekon/rm_kolom_compare', 'Rekon::rm_kolom_compare');
+$routes->post('rekon/add_kolom_sum', 'Rekon::add_kolom_sum');
+$routes->post('rekon/rm_kolom_sum', 'Rekon::rm_kolom_sum');
+$routes->get('rekon/add_rekon_preview', 'Rekon::add_rekon_preview');
+$routes->get('rekon/add_rekon_finish', 'Rekon::add_rekon_finish');
+$routes->post('rekon/save_compare', 'Rekon::save_compare');
+$routes->get('rekon/add_rekon_preview_sum', 'Rekon::add_rekon_preview_sum');
+$routes->post('rekon/save_compare_sum', 'Rekon::save_compare_sum');
+$routes->get('rekon/add_rekon_finish', 'Rekon::add_rekon_finish');
+$routes->get('rekon/rekon_result', 'Rekon::rekon_result');
+$routes->post('rekon/rekon_result_post', 'Rekon::rekon_result_post');
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

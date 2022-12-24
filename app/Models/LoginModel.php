@@ -4,31 +4,31 @@ namespace App\Models;
 
 use App\Libraries\DatabaseConnector;
 
-class RekonBuffDetail {
-    private $rekon_buff_detail;
+class LoginModel {
+    private $login;
 
     function __construct() {
         $connection = new DatabaseConnector();
         $database = $connection->getDatabase();
-        $this->rekon_buff_detail = $database->rekon_buff_detail;
+        $this->login = $database->user_data;
     }
 
-    function getRekons($id_rekon, $tipe, $limit = 10) {
+    function getUser() {
         try {
-            $cursor = $this->rekon_buff_detail->find(['id_rekon' => $id_rekon, "tipe" => $tipe], ['limit' => $limit]);
-            $rekons = $cursor->toArray();
+            $cursor = $this->login->find([], ['limit' => 0]);
+            $usr = $cursor->toArray();
 
-            return $rekons;
+            return $usr;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
         }
     }
 
-    function getRekon($id) {
+    function getUserOne($uname, $pwd) {
         try {
-            $rekon = $this->rekon_buff_detail->findOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+            $usr = $this->login->findOne(['username' => $uname, 'password' => $pwd]);
 
-            return $rekon;
+            return $usr;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while fetching rekon with ID: ' . $id . $ex->getMessage(), 500);
         }
@@ -36,7 +36,7 @@ class RekonBuffDetail {
 
     function insertRekon($title, $author, $pages) {
         try {
-            $insertOneResult = $this->rekon_buff_detail->insertOne([
+            $insertOneResult = $this->collection->insertOne([
                 'title' => $title,
                 'author' => $author,
                 'pages' => $pages,
@@ -55,7 +55,7 @@ class RekonBuffDetail {
 
     function insertRekonMany($data) {
         try {
-            $insertOneResult = $this->rekon_buff_detail->insertMany($data);
+            $insertOneResult = $this->collection->insertMany($data);
 
             if($insertOneResult->getInsertedCount() == 1) {
                 return true;
@@ -69,7 +69,7 @@ class RekonBuffDetail {
 
     function updateRekon($id, $title, $author, $pagesRead) {
         try {
-            $result = $this->rekon_buff_detail->updateOne(
+            $result = $this->collection->updateOne(
                 ['_id' => new \MongoDB\BSON\ObjectId($id)],
                 ['$set' => [
                     'title' => $title,
@@ -90,7 +90,7 @@ class RekonBuffDetail {
 
     function deleteRekon($id) {
         try {
-            $result = $this->rekon_buff_detail->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+            $result = $this->collection->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
 
             if($result->getDeletedCount() == 1) {
                 return true;
@@ -100,20 +100,38 @@ class RekonBuffDetail {
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while deleting a rekon with ID: ' . $id . $ex->getMessage(), 500);
         }
-    }    
+    }
 
-    function deleteRekonMany($id, $tipe) {
+    function insertRekonMaster($namaRekon, $idRekon) {
         try {
-            $result = $this->rekon_buff_detail->deleteMany(['id_rekon' => $id, "tipe" => $tipe]);
+            $insertOneResult = $this->collection->insertOne([
+                'id_rekon' => $idRekon,
+                'nama_rekon' => $namaRekon
+            ]);
 
-            if($result->getDeletedCount() == 1) {
+            if($insertOneResult->getInsertedCount() == 1) {
                 return true;
             }
 
             return false;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while deleting a rekon with ID: ' . $id . $ex->getMessage(), 500);
+            show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
         }
-    }    
+    }
+
+    function getNextSequenceRekon(){
+        global $collection;
+        
+        $retval = $collection->findAndModify(
+            array('_id' => 'id_rekon'),
+            array('$inc' => array("seq" => 1)),
+            null,
+            array(
+                "new" => true,
+            )
+        );
+        return $retval['seq'];
+    }
+    
     
 }

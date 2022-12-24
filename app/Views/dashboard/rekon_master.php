@@ -1,5 +1,3 @@
-
-
 <!-- Container Fluid-->
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -9,41 +7,61 @@
     <div class="row mb-3">
 
 
-        <!-- Invoice Example -->
+        <!-- tables -->
         <div class="col-lg-12">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
-                  <h6 class="m-0 font-weight-bold text-light">Data Ucapan</h6>
+                  <h6 class="m-0 font-weight-bold text-light">Data Rekon</h6>
                 </div>
                 <div class="table-responsive p-3">
                   <table class="table align-items-center table-flush" id="dataTable">
                     <thead class="thead-light">
                       <tr>
-                        <th>Email</th>
-                        <th>Domain</th>
-                        <th>Exp</th>
+                        <th>No</th>
+                        <th>Nama Rekon</th>
+                        <th>Date</th>
                         <th>Status</th>
                         <th>Aksi</th>
                       </tr>
                     </thead>
                     <tfoot>
                       <tr>
-                        <th>Email</th>
-                        <th>Domain</th>
-                        <th>Exp</th>
+                        <th>No</th>
+                        <th>Nama Rekon</th>
+                        <th>Date</th>
                         <th>Status</th>
                         <th>Aksi</th>
                       </tr>
                     </tfoot>
                     <tbody>
-                    
-                      
+                      <?php
+                      $no = 1;
+                      foreach ($data_rekon as $row) {
+                        if (!isset($row['is_proses'])) continue; 
+                        
+                        if($row['is_proses'] == "pending") {
+                          $status = '<p style="background: #ffc107;display: inline;padding: 4px 10px;border-radius: 5px;" type="button">Pending</p>';
+                          $btnAct = "-";
+                        } else if($row['is_proses'] == "sukses") {
+                          $status = '<p style="background: #66bb6a;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Sukses</p>';
+                          $btnAct = "<button class='btn btn-primary btn-sm' type='button' data-id='". $row['id_rekon'] ."' id='btnShowResult'>Detail</button>";
+                        }
+                        
+                      ?> 
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td><?= $row['nama_rekon'] ?></td>     
+                            <td><?= $row['timestamp'] ?></td>  
+                            <td><?= $status; ?></td>  
+                            <td><?= $btnAct ?></td>                      
+                        </tr>
+                      <?php } ?>
                     </tbody>
                   </table>
                 </div>
               </div>
         </div>
-        <!-- Message From Customer-->
+        <!-- tables-->
        
     </div>
     <!--Row-->
@@ -75,26 +93,16 @@
 
 <script>
   
+    $('#btnShowResult').on('click', function(event) {
+        var id_rekon= $(this).data('id');
 
-    $('.hapus').on('click', function (event) {
-        var iduser = $(this).data('id');
-        $(".modal-body #iduser").val( iduser );
-    });
-
-    $('#hapusBtn').on('click', function(event) {
-
-        var id = $('#iduser').val();
-    
         $.ajax({
-            url : "<?= base_url('admin/hapus_user') ?>",
+            url : "<?= base_url('rekon/rekon_result_post') ?>",
             method : "POST",
-            data : {id: id},
+            data : {id_rekon: id_rekon},
             async : true,
-            dataType : 'html',
             success: function($hasil){
-               if($hasil == 'sukses'){
-                location.reload();
-               }
+                window.location.replace("<?= base_url('rekon/rekon_result') ?>");
             }
         });
     });

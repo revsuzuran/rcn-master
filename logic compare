@@ -1,0 +1,90 @@
+const compareOption = [
+    {
+        rule : "equals",
+        kolom : "0",
+        kolom_to_compare : "1"
+    },
+    {
+        rule : "equals",
+        kolom : "1",
+        kolom_to_compare : "1"
+    }
+]
+
+const dataSatu = [
+    {
+        index : 1,
+        data_row : ["123","456","789","111","112","555"],
+        tipe : 1
+    },
+    {
+        index : 2,
+        data_row : ["12","456","789","111","112","555"],
+        tipe : 1
+    },
+    {
+        index : 3,
+        data_row : ["12","456","789","111","112","555"],
+        tipe : 1
+    }
+]
+
+const data2 = [
+    {
+        index : 1,
+        data_row : ["123","456","789","111","112","555"],
+        tipe : 2
+    },
+    {
+        index : 2,
+        data_row : ["13","456","789","111","112","555"],
+        tipe : 2
+    },
+    {
+        index : 3,
+        data_row : ["12","456","789","111","112","555"],
+        tipe : 2
+    }
+]
+
+const unMatch = [];
+const matchIndex = [];
+
+for (const [index, value] of dataSatu.entries()) { 
+    const dataRow = value.data_row;
+    let isCocok = false;
+    for (const [ind2, val2] of data2.entries()) { 
+        
+        if(matchIndex.includes(val2.index)) continue;
+
+        for (const [indexCompare, valCompare] of compareOption.entries()) { 
+            const dataDua = val2.data_row[valCompare.kolom];
+            const dataSatu = dataRow[valCompare.kolom]
+            if(dataSatu == dataDua) {
+                console.log("#" + valCompare.kolom + " - " + value.index + " cocok dengan " + val2.index + " => " + dataSatu + "=" + dataDua);
+                isCocok = true;
+            } else {
+                isCocok = false;
+                console.log("#" + valCompare.kolom + " - " + value.index + " tidak cocok dengan " + val2.index + " => " + dataSatu + "=" + dataDua);
+                break;
+                
+            }
+        }
+        if(isCocok) {
+            matchIndex.push(val2.index)
+            break;
+        } 
+        
+    }
+    console.log(isCocok)
+    if(!isCocok) {
+        unMatch.push(
+            {
+                index : value.index,
+                value : value.data_row
+            })
+    }
+}
+
+console.log(unMatch)
+// console.log(matchIndex)

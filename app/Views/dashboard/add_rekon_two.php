@@ -8,24 +8,17 @@
 
     <div class="row mb-3">
       <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/upload'); ?>">
-          <div class="col-12">
+          <div class="col-6">
             <div class="card mb-4">
                 <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
-                      <h6 class="m-0 font-weight-bold text-light">Input Data Rekon</h6>
+                      <h6 class="m-0 font-weight-bold text-light">Input Data Rekon #2</h6>
                 </div>
                 <div class="card-body">
                 
                   <div class="row mb-3">
-                  
-                    <div class="col-lg-6">
-                      <div class="form-group">
-                          <label class="form-label">Nama Rekon</label>
-                          <input name="namaRekon" type="text" class="form-control" placeholder="ex : Rekon Bank Indonesia" value="" required>
-                      </div>
-                    </div>
 
                     <div class="col-lg-6">
-                      <label class="form-label">Sample File Rekon 1</label>
+                      <label class="form-label">Sample File Rekon #2</label>
                       <div class="form-group">
                         <div class="custom-file">
                           <input type="file" name="csvFile" id="csvFile" accept=".csv">
@@ -41,7 +34,7 @@
               </div>
             </div>
           </div>
-        <input name="tipe" type="text" class="form-control" value="1" hidden>
+        <input name="tipe" type="text" class="form-control" value="2" hidden>
       </form>
     </div>
     <!--Row-->

@@ -4,23 +4,21 @@ namespace App\Models;
 
 use App\Libraries\DatabaseConnector;
 
-class RekonBuff {
-    private $rekon_buff;
-    private $rekon_buff_seq;
+class RekonResult {
+    private $rekon_result;
 
     function __construct() {
         $connection = new DatabaseConnector();
         $database = $connection->getDatabase();
-        $this->rekon_buff = $database->rekon_buff;
-        $this->rekon_buff_seq = $database->rekon_buff_seq;
+        $this->rekon_result = $database->rekon_result;
     }
 
     function getRekons($limit = 10) {
         try {
-            $cursor = $this->rekon_buff->find([], ['limit' => $limit]);
+            $cursor = $this->rekon_result->find([], ['limit' => $limit]);
             $rekon = $cursor->toArray();
 
-            return $rekons;
+            return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
         }
@@ -28,7 +26,8 @@ class RekonBuff {
 
     function getRekon($id) {
         try {
-            $rekon = $this->rekon_buff->findOne(['id_rekon' => (int)  $id]);
+            $rekon = $this->rekon_result->find(['id_rekon' => (int) $id]);
+            $rekon = $rekon->toArray();
 
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
@@ -38,7 +37,7 @@ class RekonBuff {
 
     function getRekonAll($limit = 10) {
         try {
-            $cursor = $this->rekon_buff->find([], ['limit' => $limit]);
+            $cursor = $this->rekon_result->find([], ['limit' => $limit]);
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -49,7 +48,7 @@ class RekonBuff {
 
     function insertRekon($namaRekon, $idRekon) {
         try {
-            $insertOneResult = $this->rekon_buff->insertOne([
+            $insertOneResult = $this->rekon_result->insertOne([
                 'id_rekon' => $idRekon,
                 'nama_rekon' => $namaRekon,
                 'kolom_compare' => array(),
@@ -70,7 +69,7 @@ class RekonBuff {
 
     function updateRekon($id, $data) {
         try {
-            $result = $this->rekon_buff->updateOne(
+            $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id],
                 ['$set' => $data ]
             );
@@ -87,7 +86,7 @@ class RekonBuff {
 
     function updateRekonPush($id, $data) {
         try {
-            $result = $this->rekon_buff->updateOne(
+            $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id],
                 ['$push' => $data ]
             );
@@ -104,7 +103,7 @@ class RekonBuff {
 
     function deleteRekon($id) {
         try {
-            $result = $this->rekon_buff->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+            $result = $this->rekon_result->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
 
             if($result->getDeletedCount() == 1) {
                 return true;
@@ -118,7 +117,7 @@ class RekonBuff {
 
     function deleteKolomCompare($id_rekon, $tipe, $kolomIndex, $kolomName) {
         try {
-            $result = $this->rekon_buff->updateOne(
+            $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id_rekon],
                 ['$pull' => 
                     [
@@ -143,7 +142,7 @@ class RekonBuff {
 
     function deleteKolomSum($id_rekon, $tipe, $kolomIndex, $kolomName) {
         try {
-            $result = $this->rekon_buff->updateOne(
+            $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id_rekon],
                 ['$pull' => 
                     [
@@ -166,14 +165,5 @@ class RekonBuff {
         }
     }
 
-
-    function getNextSequenceRekon(){     
-        $ret = $this->rekon_buff_seq->findOneAndUpdate(
-            array("_id" => "id_rekon"),
-            array('$inc' => array("seq" => 1)),
-            array("new" => true, "upsert" => true)
-        );
-        return $ret->seq;
-    }
     
 }

@@ -25,30 +25,25 @@
 <div id="wrapper">
     <!-- Sidebar -->
     <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url('dashboard'); ?>">
-            <div class="sidebar-brand-icon">
-                <!-- <img src="<?= base_url('assets/base'); ?>/img/logo2.png"> -->
-            </div>
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url('rekon'); ?>">
+        <div style="font-size: 20px;" class="sidebar-brand-icon fw-lighter">R
+                        <!-- <img src="http://localhost:8082/assets/base/img/logo2.png"> -->
+        </div>
             <div class="sidebar-brand-text mx-3"><?= SITE_NAME; ?></div>
         </a>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('admin/dashboard'); ?>">
+            <a class="nav-link" href="<?= base_url('rekon'); ?>">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
+                <span>Data Rekon</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('admin/pengguna'); ?>">
-                <i class="fas fa-fw fa-user-alt"></i>
-                <span>Data Pengguna</span></a>
+            <a class="nav-link" href="<?= base_url('rekon/add'); ?>">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Add Data Rekon</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('admin/pembayaran'); ?>">
-                <i class="fas fa-fw fa-money-bill-alt"></i>
-                <span>Data Pembayaran</span></a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('admin/setting'); ?>">
+            <a class="nav-link" href="<?= base_url('#'); ?>">
                 <i class="fas fa-cogs"></i>
                 <span>Setting</span></a>
         </li>
@@ -61,10 +56,10 @@
         <div id="content">
             <!-- TopBar -->
             <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
-                <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
+                <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3" style="color: #fff;">
                     <i class="fa fa-bars"></i>
                 </button>
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ms-auto">
                     <div class="topbar-divider d-none d-sm-block"></div>
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,12 +67,12 @@
                             <span class="ml-2 d-none d-lg-inline text-white small"><?= $_SESSION['uname'] ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="<?= base_url('admin/profil') ?>">
+                            <a class="dropdown-item" href="<?= base_url('#') ?>">
                                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profil
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="<?= base_url('logout') ?>">
+                            <a class="dropdown-item" href="<?= base_url('#') ?>">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </a>
@@ -86,6 +81,16 @@
                 </ul>
             </nav>
             <!-- Topbar -->
+            <?php
+
+                function rupiah($angka){
+                    
+                    $hasil_rupiah = "Rp " . number_format($angka,0,',','.');
+                    return $hasil_rupiah;
+                
+                }
+
+            ?>
 
             <!-- DATA BODY -->
             <?php 
@@ -114,25 +119,6 @@
 </a>
 
 
-    <!-- modal upload croppie -->
-    <div class="modal" id="myModal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Foto Mempelai</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div id="resizer"></div>
-                    <hr>
-                    <button class="btn btn-block btn-dark" id="upload" > 
-                    Upload</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 <script src="<?= base_url('assets/dashboard'); ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url('assets/dashboard'); ?>/vendor/jquery-easing/jquery.easing.min.js"></script>
