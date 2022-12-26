@@ -554,9 +554,10 @@ class Rekon extends BaseController
             $toKolName = "KOLOM " . ((int) $toKolIndex + 1);
         }
 
-        if($toKolIndex == "" || $toKolIndex == null) {
+        if($rule == null) {
             return $this->add_rekon_preview();
         }
+        
 
         $objData = array(
             "kolom_index" => $kolIndex,
@@ -567,7 +568,7 @@ class Rekon extends BaseController
             "to_compare_index" => $toKolIndex,
             "to_compare_name" => $toKolName,
         );
-
+        
         $dataSave = array(
             "kolom_compare" => $objData
         );
