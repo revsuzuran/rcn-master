@@ -37,7 +37,7 @@
                       <?php
                       $no = 1;
                       foreach ($data_rekon as $row) {
-                        if (!isset($row['is_proses']) != "") continue; 
+                        if (!isset($row['is_proses']) || $row['is_proses'] == "") continue; 
                         
                         if($row['is_proses'] == "pending") {
                           $status = '<p style="background: #ffc107;display: inline;padding: 4px 10px;border-radius: 5px;" type="button">Pending</p>';
