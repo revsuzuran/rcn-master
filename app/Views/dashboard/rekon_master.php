@@ -37,7 +37,7 @@
                       <?php
                       $no = 1;
                       foreach ($data_rekon as $row) {
-                        if (!isset($row['is_proses'])) continue; 
+                        if (!isset($row['is_proses']) != "") continue; 
                         
                         if($row['is_proses'] == "pending") {
                           $status = '<p style="background: #ffc107;display: inline;padding: 4px 10px;border-radius: 5px;" type="button">Pending</p>';
@@ -45,6 +45,9 @@
                         } else if($row['is_proses'] == "sukses") {
                           $status = '<p style="background: #66bb6a;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Sukses</p>';
                           $btnAct = "<button class='btn btn-primary btn-sm' type='button' data-id='". $row['id_rekon'] ."' id='btnShowResult'>Detail</button>";
+                        } else {
+                          $status = "";
+                          $btnAct = "-";
                         }
                         
                       ?> 

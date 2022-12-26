@@ -553,9 +553,10 @@ class Rekon extends BaseController
             $toKolIndex = $this->request->getPost('kolom_compare_dua2');
             $toKolName = "KOLOM " . ((int) $toKolIndex + 1);
         }
-        
-        
 
+        if($toKolIndex == "" || $toKolIndex == null) {
+            return $this->add_rekon_preview();
+        }
 
         $objData = array(
             "kolom_index" => $kolIndex,
