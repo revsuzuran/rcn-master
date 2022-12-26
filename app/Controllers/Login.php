@@ -45,7 +45,7 @@ class Login extends BaseController
     {
 
         // init data first time;
-        $this->login_model->getUserOne($uname, $pwd);
+        // $this->login_model->getUserOne($uname, $pwd);
 
         if(session()->has('masukAdmin'))
         {
