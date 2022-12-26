@@ -44,7 +44,10 @@
                           $btnAct = "-";
                         } else if($row['is_proses'] == "sukses") {
                           $status = '<p style="background: #66bb6a;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Sukses</p>';
-                          $btnAct = "<button class='btn btn-primary btn-sm' type='button' data-id='". $row['id_rekon'] ."' id='btnShowResult'>Detail</button>";
+                          $btnAct = "<button class='btn btn-primary btn-sm btnShowResult' type='button' data-id='". $row['id_rekon'] ."' id='btnShowResult'>Detail</button>";
+                        } else if($row['is_proses'] == "proses") {
+                          $status = '<p style="background: #6777ef;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Sukses</p>';
+                          $btnAct = "<button class='btn btn-primary btn-sm btnShowResult' type='button' data-id='". $row['id_rekon'] ."' id='btnShowResult'>Detail</button>";
                         } else {
                           $status = "";
                           $btnAct = "-";
@@ -96,7 +99,7 @@
 
 <script>
   
-    $('#btnShowResult').on('click', function(event) {
+    $('.btnShowResult').on('click', function(event) {
         var id_rekon= $(this).data('id');
 
         $.ajax({

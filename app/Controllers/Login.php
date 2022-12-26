@@ -6,7 +6,7 @@ use App\Models\LoginModel;
 class Login extends BaseController
 {
     public function __construct() {
-        //mengisi variable global dengan data
+        // mengisi variable global dengan data
         $this->session = session();
 		$this->request = \Config\Services::request(); //memanggil class request
         $this->uri = $this->request->uri; //class request digunakan untuk request uri/url
@@ -18,7 +18,6 @@ class Login extends BaseController
         $uname = $this->request->getPost('uname');
         $pwd = md5($this->request->getPost('password'));
         $hasil = $this->login_model->getUserOne($uname, $pwd);
-        var_dump($hasil);
         if(isset($hasil->name))
         {
             // set session
@@ -44,6 +43,10 @@ class Login extends BaseController
 
     public function login()
     {
+
+        // init data first time;
+        $this->login_model->getUserOne($uname, $pwd);
+
         if(session()->has('masukAdmin'))
         {
         	return redirect()->to(base_url());

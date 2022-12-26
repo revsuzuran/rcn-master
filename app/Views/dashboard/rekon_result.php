@@ -106,7 +106,7 @@
                   <h6 class="m-0 font-weight-bold text-light">Data Unmatch Rekon #2</h6>
               </div>
               <div class="table-responsive p-3">
-                <table class="table align-items-center table-flush" id="dataTable">
+                <table class="table align-items-center table-flush" id="dataTable2">
                   <thead class="table-dark">
                     <tr>
                       <th>No</th>
