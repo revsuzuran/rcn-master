@@ -133,7 +133,7 @@
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                           <input type="text" name="tipe" class="form-check-input" value="1" hidden>
-                          <button class="btn btn-danger" type="submit" id="saveCompareDataSatu">Save & Preview</button>
+                          <button class="btn btn-secondary" type="submit" id="saveCompareDataSatu">Save & Preview</button>
                         </div>
                   
                   </div>
@@ -270,8 +270,9 @@
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                           <input type="text" name="tipe" class="form-check-input" value="2" hidden>
-                          <button class="btn btn-danger" type="submit" id="saveCompareDataDua">Save & Preview</button>
-                          <a class="btn btn-primary" href="<?php echo base_url('rekon/add_rekon_preview_sum');?>" id="btnNext">NEXT</a>
+                          <button class="btn btn-secondary" type="submit" id="saveCompareDataDua">Save & Preview</button>
+                          <a href="<?php echo base_url('rekon/add_compare');?>" class="btn btn-danger">Kembali</a>  
+                          <a class="btn btn-primary" href="<?php echo base_url('rekon/rekon_preview_sum');?>" id="btnNext">Next</a>
                         </div>
 
                   </div>

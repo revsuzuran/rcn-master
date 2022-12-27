@@ -130,7 +130,8 @@ foreach ($data_csv as $row) {
                 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                   <button class="btn btn-secondary me-md-2" id="btn_save_preview" type="submit">Save & Preview</button>
-                  <a href="<?php echo base_url('rekon/add_rekon_data_to_compare');?>" class="btn btn-primary">Next</a>
+                  <a href="<?php echo base_url('rekon/delimiter');?>" class="btn btn-danger">Kembali</a>  
+                  <a href="<?php echo base_url('rekon/add_compare');?>" class="btn btn-primary">Next</a>
                 </div>
               </div>
             </div>
@@ -140,7 +141,9 @@ foreach ($data_csv as $row) {
           <div class="col-lg-12">
                 <div class="card mb-4">
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
-                    <h6 class="m-0 font-weight-bold text-light">Data Rekon</h6>
+                    <h6 class="m-0 font-weight-bold text-light">Data Rekon Preview (20 Data)</h6>
+                    <a href="<?php echo base_url('rekon/cleansing_data/all');?>" class="btn btn-sm btn-light me-md-2">Show All Data</a>
+                    <!-- <button class="btn btn-sm btn-light me-md-2" type="button" onclick="history.back()">Show All Data</button>    -->
                   </div>
                   <div class="table-responsive p-3">
                     <table class="table align-items-center table-flush" id="dataTable">

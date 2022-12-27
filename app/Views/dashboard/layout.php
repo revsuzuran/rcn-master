@@ -15,13 +15,27 @@
     <link href="<?= base_url('assets/dashboard/'); ?>/vendor/datatables/datatables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/base/css/croppie.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/base/css/pikaday.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <script src="<?= base_url() ?>/assets/base/js/moment-with-locales.js"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/jquery/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="<?= base_url('assets/dashboard'); ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body id="page-top">
+
+<div class="toast align-items-center text-white bg-danger toast-container position-absolute top-0 end-0 m-3" data-bs-animation="true" data-bs-autohide="true" data-bs-delay="3500" role="alert" aria-live="assertive" aria-atomic="true" id="toastError" style="z-index: 99999;background:#fc544bee !important;">
+  <div class="d-flex">
+    <div class="toast-body">
+        <div class="card-body p-2">
+            <span class="fs-6 text-white fw-bolder">Oops!</span>
+            <div class="text-white-60 message-error fs-6"></div>
+        </div>
+    </div>
+  </div>
+</div>
+
 <div id="wrapper">
     <!-- Sidebar -->
     <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
@@ -43,9 +57,16 @@
                 <span>Add Data Rekon</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('#'); ?>">
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
                 <i class="fas fa-cogs"></i>
                 <span>Setting</span></a>
+            </a>
+            <div id="collapseBootstrap" class="collapse dropdown-menu" aria-labelledby="headingBootstrap" data-bs-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="<?= base_url('setting_ftp'); ?>">FTP</a>
+                    <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
+                </div>
+            </div>
         </li>
         <hr class="sidebar-divider">
         <div class="version" ><?= SITE_NAME ?> @ Version 1.0</div>
@@ -62,7 +83,7 @@
                 <ul class="navbar-nav ms-auto">
                     <div class="topbar-divider d-none d-sm-block"></div>
                     <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img class="img-profile rounded-circle" src="<?= base_url('assets/dashboard'); ?>/img/boy.png" style="max-width: 60px">
                             <span class="ml-2 d-none d-lg-inline text-white small"><?= $_SESSION['uname'] ?></span>
                         </a>
@@ -120,7 +141,6 @@
 
 
 
-<script src="<?= base_url('assets/dashboard'); ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="<?= base_url('assets/dashboard'); ?>/vendor/jquery-easing/jquery.easing.min.js"></script>
 <script src="<?= base_url('assets/dashboard'); ?>/vendor/datatables/datatables.min.js"></script>
 <script src="<?= base_url('assets/dashboard'); ?>/js/ruang-admin.js"></script>
@@ -128,9 +148,19 @@
 <!-- cart -->
 <script src="<?= base_url('assets/dashboard'); ?>/vendor/chart.js/Chart.min.js"></script>
 <script src="<?= base_url('assets/dashboard'); ?>/js/demo/chart-area-demo.js"></script>
-
+<?php $isError = isset($_SESSION['error']) ? $_SESSION['error'] : ""; ?>
 <!-- Page level custom scripts -->
 <script>
+
+    const isError = "<?= $isError ?>";
+    if(isError != "") {
+        var myToastEl = document.getElementById('toastError')
+        var myToast = bootstrap.Toast.getOrCreateInstance(myToastEl) 
+        myToast.show()
+        $(".message-error").text(isError);
+    }
+
+
  $(document).ready(function () {
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTable2').DataTable(); // ID From dataTable

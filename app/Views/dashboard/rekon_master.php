@@ -19,7 +19,7 @@
                       <tr>
                         <th>No</th>
                         <th>Nama Rekon</th>
-                        <th>Date</th>
+                        <th>Tanggal Submit</th>
                         <th>Status</th>
                         <th>Aksi</th>
                       </tr>
@@ -28,7 +28,7 @@
                       <tr>
                         <th>No</th>
                         <th>Nama Rekon</th>
-                        <th>Date</th>
+                        <th>Tanggal Submit</th>
                         <th>Status</th>
                         <th>Aksi</th>
                       </tr>
@@ -46,8 +46,8 @@
                           $status = '<p style="background: #66bb6a;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Sukses</p>';
                           $btnAct = "<button class='btn btn-primary btn-sm btnShowResult' type='button' data-id='". $row['id_rekon'] ."' id='btnShowResult'>Detail</button>";
                         } else if($row['is_proses'] == "proses") {
-                          $status = '<p style="background: #6777ef;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Sukses</p>';
-                          $btnAct = "<button class='btn btn-primary btn-sm btnShowResult' type='button' data-id='". $row['id_rekon'] ."' id='btnShowResult'>Detail</button>";
+                          $status = '<p style="background: #6777ef;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Sedang Proses</p>';
+                          $btnAct = "-";
                         } else {
                           $status = "";
                           $btnAct = "-";

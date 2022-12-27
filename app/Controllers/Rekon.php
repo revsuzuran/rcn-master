@@ -5,16 +5,22 @@ use App\Models\RekonBuff;
 use App\Models\RekonBuffDetail;
 use App\Models\RekonResult;
 use App\Models\RekonUnmatch;
+use App\Models\DataModels;
+
 
 class Rekon extends BaseController
 {
     public function __construct() {
         //mengisi variable global dengan data
+        $this->request = \Config\Services::request(); 
         $this->session = session();
         $this->rekon_buff = new RekonBuff();
         $this->rekon_buff_detail = new RekonBuffDetail();
         $this->rekon_result = new RekonResult();
         $this->rekon_unmatch = new RekonUnmatch();
+        $this->ftp_model = new DataModels();
+
+		$this->uri = $this->request->uri;
     }
 
     public function index()
@@ -44,9 +50,31 @@ class Rekon extends BaseController
     }
 
     public function upload_data_rekon() {
-        $csv = $this->request->getFile('csvFile');
         $namaRekon =$this->request->getPost('namaRekon');
         $tipe = $this->request->getPost('tipe');
+        $radioTipe = $this->request->getPost('radioUpload');
+
+        $dataFtp = $this->ftp_model->getFtp();
+        
+        if($radioTipe == "ftp") {
+            try {
+                $namaFile = $this->request->getPost('nama_file') ;
+                $source = "$namaFile.csv";
+                $target = fopen($source, "w");
+                $conn = ftp_connect($dataFtp[0]->domain) or die("Could not connect");
+                
+                ftp_login($conn,$dataFtp[0]->username,$dataFtp[0]->password);
+                ftp_fget($conn,$target,$source,FTP_ASCII);
+                $csv = $source;
+            } catch (\Throwable $th) {
+                $this->session->setFlashdata('error', 'FTP Error! Failed to get file or file not found');
+                if($tipe == 1) return redirect()->to(base_url('rekon/add'));
+                else return redirect()->to(base_url('rekon/add_rekon_next'));
+            }
+            
+        } else {
+            $csv = $this->request->getFile('csvFile');
+        }
 
         if($tipe == 1) {
             /* Create New Rekon and Save Id to Sessions */
@@ -61,13 +89,16 @@ class Rekon extends BaseController
         /* Save Tipe */
         $this->session->set('tipe', $tipe);
 
+        if($csv == "") {
+            $this->session->setFlashdata('error', 'Failed to process file!');
+            if($tipe == 1) return redirect()->to(base_url('rekon/add'));
+            else return redirect()->to(base_url('rekon/add_rekon_next'));
+        }
+
         $file = file($csv);
         $arrData = array();
         $strDataPreview = "";
         foreach($file as $key => $hehe) {
-            // $dataArr = explode("\n",$hehe);
-            // echo $hehe . "================";
-            // echo json_encode(str_getcsv($hehe, ","));
             $drow = array(
                 "data_asli" => $hehe,
                 "data_string" => $hehe,
@@ -79,37 +110,29 @@ class Rekon extends BaseController
                 $strDataPreview .= $hehe . "\r\n";
             }
         }
-        // die();
 
-        
-
-        /* insert _buff data to Mongo DB  */
-        // $handle = fopen($csv,"r");
-        // $arrData = array();
-        // $strDataPreview = ""; // save data string to preview
-        // $countPreview = 0;
-        // while (($row = fgetcsv($handle)) != FALSE) //get row vales
-        // {
-        //     var_dump($row) . "\n";
-        //     $drow = array(
-        //         "data_asli" => implode(",", $row),
-        //         "data_string" => implode(",", $row),
-        //         "tipe" => $tipe,
-        //         "id_rekon" => $id_rekon
-        //     );
-        //     array_push($arrData, $drow);
-
-        //     if($countPreview < 20) {
-        //         $strDataPreview .= implode(",", $row) . "\r\n";
-        //     }
-        //     $countPreview++;
-
-        // }
-        // die();
+        $this->rekon_buff_detail->deleteRekonMany($id_rekon, $tipe);
         /* insert all rekon to detail */
         log_message('info', 'DO Writes To DATABASE...');
         $this->rekon_buff_detail->insertRekonMany($arrData);
         log_message('info', 'DONE.. Writes To DATABASE...');
+
+        return redirect()->to(base_url('rekon/delimiter'));
+
+       
+    }
+
+    public function add_rekon_delimiter() {
+        $id_rekon = $this->session->get('id_rekon');
+        $tipe = $this->session->get('tipe');
+        $dataRekon = $this->rekon_buff_detail->getRekons($id_rekon, $tipe);
+        // var_dump($id_rekon, $tipe);
+        $strDataPreview = "";
+        foreach($dataRekon as $key => $row) {
+            if($key < 20) {
+                $strDataPreview .= $row->data_asli . "\r\n";
+            }
+        }        
 
         $data['title'] = 'Add New Rekon';
         $data['view'] = 'dashboard/add_rekon_delimiter';
@@ -120,15 +143,13 @@ class Rekon extends BaseController
     public function save_delimiter() {
         $delimiter =$this->request->getPost('delimiter');
         $id_rekon = $this->session->get('id_rekon');
-        // $sampleCsv = $this->request->getPost('sampleCsv');
         $tipe = $this->session->get('tipe');
 
         $sampleCsv = $this->rekon_buff_detail->getRekons($id_rekon, $tipe, 0);
-        // echo json_encode($sampleCsv);
+        
         /* Split data and save to Array to preview in tables */
         $dataCsvArr = array();
         $dataCsvSample = array();
-        // $arrRow = explode("\r\n", $sampleCsv);
         foreach ($sampleCsv as $key => $valueRow) {
             $dataObj = str_getcsv($valueRow->data_asli, $delimiter);
 
@@ -164,6 +185,33 @@ class Rekon extends BaseController
             "delimiter" => $delimiter
         );
         $this->rekon_buff->updateRekon($id_rekon, $data);
+
+        return redirect()->to(base_url('rekon/cleansing_data'));
+    }
+
+    public function cleansing_data() {
+        $id_rekon = $this->session->get('id_rekon');
+        $tipe = $this->session->get('tipe');
+        $limit = $this->uri->getSegment(3);
+        // die($limit);
+        if($limit == "all") {
+            $sampleCsv = $this->rekon_buff_detail->getRekons($id_rekon, $tipe, 0);
+        } else {
+            $sampleCsv = $this->rekon_buff_detail->getRekons($id_rekon, $tipe, 20);
+        }
+        
+        $dataCsvSample = array();
+        foreach ($sampleCsv as $key => $valueRow) {
+            /* untuk preview sample */
+            if($limit != "all") {
+                if($key < 20) {
+                    array_push($dataCsvSample, $valueRow);
+                }
+            } else {
+                array_push($dataCsvSample, $valueRow);
+            }           
+            
+        }
 
         /* Prepare Preview */
         $data['title'] = 'Add New Rekon';
@@ -523,7 +571,7 @@ class Rekon extends BaseController
         }
         
 
-        $data['title'] = 'Add New Rekon Preview';
+        $data['title'] = 'Compare Data';
         $data['view'] = 'dashboard/add_rekon_data_preview'; 
         $data['data_compare_satu'] = $dataKolomCompareArr; 
         $data['data_compare_satu_db'] = $dataRekon1DB; 
@@ -597,21 +645,23 @@ class Rekon extends BaseController
         $dataRekon1DB = $this->rekon_buff_detail->getRekons($id_rekon, "1", 5);
         $dataRekon2DB = $this->rekon_buff_detail->getRekons($id_rekon, "2", 5);
 
+        foreach($dataRekon->kolom_compare as $dataRow) {
+            if($dataRow->to_compare_index == "") {
+                $this->session->setFlashdata('error', 'Semua data wajib di compare');
+                return redirect()->to(base_url('rekon/rekon_preview'));
+            }
+        }
+
         /* Get Data Index Compare DB */
         $dataIndexCompare1DB = array();
         foreach($dataRekon->kolom_sum as $dataRow) {
+            
             if($dataRow->tipe == "1") array_push($dataIndexCompare1DB, $dataRow);
         }
         $dataIndexCompare2DB = array();
         foreach($dataRekon->kolom_sum as $dataRow) {
             if($dataRow->tipe == "2") array_push($dataIndexCompare2DB, $dataRow);
         }
-
-        // /* Get Data Index SUM DB */
-        // $dataKolomSumDB = array();
-        // foreach($dataRekon->kolom_sum as $dataRow) {
-        //     array_push($dataKolomSumDB, $dataRow);
-        // }
 
         /* collect data kolom compare */
         $dataKolomCompareArr = array();
@@ -640,7 +690,7 @@ class Rekon extends BaseController
         }
         
 
-        $data['title'] = 'Add New Rekon Preview (Data to SUM)';
+        $data['title'] = 'Compare Data Sum';
         $data['view'] = 'dashboard/add_rekon_data_preview_sum'; 
         $data['data_compare_satu'] = $dataKolomCompareArr; 
         $data['data_compare_satu_db'] = $dataRekon1DB; 
@@ -694,8 +744,19 @@ class Rekon extends BaseController
 
     public function add_rekon_finish() {
         $id_rekon = $this->session->get('id_rekon'); 
+
+
+        /* Get Data Rekon Master */
+        $dataRekon = $this->rekon_buff->getRekon($id_rekon);
+        foreach($dataRekon->kolom_sum as $dataRow) {
+            if($dataRow->to_compare_index == "") {
+                $this->session->setFlashdata('error', 'Semua data wajib di compare');
+                return redirect()->to(base_url('rekon/rekon_preview_sum'));
+            }
+        }
+
         $this->rekon_buff->updateRekon($id_rekon, ["is_proses" => "pending"]);
-        return $this->data_rekon_master();
+        return redirect()->to(base_url('rekon'));
     }
 
     public function rekon_result() {

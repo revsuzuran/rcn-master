@@ -38,6 +38,11 @@
                         </select>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <?php if ($_SESSION['tipe'] == "2") { ?>
+                        <a class="btn btn-danger me-md-2" href="<?php echo base_url('rekon/add_rekon_next');?>">Kembali</a>
+                        <?php } else {  ?>
+                        <a class="btn btn-danger me-md-2"  href="<?php echo base_url('rekon/add');?>">Kembali</a>
+                        <?php }  ?>
                         <button class="btn btn-primary me-md-2" type="submit">Next</button>
                     </div>
                 </div>

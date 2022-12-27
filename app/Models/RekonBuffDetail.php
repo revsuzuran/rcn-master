@@ -13,7 +13,7 @@ class RekonBuffDetail {
         $this->rekon_buff_detail = $database->rekon_buff_detail;
     }
 
-    function getRekons($id_rekon, $tipe, $limit = 10) {
+    function getRekons($id_rekon, $tipe, $limit = 0) {
         try {
             $cursor = $this->rekon_buff_detail->find(['id_rekon' => $id_rekon, "tipe" => $tipe], ['limit' => $limit]);
             $rekons = $cursor->toArray();

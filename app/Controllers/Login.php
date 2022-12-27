@@ -21,7 +21,7 @@ class Login extends BaseController
         if(isset($hasil->name))
         {
             // set session
-            $sess_data = array('masukAdmin' => TRUE, 'uname' => $hasil->name, 'uname_admin' => $hasil->name);
+            $sess_data = array('masukAdmin' => TRUE, 'uname' => $hasil->name, 'uname_admin' => $hasil->username);
             $this->session->set($sess_data);
             return redirect()->to(base_url());
             exit();

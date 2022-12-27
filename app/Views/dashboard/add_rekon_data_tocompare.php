@@ -97,9 +97,13 @@ foreach ($data_csv as $row) {
                         <?php if ($_SESSION['tipe'] == "2") {
                            ?>
                           <!-- <button class="btn btn-warning me-md-2" type="submit">Finish</button> -->
-                          <a href="<?php echo base_url('rekon/add_rekon_preview');?>" class="btn btn-warning">Next (Preview Data)</a>
+
+                          <a href="<?php echo base_url('rekon/cleansing_data');?>" class="btn btn-danger">Kembali</a>  
+                          <a href="<?php echo base_url('rekon/rekon_preview');?>" class="btn btn-warning">Next (Preview Data)</a>
                         <?php } else {  ?>
                           <!-- <button class="btn btn-primary me-md-2" type="submit">Next (Data #2)</button> -->
+
+                          <a href="<?php echo base_url('rekon/cleansing_data');?>" class="btn btn-danger">Kembali</a>  
                           <a href="<?php echo base_url('rekon/add_rekon_next');?>" class="btn btn-primary">Next (Data #2)</a>
 
                         <?php }  ?>

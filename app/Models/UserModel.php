@@ -4,33 +4,31 @@ namespace App\Models;
 
 use App\Libraries\DatabaseConnector;
 
-class DataModels {
-    private $buff_rekon;
-    private $ftp;
+class UserModel {
+    private $user;
 
     function __construct() {
         $connection = new DatabaseConnector();
         $database = $connection->getDatabase();
-        $this->buff_rekon = $database->buff_rekon;
-        $this->ftp = $database->ftp_data;
+        $this->user = $database->user_data;
     }
 
-    function getRekons($limit = 10) {
+    function getUser() {
         try {
-            $cursor = $this->collection->find([], ['limit' => $limit]);
-            $rekon = $cursor->toArray();
+            $cursor = $this->user->find([], ['limit' => 0]);
+            $usr = $cursor->toArray();
 
-            return $rekons;
+            return $usr;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
         }
     }
 
-    function getRekon($id) {
+    function getUserOne($uname) {
         try {
-            $rekon = $this->collection->findOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+            $usr = $this->user->findOne(['username' => $uname]);
 
-            return $rekon;
+            return $usr;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while fetching rekon with ID: ' . $id . $ex->getMessage(), 500);
         }
@@ -38,7 +36,7 @@ class DataModels {
 
     function insertRekon($title, $author, $pages) {
         try {
-            $insertOneResult = $this->collection->insertOne([
+            $insertOneResult = $this->user->insertOne([
                 'title' => $title,
                 'author' => $author,
                 'pages' => $pages,
@@ -57,7 +55,7 @@ class DataModels {
 
     function insertRekonMany($data) {
         try {
-            $insertOneResult = $this->collection->insertMany($data);
+            $insertOneResult = $this->user->insertMany($data);
 
             if($insertOneResult->getInsertedCount() == 1) {
                 return true;
@@ -69,16 +67,27 @@ class DataModels {
         }
     }
 
-    function updateRekon($id, $title, $author, $pagesRead) {
+    function updateUser($uname, $password, $name) {
         try {
-            $result = $this->collection->updateOne(
-                ['_id' => new \MongoDB\BSON\ObjectId($id)],
-                ['$set' => [
-                    'title' => $title,
-                    'author' => $author,
-                    'pagesRead' => $pagesRead,
-                ]]
-            );
+
+            if($password == "") {
+                $result = $this->user->updateOne(
+                    ['username' => $uname],
+                    ['$set' => [
+                        'username' => $uname,
+                        'name' => $name,
+                    ]]
+                );
+            } else {
+                $result = $this->user->updateOne(
+                    ['username' => $uname],
+                    ['$set' => [
+                        'username' => $uname,
+                        'password' => $password,
+                        'name' => $name,
+                    ]]
+                );
+            }
 
             if($result->getModifiedCount()) {
                 return true;
@@ -92,7 +101,7 @@ class DataModels {
 
     function deleteRekon($id) {
         try {
-            $result = $this->collection->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+            $result = $this->user->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
 
             if($result->getDeletedCount() == 1) {
                 return true;
@@ -106,7 +115,7 @@ class DataModels {
 
     function insertRekonMaster($namaRekon, $idRekon) {
         try {
-            $insertOneResult = $this->collection->insertOne([
+            $insertOneResult = $this->user->insertOne([
                 'id_rekon' => $idRekon,
                 'nama_rekon' => $namaRekon
             ]);
@@ -122,9 +131,9 @@ class DataModels {
     }
 
     function getNextSequenceRekon(){
-        global $collection;
+        global $user;
         
-        $retval = $collection->findAndModify(
+        $retval = $user->findAndModify(
             array('_id' => 'id_rekon'),
             array('$inc' => array("seq" => 1)),
             null,
@@ -135,35 +144,5 @@ class DataModels {
         return $retval['seq'];
     }
     
-    function getFtp() {
-        try {
-            $cursor = $this->ftp->find([]);
-            $rekon = $cursor->toArray();
-
-            return $rekon;
-        } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
-        }
-    }
     
-    function updateFtp($uname, $passw, $domain) {
-        try {
-            $result = $this->ftp->updateOne(
-                ['id_ftp' => 1],
-                ['$set' => [
-                    'username' => $uname,
-                    'password' => $passw,
-                    'domain' => $domain,
-                ]]
-            );
-
-            if($result->getModifiedCount()) {
-                return true;
-            }
-
-            return false;
-        } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while updating a rekon with ID: ' . $id . $ex->getMessage(), 500);
-        }
-    }
 }

@@ -44,21 +44,27 @@ $routes->get('rekon', 'Rekon::data_rekon_master');
 $routes->get('rekon/add', 'Rekon::add_rekon_master');
 $routes->post('rekon/upload', 'Rekon::upload_data_rekon');
 $routes->post('rekon/save_delimiter', 'Rekon::save_delimiter');
+$routes->get('rekon/cleansing_data/(:any)', 'Rekon::cleansing_data');
+$routes->get('rekon/cleansing_data', 'Rekon::cleansing_data');
 $routes->post('rekon/save_cleansing', 'Rekon::save_cleansing');
 $routes->get('rekon/add_rekon_next', 'Rekon::add_rekon_next');
-$routes->get('rekon/add_rekon_data_to_compare', 'Rekon::add_rekon_data_to_compare');
+$routes->get('rekon/add_compare', 'Rekon::add_rekon_data_to_compare');
 $routes->post('rekon/add_kolom_compare', 'Rekon::add_kolom_compare');
 $routes->post('rekon/rm_kolom_compare', 'Rekon::rm_kolom_compare');
 $routes->post('rekon/add_kolom_sum', 'Rekon::add_kolom_sum');
 $routes->post('rekon/rm_kolom_sum', 'Rekon::rm_kolom_sum');
-$routes->get('rekon/add_rekon_preview', 'Rekon::add_rekon_preview');
+$routes->get('rekon/rekon_preview', 'Rekon::add_rekon_preview');
 $routes->get('rekon/add_rekon_finish', 'Rekon::add_rekon_finish');
 $routes->post('rekon/save_compare', 'Rekon::save_compare');
-$routes->get('rekon/add_rekon_preview_sum', 'Rekon::add_rekon_preview_sum');
+$routes->get('rekon/rekon_preview_sum', 'Rekon::add_rekon_preview_sum');
 $routes->post('rekon/save_compare_sum', 'Rekon::save_compare_sum');
-$routes->get('rekon/add_rekon_finish', 'Rekon::add_rekon_finish');
 $routes->get('rekon/rekon_result', 'Rekon::rekon_result');
 $routes->post('rekon/rekon_result_post', 'Rekon::rekon_result_post');
+$routes->get('rekon/delimiter', 'Rekon::add_rekon_delimiter');
+$routes->get('profil', 'Setting::profil');
+$routes->post('update_user', 'Setting::update_user');
+$routes->get('ftp', 'Setting::ftp');
+$routes->post('update_ftp', 'Setting::update_ftp');
 
 
 /*
