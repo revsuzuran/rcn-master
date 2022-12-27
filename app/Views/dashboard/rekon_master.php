@@ -48,6 +48,9 @@
                         } else if($row['is_proses'] == "proses") {
                           $status = '<p style="background: #6777ef;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Sedang Proses</p>';
                           $btnAct = "-";
+                        } else if($row['is_proses'] == "gagal") {
+                          $status = '<p style="background: #fc544b;display: inline;padding: 4px 10px;border-radius: 5px;color:#fff;" type="button">Gagal</p>';
+                          $btnAct = "-";
                         } else {
                           $status = "";
                           $btnAct = "-";
