@@ -75,7 +75,9 @@
                       </div>
                       <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Input Query</label>
-                        <textarea class="form-control" name="query" rows="3"></textarea>
+                        <textarea class="form-control" name="query" rows="3"></textarea><br>
+                        <p class="fst-italic"><code class="text-primary fw-bold">Information</code> :<br> Use single quotation marks</code></p> 
+                        <p>Example : <br> SELECT * FROM data_transaksi WHERE date_insert = <code class="highlighter-rouge">'2022-12-30'</code></p> 
                       </div>
                     </div>
                   </div>
