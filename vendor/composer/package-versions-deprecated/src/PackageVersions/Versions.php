@@ -35,11 +35,16 @@ final class Versions
     const VERSIONS          = array (
   'codeigniter4/framework' => 'v4.2.10@6ffad151a303c5817ad6b2d9b996d07960aff2cc',
   'composer/package-versions-deprecated' => '1.11.99.5@b4f54f74ef3453349c24a845d22392cd31e65f1d',
+  'dompdf/dompdf' => 'v2.0.1@c5310df0e22c758c85ea5288175fc6cd777bc085',
   'jean85/pretty-package-versions' => '1.6.0@1e0104b46f045868f11942aea058cd7186d6c303',
   'kint-php/kint' => '4.2.3@7601bfd95ccc50a1b903c2764b31d00919e8edd9',
   'laminas/laminas-escaper' => '2.12.0@ee7a4c37bf3d0e8c03635d5bddb5bb3184ead490',
+  'masterminds/html5' => '2.7.6@897eb517a343a2281f11bc5556d6548db7d93947',
   'mongodb/mongodb' => '1.15.0@3a681a3b2f2c0ebac227a3b86bb9057d0e6eb8f8',
+  'phenx/php-font-lib' => '0.5.4@dd448ad1ce34c63d09baccd05415e361300c35b4',
+  'phenx/php-svg-lib' => '0.5.0@76876c6cf3080bcb6f249d7d59705108166a6685',
   'psr/log' => '1.1.4@d49695b909c3b7628b6289db5479a1c204601f11',
+  'sabberworm/php-css-parser' => '8.4.0@e41d2140031d533348b2192a83f02d8dd8a71d30',
   'symfony/polyfill-php80' => 'v1.27.0@7a6ff3f1959bb01aefccb463a0f2cd3d3d2fd936',
   'doctrine/instantiator' => '1.4.1@10dcfce151b967d20fde1b34ae6640712c3891bc',
   'fakerphp/faker' => 'v1.21.0@92efad6a967f0b79c499705c69b662f738cc9e4d',
@@ -73,7 +78,7 @@ final class Versions
   'sebastian/version' => '3.0.2@c6c1022351a901512170118436c764e473f6de8c',
   'symfony/deprecation-contracts' => 'v2.5.2@e8b495ea28c1d97b5e0c121748d6f9b53d075c66',
   'theseer/tokenizer' => '1.2.1@34a41e998c2183e22995f158c581e7b5e755ab9e',
-  'codeigniter4/appstarter' => 'No version set (parsed as 1.0.0)@',
+  'codeigniter4/appstarter' => 'dev-master@7b05bf482714b4fc6f56abb0ff661be77d1b684b',
 );
 
     private function __construct()

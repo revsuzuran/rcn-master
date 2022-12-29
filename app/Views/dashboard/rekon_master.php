@@ -2,6 +2,7 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
+        <a type="button" class="btn btn-success" href="<?= base_url('rekon') ?>">Refresh</a>
     </div>
 
     <div class="row mb-3">
@@ -10,7 +11,7 @@
         <!-- tables -->
         <div class="col-lg-12">
               <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                   <h6 class="m-0 font-weight-bold text-light">Data Rekon</h6>
                 </div>
                 <div class="table-responsive p-3">
@@ -19,7 +20,8 @@
                       <tr>
                         <th>No</th>
                         <th>Nama Rekon</th>
-                        <th>Tanggal Submit</th>
+                        <th>Time Submit</th>
+                        <th>Time Completed</th>
                         <th>Status</th>
                         <th>Aksi</th>
                       </tr>
@@ -28,7 +30,8 @@
                       <tr>
                         <th>No</th>
                         <th>Nama Rekon</th>
-                        <th>Tanggal Submit</th>
+                        <th>Time Submit</th>
+                        <th>Time Completed</th>
                         <th>Status</th>
                         <th>Aksi</th>
                       </tr>
@@ -60,7 +63,8 @@
                         <tr>
                             <td><?= $no++ ?></td>
                             <td><?= $row['nama_rekon'] ?></td>     
-                            <td><?= $row['timestamp'] ?></td>  
+                            <td><?= $row['timestamp'] ?></td>      
+                            <td><?= isset($row['timestamp_complete']) ? $row['timestamp_complete'] : "-" ?></td> 
                             <td><?= $status; ?></td>  
                             <td><?= $btnAct ?></td>                      
                         </tr>
@@ -78,7 +82,7 @@
 <!---Container Fluid-->
 
 <!-- Modal -->
-<div class="modal fade" id="modalHapus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="modalHapus" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -98,7 +102,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <script>
   

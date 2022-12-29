@@ -26,7 +26,7 @@ foreach ($data_csv as $row) {
                   
           <div class="col-12">
             <div class="card mb-4">
-              <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+              <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                   <h6 class="m-0 font-weight-bold text-light">Cleaning Data Options</h6>
               </div>
               <div class="card-body">
@@ -130,7 +130,7 @@ foreach ($data_csv as $row) {
                 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                   <button class="btn btn-secondary me-md-2" id="btn_save_preview" type="submit">Save & Preview</button>
-                  <a href="<?php echo base_url('rekon/delimiter');?>" class="btn btn-danger">Kembali</a>  
+                  <button onclick="history.back()" class="btn btn-danger">Kembali</button>  
                   <a href="<?php echo base_url('rekon/add_compare');?>" class="btn btn-primary">Next</a>
                 </div>
               </div>
@@ -140,7 +140,7 @@ foreach ($data_csv as $row) {
           <!-- Tables -->
           <div class="col-lg-12">
                 <div class="card mb-4">
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                     <h6 class="m-0 font-weight-bold text-light">Data Rekon Preview (20 Data)</h6>
                     <a href="<?php echo base_url('rekon/cleansing_data/all');?>" class="btn btn-sm btn-light me-md-2">Show All Data</a>
                     <!-- <button class="btn btn-sm btn-light me-md-2" type="button" onclick="history.back()">Show All Data</button>    -->
@@ -162,7 +162,7 @@ foreach ($data_csv as $row) {
                           <?php } break; }  ?>
                         </tr>
                       </thead>
-                      <tfoot>
+                      <tfoot class="table-dark">
                         <tr>
                           <?php
                           $totalData = count($data_csv);
@@ -196,7 +196,7 @@ foreach ($data_csv as $row) {
           <!-- Tables-->
       
           <input name="tipe" type="text" class="form-control" value="1" hidden>
-          <textarea id="jsondata" name="dataCsv"  hidden><?= json_encode($data_csv) ?></textarea>
+          <!-- <textarea id="jsondata" name="dataCsv"  hidden><?= json_encode($data_csv) ?></textarea> -->
 
         </form>
       </div>

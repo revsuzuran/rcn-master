@@ -2,36 +2,58 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
+        <a type="button" class="btn btn-primary" href="<?= base_url('add_ftp') ?>">Add New</a>
     </div> 
 
     <div class="row mb-3">
 
-        <div class="col-xl-6 col-lg-6 mb-4">
+
+        <!-- tables -->
+        <div class="col-lg-12">
             <div class="card mb-4">
-                <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
-                  <h6 class="m-0 font-weight-bold text-light">Setting FTP</h6>
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
+                <h6 class="m-0 font-weight-bold text-light">Data FTP</h6>
                 </div>
-                <div class="card-body">
-
-                    <div class="mb-3">
-                        <label class="form-label">Domain FTP</label>
-                        <input id="domain" type="text" class="form-control" name="domain" placeholder="ex : sesuatudomain.com" value="<?= $data_ftp[0]->domain ?>" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Username</label>
-                        <input id="username" type="text" class="form-control" value="<?= $data_ftp[0]->username ?>" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input id="password" type="text" class="form-control" value="<?= $data_ftp[0]->password ?>" required>
-                    </div>
-
-                    <button class="btn btn-primary" id="simpanFTP">Update</button>
+                <div class="table-responsive p-3">
+                <table class="table align-items-center table-flush" id="dataTable">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Rekon</th>
+                        <th>Hostname</th>
+                        <th>Aksi</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Rekon</th>
+                        <th>Hostname</th>
+                        <th>Aksi</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                        
+                            <?php foreach($dataFtp as $index => $row) {?> 
+                                <tr>
+                                <td><?= ($index+1) ?></td>
+                                <td><?= $row['ftp_name'] ?></td>     
+                                <td><?= $row['domain'] ?></td>   
+                                <td>
+                                    <a type="button" class="btn btn-primary btn-sm editBtn" href="<?= base_url('edit_ftp/' . $row->_id->__toString()) ?>">Edit</a>
+                                    <button type="button" class="btn btn-danger btn-sm deleteBtn" data-id="<?= $row->_id->__toString() ?>" >Delete</button>
+                                </td>  
+                                </tr>
+                            <?php } ?>                    
+                        
+                    </tbody>
+                </table>
                 </div>
             </div>
         </div>
+        <!-- tables-->
+
+
 
      
     </div>
@@ -39,24 +61,42 @@
 </div>
 
 <script>
-$('#simpanFTP').on('click', function(event) {
+$('.deleteBtn').on('click', function(event) {
 
-var username = $('#username').val();
-var password = $('#password').val();
-var domain = $('#domain').val();
+    const id = $(this).data("id");
 
-$.ajax({
-    url : "<?= base_url('update_ftp') ?>",
-    method : "POST",
-    data : {username: username,password: password, domain: domain},
-    async : true,
-    dataType : 'html',
-    success: function($hasil){
-        if($hasil == 'sukses'){
-            location.reload();
-        }
-    }
-});
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url : "<?= base_url('rm_ftp') ?>",
+                    method : "POST",
+                    data : {id:id},
+                    async : true,
+                    dataType : 'html',
+                    success: function($hasil){
+                        if($hasil == 'sukses'){
+
+                            Swal.fire('Deleted!', 'Successfully deleted FTP', 'success' )
+
+                            location.reload();
+                        }
+                    }
+                });
+
+                
+            }
+    })
+   
+    
 
 });
 </script>

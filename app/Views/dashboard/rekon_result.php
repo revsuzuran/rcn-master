@@ -2,13 +2,14 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
+        <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf') ?>">Generate PDF</a>
     </div>
     
       <div class="row mb-3">               
           <!-- Tables -->
           <div class="col-lg-12">
             <div class="card mb-4">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                 <h6 class="m-0 font-weight-bold text-light">Data Rekon #1</h6>
               </div>
 
@@ -31,7 +32,7 @@
 
               </div>
 
-              <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+              <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                   <h6 class="m-0 font-weight-bold text-light">Data Unmatch Rekon #1</h6>
               </div>
               <div class="table-responsive p-3">
@@ -40,9 +41,10 @@
                     <tr>
                       <th>No</th>
                       <?php foreach ($data_rekon_unmatch_satu as $row) { ?>
-                        <?php foreach ($row['row_data'] as $key => $rowData) { ?>
-                          <th><?= "KOLOM " . ($key+1) ?> </th>
-                      <?php } ?>
+                        <?php foreach ($row['row_data'] as $key => $rowData) { 
+                            if (!in_array($key, $kolom_filter_satu)) continue; ?>
+                            <th><?= "KOLOM " . ($key+1) ?> </th>
+                        <?php } ?>
                       <?php break;} ?>
                     </tr>
                   </thead>
@@ -50,22 +52,23 @@
                     <tr>
                       <th>No</th>
                       <?php foreach ($data_rekon_unmatch_satu as $row) { ?>
-                        <?php foreach ($row['row_data'] as $key => $rowData) { ?>
-                          <th><?= "KOLOM " . ($key+1) ?> </th>
-                      <?php } ?>
+                        <?php foreach ($row['row_data'] as $key => $rowData) { 
+                            if (!in_array($key, $kolom_filter_satu)) continue; ?>
+                            <th><?= "KOLOM " . ($key+1) ?> </th>
+                        <?php } ?>
                       <?php break;} ?>
                     </tr>
                   </tfoot>
                   <tbody>
                         
-                  <?php
-                    foreach ($data_rekon_unmatch_satu as $key => $row) { ?> 
+                  <?php foreach ($data_rekon_unmatch_satu as $key => $row) { ?> 
                     <tr>
-                        <td>1</td>
-                      <?php foreach ($row['row_data'] as $key => $rowData) { ?>
+                        <td><?= ($key+1) ?></td>
+                        <?php foreach ($row['row_data'] as $key => $rowData) { 
+                          if (!in_array($key, $kolom_filter_satu)) continue; ?>
                           <td><?= $rowData; ?></td>
-                  <?php  } ?>
-                  </tr>
+                        <?php  } ?>
+                    </tr>
                   <?php  } ?>
                   
                   </tbody>
@@ -79,7 +82,7 @@
           <!-- Tables -->
           <div class="col-lg-12">
             <div class="card mb-4">
-              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                 <h6 class="m-0 font-weight-bold text-light">Data Rekon #2</h6>
               </div>
 
@@ -102,7 +105,7 @@
 
               </div>
 
-              <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+              <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                   <h6 class="m-0 font-weight-bold text-light">Data Unmatch Rekon #2</h6>
               </div>
               <div class="table-responsive p-3">
@@ -111,9 +114,10 @@
                     <tr>
                       <th>No</th>
                       <?php foreach ($data_rekon_unmatch_dua as $row) { ?>
-                        <?php foreach ($row['row_data'] as $key => $rowData) { ?>
-                          <th><?= "KOLOM " . ($key+1) ?> </th>
-                      <?php } ?>
+                        <?php foreach ($row['row_data'] as $key => $rowData) { 
+                            if (!in_array($key, $kolom_filter_dua)) continue; ?>
+                            <th><?= "KOLOM " . ($key+1) ?> </th>
+                        <?php } ?>
                       <?php break;} ?>
                     </tr>
                   </thead>
@@ -121,22 +125,23 @@
                     <tr>
                       <th>No</th>
                       <?php foreach ($data_rekon_unmatch_dua as $row) { ?>
-                        <?php foreach ($row['row_data'] as $key => $rowData) { ?>
-                          <th><?= "KOLOM " . ($key+1) ?> </th>
-                      <?php } ?>
+                        <?php foreach ($row['row_data'] as $key => $rowData) { 
+                            if (!in_array($key, $kolom_filter_dua)) continue; ?>
+                            <th><?= "KOLOM " . ($key+1) ?> </th>
+                        <?php } ?>
                       <?php break;} ?>
                     </tr>
                   </tfoot>
                   <tbody>
                         
-                  <?php
-                    foreach ($data_rekon_unmatch_dua as $key => $row) { ?> 
+                  <?php foreach ($data_rekon_unmatch_dua as $key => $row) { ?> 
                     <tr>
-                        <td>1</td>
-                      <?php foreach ($row['row_data'] as $key => $rowData) { ?>
+                        <td><?= ($key+1) ?></td>
+                        <?php foreach ($row['row_data'] as $key => $rowData) { 
+                          if (!in_array($key, $kolom_filter_dua)) continue; ?>
                           <td><?= $rowData; ?></td>
-                  <?php  } ?>
-                  </tr>
+                        <?php  } ?>
+                    </tr>
                   <?php  } ?>
                   
                   </tbody>

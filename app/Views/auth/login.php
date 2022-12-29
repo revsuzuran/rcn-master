@@ -2,15 +2,14 @@
 <div class="container-login d-flex align-items-center justify-content-center">
     <div class="row d-flex flex-column align-items-center">
             
-            <div class="d-flex justify-content-center">
-                <!-- <img src="<?= base_url() ?>/assets/base/img/logo.png" height="50px"> -->
-            </div>
-
             <div class="card shadow-sm mt-4" style='width:100%;max-width:400px'>
                 <div class="card-body p-0">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="login-form">
+                                <div class="d-flex justify-content-center mb-3">
+                                    <img src="<?= base_url() ?>/assets/base/img/logo.png" height="80px">
+                                </div>
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Login</h1>
                                 </div>
@@ -44,7 +43,7 @@
                                         </div>
                                     </div> -->
                                     <div class="d-grid gap-2 mt-4">
-                                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                                        <button type="submit" class="btn btn-danger btn-block">Login</button>
                                     </div>
                                 </form>
                                 <hr>

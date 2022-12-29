@@ -23,7 +23,7 @@ foreach ($data_csv as $row) {
                 <!-- Value Compare -->
                 <div class="col-12">
                   <div class="card mb-4">
-                      <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+                      <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                             <h6 class="m-0 font-weight-bold text-light">Manage Data Rekon</h6>
                       </div>
                       <div class="card-body">
@@ -122,7 +122,7 @@ foreach ($data_csv as $row) {
           <!-- Tables -->
           <div class="col-lg-12">
                 <div class="card mb-4">
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                     <h6 class="m-0 font-weight-bold text-light">Data Rekon</h6>
                   </div>
                   <div class="table-responsive p-3">

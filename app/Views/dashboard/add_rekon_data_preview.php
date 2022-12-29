@@ -9,7 +9,7 @@
           <div class="col-lg-12">
             <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/save_compare'); ?>">
                 <div class="card mb-4">
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                     <h6 class="m-0 font-weight-bold text-light">Data Rekon #1</h6>
                   </div>
                   <div class="table-responsive p-3">
@@ -52,7 +52,7 @@
 
                   <div class="card-body">
 
-                        <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                           <h6 class="m-0 font-weight-bold text-light">Compare Data Options</h6>
                         </div>
 
@@ -75,7 +75,7 @@
                                 <label class="form-label">Data Compare</label>
                                 <?php foreach ($data_compare_satu as $row) { ?>
                                   <div>
-                                    <p style="margin: 3px;border-bottom: 3.5px solid #0d6efd;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
+                                    <p style="margin: 3px;border-bottom: 3.5px solid #dc3545;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?>]</code> </p>
                                   </div>
                                 <?php } ?>
                                 
@@ -108,24 +108,39 @@
 
                         <div class="form-group mt-3">
 
+                          <div class="col-lg-6 radio-element" id="elementEqual">
+                            <div class="form-group">
+                                <label class="form-label text-primary">Information</label>
+                                <p class="fw-bold">DATA2 <code class="highlighter-rouge"> [equal] </code> DATA1</p> 
+                                <p>Example : <br>DATA1 = ABC, DATA2 = ABC<br>DATA2 <code class="highlighter-rouge"> [equal] </code> DATA1  <code class="text-primary">=>TRUE </code></p> 
+                            </div>
+                          </div>
+
                           <div class="col-lg-6 radio-element" id="elementContain">
                             <div class="form-group">
-                                <label class="form-label">Contain Value</label>
-                                <input name="contain" type="text" class="form-control">
+                                <label class="form-label text-primary">Information</label>
+                                <p class="fw-bold">DATA2 <code class="highlighter-rouge"> [contain] </code> DATA1</p> 
+                                <p>Example : <br>DATA1 = ABC, DATA2 = ABCD<br>DATA2 <code class="highlighter-rouge"> [contain] </code> DATA1  <code class="text-primary">=>TRUE </code></p> 
                             </div>
                           </div>
 
                           <div class="col-lg-6 radio-element" id="elementBegin">
                             <div class="form-group">
-                                <label class="form-label">Begin Value</label>
-                                <input name="begin" type="text" class="form-control">
+                                <!-- <label class="form-label">Begin Value</label>
+                                <input name="begin" type="text" class="form-control"> -->
+                                <label class="form-label text-primary">Information</label>
+                                <p class="fw-bold">DATA2 <code class="highlighter-rouge"> [beginWith] </code> DATA1</p> 
+                                <p>Example : <br>DATA1 = 123, DATA2 = 123ABCD<br>DATA2 <code class="highlighter-rouge"> [beginWith] </code> DATA1  <code class="text-primary">=>TRUE </code></p> 
                             </div>
                           </div>
 
                           <div class="col-lg-6 radio-element" id="elementEnd">
                             <div class="form-group">
-                                <label class="form-label">End Value</label>
-                                <input name="end" type="text" class="form-control">
+                                <!-- <label class="form-label">End Value</label>
+                                <input name="end" type="text" class="form-control"> -->
+                                <label class="form-label text-primary">Information</label>
+                                <p class="fw-bold">DATA2 <code class="highlighter-rouge"> [endWith] </code> DATA1</p> 
+                                <p>Example : <br>DATA1 = 123, DATA2 = ABCD123<br>DATA2 <code class="highlighter-rouge"> [endWith] </code> DATA1  <code class="text-primary">=>TRUE </code></p> 
                             </div>
                           </div>
 
@@ -147,7 +162,7 @@
           <div class="col-lg-12">
             <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/save_compare'); ?>">
                 <div class="card mb-4">
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                     <h6 class="m-0 font-weight-bold text-light">Data Rekon #2</h6>
                   </div>
                   <div class="table-responsive p-3">
@@ -189,7 +204,7 @@
 
                   <div class="card-body">
 
-                        <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                           <h6 class="m-0 font-weight-bold text-light">Compare Data Options</h6>
                         </div>
 
@@ -212,7 +227,7 @@
                                 <label class="form-label">Data Compare</label>
                                 <?php foreach ($data_compare_dua as $row) { ?>
                                   <div>
-                                    <p style="margin: 3px;border-bottom: 3.5px solid #0d6efd;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
+                                    <p style="margin: 3px;border-bottom: 3.5px solid #dc3545;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
                                   </div>
                                 <?php } ?>
                                 
@@ -245,24 +260,45 @@
 
                         <div class="form-group mt-3">
 
+                          <div class="col-lg-6 radio-element-dua" id="elementEqualDua">
+                            <div class="form-group">
+                                <!-- <label class="form-label">Contain Value</label>
+                                <input name="contain" type="text" class="form-control"> -->
+
+                                <label class="form-label text-primary">Information</label>
+                                <p class="fw-bold">DATA1 <code class="highlighter-rouge"> [equal] </code> DATA2</p> 
+                                <p>Example : <br>DATA2 = ABC, DATA1 = ABC<br>DATA1 <code class="highlighter-rouge"> [equal] </code> DATA2  <code class="text-primary">=>TRUE </code></p> 
+                            </div>
+                          </div>
+
                           <div class="col-lg-6 radio-element-dua" id="elementContainDua">
                             <div class="form-group">
-                                <label class="form-label">Contain Value</label>
-                                <input name="contain" type="text" class="form-control">
+                                <!-- <label class="form-label">Contain Value</label>
+                                <input name="contain" type="text" class="form-control"> -->
+
+                                <label class="form-label text-primary">Information</label>
+                                <p class="fw-bold">DATA1 <code class="highlighter-rouge"> [contain] </code> DATA2</p> 
+                                <p>Example : <br>DATA2 = ABC, DATA1 = ABCD<br>DATA1 <code class="highlighter-rouge"> [contain] </code> DATA2  <code class="text-primary">=>TRUE </code></p> 
                             </div>
                           </div>
 
                           <div class="col-lg-6 radio-element-dua" id="elementBeginDua">
                             <div class="form-group">
-                                <label class="form-label">Begin Value</label>
-                                <input name="begin" type="text" class="form-control">
+                                <!-- <label class="form-label">Begin Value</label>
+                                <input name="begin" type="text" class="form-control"> -->
+                                <label class="form-label text-primary">Information</label>
+                                <p class="fw-bold">DATA1 <code class="highlighter-rouge"> [startWith] </code> DATA2</p> 
+                                <p>Example : <br>DATA2 = 123, DATA1 = 123ABC<br>DATA1 <code class="highlighter-rouge"> [startWith] </code> DATA2  <code class="text-primary">=>TRUE </code></p> 
                             </div>
                           </div>
 
                           <div class="col-lg-6 radio-element-dua" id="elementEndDua">
                             <div class="form-group">
-                                <label class="form-label">End Value</label>
-                                <input name="end" type="text" class="form-control">
+                                <!-- <label class="form-label">End Value</label>
+                                <input name="end" type="text" class="form-control"> -->
+                                <label class="form-label text-primary">Information</label>
+                                <p class="fw-bold">DATA1 <code class="highlighter-rouge"> [endWith] </code> DATA2</p> 
+                                <p>Example : <br>DATA2 = 123, DATA1 = ABC123<br>DATA1 <code class="highlighter-rouge"> [endWith] </code> DATA2  <code class="text-primary">=>TRUE </code></p> 
                             </div>
                           </div>
 
@@ -295,6 +331,7 @@
 
   $("#radioEqualSatu").click(function() {
     hideAllElementRadioSatu();
+    $("#elementEqual").show();
   });
 
   $("#radioContainSatu").click(function() {
@@ -323,6 +360,7 @@
 
   $("#radioEqualDua").click(function() {
     hideAllElementRadioDua();
+    $("#elementEqualDua").show();
   });
 
   $("#radioContainDua").click(function() {

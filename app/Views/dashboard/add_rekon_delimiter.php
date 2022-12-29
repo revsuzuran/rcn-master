@@ -10,7 +10,7 @@
       
       <div class="col-12">
             <div class="card mb-4">
-                <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                     <h6 class="m-0 font-weight-bold text-light">Preview Sample Data</h6>
                 </div>
                 <div class="card-body m-1">
@@ -25,17 +25,13 @@
 
         <div class="col-6">
             <div class="card mb-4">
-                <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                     <h6 class="m-0 font-weight-bold text-light">Options</h6>
                 </div>
                 <div class="card-body">
-                    <div class="form-group mt-2">
-                        <label class="form-label">Pilih Delimiter</label>
-                        <select class="form-select mb-3" name="delimiter">
-                            <option value=";">Colon (;)</option>
-                            <option value=",">Comma (,)</option>
-                            <option value="|">Pipe (|)</option>
-                        </select>
+                    <div class="form-group mt-2 col-6">
+                        <label class="form-label">Input Delimiter</label>
+                        <input class="form-control mb-3" name="delimiter" placeholder="Example | ; , -" required></input>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <?php if ($_SESSION['tipe'] == "2") { ?>

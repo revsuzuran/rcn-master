@@ -8,7 +8,7 @@
 
         <div class="col-xl-6 col-lg-6 mb-4">
             <div class="card mb-4">
-                <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+                <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                   <h6 class="m-0 font-weight-bold text-light">Profil User</h6>
                 </div>
                 <div class="card-body">

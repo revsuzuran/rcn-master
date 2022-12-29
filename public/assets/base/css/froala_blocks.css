@@ -1302,7 +1302,7 @@ header + header {
   color: #444444; }
 
 .navbar{
-  background: linear-gradient(to right, #3498db 0%, #00c6f9 100%) !important;
+  background: linear-gradient(to right, #dc3545 0%, #00c6f9 100%) !important;
 }
 
 .konten{
@@ -1327,23 +1327,23 @@ header + header {
 }
 
 .cover{
-  background-image: linear-gradient(to right, #3498db 0%, #00c6f9 100%) !important;
+  background-image: linear-gradient(to right, #dc3545 0%, #00c6f9 100%) !important;
   position: relative;
   min-height: 700px;
 }
 
 .cover-tema{
-  background-image: linear-gradient(to right, #3498db 0%, #00c6f9 100%) !important;
+  background-image: linear-gradient(to right, #dc3545 0%, #00c6f9 100%) !important;
   position: relative;
   min-height: 150px;
 }
 
 .btn-pesan{
-  color: #3498db; 
+  color: #dc3545; 
 }
 
 .footer{
-  background: linear-gradient(to right, #3498db 0%, #00c6f9 100%) !important;
+  background: linear-gradient(to right, #dc3545 0%, #00c6f9 100%) !important;
 }
 
 .text-footer{
@@ -1356,9 +1356,9 @@ header + header {
 }
 
 .btn-order:hover{
-  background-image: -webkit-linear-gradient(bottom right, #3498db, #00c6f9);
-  background-image: -o-linear-gradient(bottom right, #3498db, #00c6f9);
-  background-image: linear-gradient(to top left, #3498db, #00c6f9);
+  background-image: -webkit-linear-gradient(bottom right, #dc3545, #00c6f9);
+  background-image: -o-linear-gradient(bottom right, #dc3545, #00c6f9);
+  background-image: linear-gradient(to top left, #dc3545, #00c6f9);
 }
 
 .btn-order-secondary:hover{
@@ -1368,8 +1368,8 @@ header + header {
 }
 
 .btn-dark {
-  background-color: #3498db !important;
-  border-color: #3498db !important;
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
   border-radius: 5px;
 }
 
@@ -1423,11 +1423,11 @@ header + header {
 
 .upload-area-icon-main{
   font-size: 40px;
-  color: #3498db;
+  color: #dc3545;
 }
 
 .upload-area-button{
-  background-image: linear-gradient(to top left, #3498db, #00c6f9);
+  background-image: linear-gradient(to top left, #dc3545, #00c6f9);
   border-radius: 5px;
   padding: 10px;
   margin-top: 10px;
@@ -1436,7 +1436,7 @@ header + header {
 }
 
 .upload-area-button:hover{
-  background: #3498db;
+  background: #dc3545;
 }
 
 .preview-uploads{

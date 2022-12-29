@@ -35,9 +35,9 @@ class RekonUnmatch {
         }
     }
 
-    function getRekonAll($id_rekon,$tipe) {
+    function getRekonAll($id_rekon,$tipe, $limit = 0) {
         try {
-            $cursor = $this->rekon_unmatch->find(['id_rekon' => (int) $id_rekon, 'tipe' => (int) $tipe], ['limit' => 0]);
+            $cursor = $this->rekon_unmatch->find(['id_rekon' => (int) $id_rekon, 'tipe' => (int) $tipe], ['limit' => $limit]);
             $rekon = $cursor->toArray();
 
             return $rekon;

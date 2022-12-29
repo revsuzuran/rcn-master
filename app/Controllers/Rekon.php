@@ -6,6 +6,9 @@ use App\Models\RekonBuffDetail;
 use App\Models\RekonResult;
 use App\Models\RekonUnmatch;
 use App\Models\DataModels;
+use App\Models\DBModel;
+use App\Models\Postgres;
+use App\Libraries\PdfGenerator;
 
 
 class Rekon extends BaseController
@@ -18,8 +21,11 @@ class Rekon extends BaseController
         $this->rekon_buff_detail = new RekonBuffDetail();
         $this->rekon_result = new RekonResult();
         $this->rekon_unmatch = new RekonUnmatch();
-        $this->ftp_model = new DataModels();
-
+        $this->data_model = new DataModels();
+        $this->dbModel = new DBModel();
+        $this->pg = new Postgres();
+        $this->pdfGen = new PdfGenerator();
+    
 		$this->uri = $this->request->uri;
     }
 
@@ -42,10 +48,11 @@ class Rekon extends BaseController
 
     public function add_rekon_master()
     {
-        // $this->session->set(array("uname" => "AQIL PRAKOSO"));
         $data['title'] = 'Add New Rekon';
         $data['view'] = 'dashboard/add_rekon'; 
-
+        $data['dataFtp'] = $this->data_model->getFtp();
+        $data['dataDb'] = $this->data_model->getDatabase();
+        
         return view('dashboard/layout', $data);
     }
 
@@ -54,18 +61,36 @@ class Rekon extends BaseController
         $tipe = $this->request->getPost('tipe');
         $radioTipe = $this->request->getPost('radioUpload');
 
-        $dataFtp = $this->ftp_model->getFtp();
+        $dataFtp = $this->data_model->getFtp();
         
         if($radioTipe == "ftp") {
             try {
                 $namaFile = $this->request->getPost('nama_file') ;
-                $source = "$namaFile.csv";
+                $ftpOptionID = $this->request->getPost('ftp_option') ;
+                $dataFtp = $this->data_model->getFtpOne($ftpOptionID);
+                $pathFile = $dataFtp->path;
+                $source = "$pathFile$namaFile.csv";
                 $target = fopen($source, "w");
-                $conn = ftp_connect($dataFtp[0]->domain) or die("Could not connect");
-                
-                ftp_login($conn,$dataFtp[0]->username,$dataFtp[0]->password);
+                $conn = ftp_connect($dataFtp->domain) or die("Could not connect");
+                ftp_login($conn,$dataFtp->username,$dataFtp->password);
                 ftp_fget($conn,$target,$source,FTP_ASCII);
                 $csv = $source;
+            } catch (\Throwable $th) {
+                $this->session->setFlashdata('error', 'FTP Error! Failed to get file or file not found');
+                if($tipe == 1) return redirect()->to(base_url('rekon/add'));
+                else return redirect()->to(base_url('rekon/add_rekon_next'));
+            }
+            
+        } else if($radioTipe == "db") {
+            try {
+                $namaFile = $this->request->getPost('nama_file');
+                $dbOptionID = $this->request->getPost('db_option');
+                $query = $this->request->getPost('query');
+                $dataDB = $this->data_model->getDatabaseOne($dbOptionID);
+
+                $this->dbModel->initConnection($dataDB->hostname, $dataDB->username, $dataDB->password, $dataDB->database, $dataDB->driver, $dataDB->port);
+                $result = $this->dbModel->getData($query);
+
             } catch (\Throwable $th) {
                 $this->session->setFlashdata('error', 'FTP Error! Failed to get file or file not found');
                 if($tipe == 1) return redirect()->to(base_url('rekon/add'));
@@ -88,6 +113,54 @@ class Rekon extends BaseController
         
         /* Save Tipe */
         $this->session->set('tipe', $tipe);
+
+        if($radioTipe == "db") {
+            /* Langsung Save Data Ke DB tanpa pilih delimiter */
+            $dataCsvArr = array();
+
+            /* Insert Header */
+            $arrData = array_keys($result[0]);
+            $drow = array(
+                "row_index" => 0,
+                "data_asli" => "header",
+                "data_row" => $arrData,
+                "tipe" => $tipe,
+                "id_rekon" => $id_rekon,
+            );
+            array_push($dataCsvArr, $drow);
+
+            foreach($result as $index => $row) {
+
+                $arrData = array();
+                foreach($row as $rowData) {
+                    array_push($arrData, $rowData);
+                }
+
+                /* untuk diinsert ulang */
+                $drow = array(
+                    "row_index" => $index+1,
+                    "data_asli" => $row,
+                    "data_row" => $arrData,
+                    "tipe" => $tipe,
+                    "id_rekon" => $id_rekon,
+                );
+                array_push($dataCsvArr, $drow);
+            }
+
+            /* delete all rekon to detail */
+            log_message('info', 'DO Remove from DATABASE...');
+            $this->rekon_buff_detail->deleteRekonMany($id_rekon, $tipe);
+            log_message('info', 'DONE.. Remove ' .count($dataCsvArr).' from DATABASE...');
+            
+            /* insert all rekon to detail */
+            log_message('info', 'DO Writes To DATABASE...');
+            $this->rekon_buff_detail->insertRekonMany($dataCsvArr);
+            log_message('info', 'DONE.. Writes ' .count($dataCsvArr).'  To DATABASE...');
+            
+            // echo json_encode($dataCsvArr);die();
+            return redirect()->to(base_url('rekon/cleansing_data'));
+
+        }
 
         if($csv == "") {
             $this->session->setFlashdata('error', 'Failed to process file!');
@@ -193,7 +266,7 @@ class Rekon extends BaseController
         $id_rekon = $this->session->get('id_rekon');
         $tipe = $this->session->get('tipe');
         $limit = $this->uri->getSegment(3);
-        // die($limit);
+        
         if($limit == "all") {
             $sampleCsv = $this->rekon_buff_detail->getRekons($id_rekon, $tipe, 0);
         } else {
@@ -501,6 +574,9 @@ class Rekon extends BaseController
         $id_rekon = $this->session->get('id_rekon'); 
         $tipe = $this->session->get('tipe');
 
+        $data['dataFtp'] = $this->data_model->getFtp();
+        $data['dataDb'] = $this->data_model->getDatabase();
+
         if($tipe == 1) {
             $this->session->set('tipe', 2);
         }
@@ -766,6 +842,13 @@ class Rekon extends BaseController
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 1);
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 2);
 
+        $kolomFilter1 = array();
+        $kolomFilter2 = array();
+        foreach ($rekonBuff->kolom_compare as $rowCompare) {
+            if($rowCompare->tipe == 1) array_push($kolomFilter1, $rowCompare->kolom_index);
+            if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
+        }
+
         $dataRekonSatu = array();
         $dataRekonDua = array();
         foreach ($rekonResult as $row) {
@@ -779,6 +862,8 @@ class Rekon extends BaseController
         $data['data_rekon_dua'] = $dataRekonDua; 
         $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
         $data['data_rekon_unmatch_dua'] = $dataRekon2unmatch; 
+        $data['kolom_filter_satu'] = $kolomFilter1; 
+        $data['kolom_filter_dua'] = $kolomFilter2; 
         // echo json_encode($dataRekonSatu);
         return view('dashboard/layout', $data);
     }
@@ -788,5 +873,99 @@ class Rekon extends BaseController
         $this->session->set('id_rekon', $id_rekon);
         return "sukses";
     }
+
+    public function generate_pdf()
+    {
+
+        /* Preparing Data */
+        $id_rekon = $this->session->get('id_rekon');
+        $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
+        $rekonResult = $this->rekon_result->getRekon($id_rekon);
+        $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 1);
+        $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 2);
+
+        $kolomFilter1 = array();
+        $kolomFilter2 = array();
+        foreach ($rekonBuff->kolom_compare as $rowCompare) {
+            if($rowCompare->tipe == 1) array_push($kolomFilter1, $rowCompare->kolom_index);
+            if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
+        }
+
+        $dataRekonSatu = array();
+        $dataRekonDua = array();
+        foreach ($rekonResult as $row) {
+            if($row->tipe == 1) array_push($dataRekonSatu, $row);
+            if($row->tipe == 2) array_push($dataRekonDua, $row);
+        }
+        
+        $data['title'] =  $rekonBuff->nama_rekon;
+        $data['view'] = 'dashboard/rekon_result'; 
+        $data['data_rekon'] = $rekonBuff; 
+        $data['data_rekon_satu'] = $dataRekonSatu; 
+        $data['data_rekon_dua'] = $dataRekonDua; 
+        $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
+        $data['data_rekon_unmatch_dua'] = $dataRekon2unmatch; 
+        $data['kolom_filter_satu'] = $kolomFilter1; 
+        $data['kolom_filter_dua'] = $kolomFilter2; 
+
+        /* Preparing DomPDF */
+        $Pdfgenerator = $this->pdfGen;
+        $file_pdf = 'laporan_penjualan_toko_kita';
+        $paper = 'A4';
+        $orientation = "portrait";
+        $html = view('pdf', $data);
+        // return $html;
+        $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+    }
+
+    public function hehepdf()
+    {
+
+        /* Preparing Data */
+        $id_rekon = 44;
+        $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
+        $rekonResult = $this->rekon_result->getRekon($id_rekon);
+        $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 1);
+        $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 2);
+
+        $kolomFilter1 = array();
+        $kolomFilter2 = array();
+        foreach ($rekonBuff->kolom_compare as $rowCompare) {
+            if($rowCompare->tipe == 1) array_push($kolomFilter1, $rowCompare->kolom_index);
+            if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
+        }
+
+        echo json_encode($kolomFilter1);
+
+        echo json_encode($kolomFilter2);
+
+        $dataRekonSatu = array();
+        $dataRekonDua = array();
+        foreach ($rekonResult as $row) {
+            if($row->tipe == 1) array_push($dataRekonSatu, $row);
+            if($row->tipe == 2) array_push($dataRekonDua, $row);
+        }
+        
+        $data['title'] =  $rekonBuff->nama_rekon;
+        $data['view'] = 'dashboard/rekon_result'; 
+        $data['data_rekon'] = $rekonBuff; 
+        $data['data_rekon_satu'] = $dataRekonSatu; 
+        $data['data_rekon_dua'] = $dataRekonDua; 
+        $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
+        $data['data_rekon_unmatch_dua'] = $dataRekon2unmatch; 
+        $data['kolom_filter_satu'] = $kolomFilter1; 
+        $data['kolom_filter_dua'] = $kolomFilter2; 
+
+        /* Preparing DomPDF */
+        $Pdfgenerator = $this->pdfGen;
+        $file_pdf = 'laporan_penjualan_toko_kita';
+        $paper = 'A4';
+        $orientation = "portrait";
+        $html = view('pdf', $data);
+        return $html;
+        $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+    }
+
+
 }
 

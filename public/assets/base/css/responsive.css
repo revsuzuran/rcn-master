@@ -181,7 +181,7 @@
   }
   .bg-inverse {
     /*background: #191c1e;*/
-    background: -webkit-linear-gradient(0deg, #3498db 0%, #00c6f9 100%);
+    background: -webkit-linear-gradient(0deg, #dc3545 0%, #00c6f9 100%);
   }
   .navbar-expand-md .navbar-brand,
   .navbar-expand-md .navbar-toggler {
@@ -302,7 +302,7 @@
   }
   .bg-inverse {
     /*background: #191c1e;*/
-    background : -webkit-linear-gradient(0deg, #3498db 0%, #00c6f9 100%);
+    background : -webkit-linear-gradient(0deg, #dc3545 0%, #00c6f9 100%);
   }
   .navbar-expand-md .navbar-brand,
   .navbar-expand-md .navbar-toggler {

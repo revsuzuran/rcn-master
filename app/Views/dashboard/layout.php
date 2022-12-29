@@ -19,7 +19,8 @@
 
     <script src="<?= base_url() ?>/assets/base/js/moment-with-locales.js"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/jquery/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
@@ -63,7 +64,8 @@
             </a>
             <div id="collapseBootstrap" class="collapse dropdown-menu" aria-labelledby="headingBootstrap" data-bs-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="<?= base_url('setting_ftp'); ?>">FTP</a>
+                    <a class="collapse-item" href="<?= base_url('ftp'); ?>">FTP</a>
+                    <a class="collapse-item" href="<?= base_url('database'); ?>">Database</a>
                     <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
                 </div>
             </div>
@@ -88,12 +90,12 @@
                             <span class="ml-2 d-none d-lg-inline text-white small"><?= $_SESSION['uname'] ?></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                            <a class="dropdown-item" href="<?= base_url('#') ?>">
+                            <a class="dropdown-item" href="<?= base_url('profil') ?>">
                                 <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Profil
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="<?= base_url('#') ?>">
+                            <a class="dropdown-item" href="<?= base_url('do_unauth') ?>">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                 Logout
                             </a>
@@ -124,7 +126,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>copyright &copy; 2020 - <?= SITE_NAME; ?>
+                    <span>copyright &copy; 2022 - <?= SITE_NAME; ?>
                     </span>
                 </div>
             </div>

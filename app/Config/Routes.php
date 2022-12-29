@@ -37,6 +37,7 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/login', 'Login::login');
 $routes->post('/do_auth', 'Login::do_auth');
+$routes->get('/do_unauth', 'Login::do_unauth');
 // $routes->post('mantab', 'Home::do_upload_csv');
 
 $routes->get('/', 'Rekon::data_rekon_master');
@@ -63,8 +64,28 @@ $routes->post('rekon/rekon_result_post', 'Rekon::rekon_result_post');
 $routes->get('rekon/delimiter', 'Rekon::add_rekon_delimiter');
 $routes->get('profil', 'Setting::profil');
 $routes->post('update_user', 'Setting::update_user');
+
+
 $routes->get('ftp', 'Setting::ftp');
+$routes->get('add_ftp', 'Setting::add_ftp');
+$routes->post('save_ftp', 'Setting::save_ftp');
+$routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
 $routes->post('update_ftp', 'Setting::update_ftp');
+$routes->post('rm_ftp', 'Setting::rm_ftp');
+
+
+$routes->get('database', 'Setting::database');
+$routes->get('add_database', 'Setting::add_database');
+$routes->post('save_database', 'Setting::save_database');
+$routes->get('edit_database/(:any)', 'Setting::edit_database');
+$routes->post('update_database', 'Setting::update_database');
+$routes->post('rm_database', 'Setting::rm_database');
+
+
+$routes->get('rekon/generate_pdf', 'Rekon::generate_pdf');
+$routes->get('rekon/hehepdf', 'Rekon::hehepdf');
+
+
 
 
 /*

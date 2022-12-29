@@ -9,7 +9,7 @@
           <div class="col-lg-12">
             <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/save_compare_sum'); ?>">
                 <div class="card mb-4">
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                     <h6 class="m-0 font-weight-bold text-light">Data Rekon SUM #1</h6>
                   </div>
                   <div class="table-responsive p-3">
@@ -52,7 +52,7 @@
 
                   <div class="card-body">
 
-                        <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                           <h6 class="m-0 font-weight-bold text-light">Compare Data Options</h6>
                         </div>
 
@@ -75,7 +75,7 @@
                                 <label class="form-label">Data Compare</label>
                                 <?php foreach ($data_compare_satu as $row) { ?>
                                   <div>
-                                    <p style="margin: 3px;border-bottom: 3.5px solid #0d6efd;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
+                                    <p style="margin: 3px;border-bottom: 3.5px solid #dc3545;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
                                   </div>
                                 <?php } ?>
                                 
@@ -133,7 +133,7 @@
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                           <input type="text" name="tipe" class="form-check-input" value="1" hidden>
-                          <button class="btn btn-danger" type="submit" id="saveCompareDataSatu">Save & Preview</button>
+                          <button class="btn btn-secondary" type="submit" id="saveCompareDataSatu">Save & Preview</button>
                         </div>
                   
                   </div>
@@ -147,7 +147,7 @@
           <div class="col-lg-12">
             <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/save_compare_sum'); ?>">
                 <div class="card mb-4">
-                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
                     <h6 class="m-0 font-weight-bold text-light">Data Rekon SUM #2</h6>
                   </div>
                   <div class="table-responsive p-3">
@@ -189,7 +189,7 @@
 
                   <div class="card-body">
 
-                        <div class="card-header d-flex flex-row align-items-center justify-content-between bg-primary">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
                           <h6 class="m-0 font-weight-bold text-light">Compare Data Options</h6>
                         </div>
 
@@ -212,7 +212,7 @@
                                 <label class="form-label">Data Compare</label>
                                 <?php foreach ($data_compare_dua as $row) { ?>
                                   <div>
-                                    <p style="margin: 3px;border-bottom: 3.5px solid #0d6efd;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
+                                    <p style="margin: 3px;border-bottom: 3.5px solid #dc3545;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
                                   </div>
                                 <?php } ?>
                                 
