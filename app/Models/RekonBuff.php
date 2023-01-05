@@ -55,7 +55,7 @@ class RekonBuff {
                 'kolom_compare' => array(),
                 'kolom_sum' => array(),
                 'is_proses' => "",
-                'timestamp' => date("Y-m-d h:i:s"),
+                'timestamp' => date("Y-m-d H:i:s"),
                 'timestamp_complete' => "-",
             ]);
             if($insertOneResult->getInsertedCount() == 1) {
