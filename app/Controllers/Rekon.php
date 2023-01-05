@@ -169,6 +169,7 @@ class Rekon extends BaseController
         }
 
         $file = file($csv);
+        if($radioTipe == "ftp") unlink("$namaFile.csv"); // remove ftp files
         $arrData = array();
         $strDataPreview = "";
         foreach($file as $key => $hehe) {
@@ -314,6 +315,9 @@ class Rekon extends BaseController
             $indexKolom = $this->request->getPost('rowLowerKolomIndex');
             $rule = "lowercase";
             $ruleVal = "";
+        } else {
+            $this->session->setFlashdata('error', 'Failed to Save! Try Again');
+            return redirect()->to(base_url('rekon/cleansing_data'));
         }
 
         $objData = array(
