@@ -53,10 +53,10 @@ foreach ($data_csv as $row) {
                       <input type="radio" id="radioLower" name="customRadio" class="form-check-input" value="radioLower">
                       <label class="custom-control-label" for="radioLower">Lowercase</label>
                     </div>
-                    <!-- <div class="custom-control custom-radio m-2">
-                      <input type="radio" id="radioRegex" name="customRadio" class="form-check-input">
-                      <label class="custom-control-label" for="radioRegex">Regex</label>
-                    </div> -->
+                    <div class="custom-control custom-radio m-2">
+                      <input type="radio" id="radioRegex" name="customRadio" class="form-check-input"  value="radioRegex">
+                      <label class="custom-control-label" for="radioRegex">Regex Replace</label>
+                    </div>
                     <!-- <div class="custom-control custom-radio m-2">
                       <input type="radio" id="radioSubtr" name="customRadio" class="form-check-input">
                       <label class="custom-control-label" for="radioSubtr">Substring</label>
@@ -91,11 +91,11 @@ foreach ($data_csv as $row) {
                   <div class="row row-cols-auto mt-2">
                     <div class="form-group">
                         <label class="form-label">Old Value</label>
-                        <input name="rowReplaceOld" type="text" class="form-control" value="" >
+                        <input name="rowReplaceOld" type="text" class="form-control" value="">
                     </div>
                     <div class="form-group">
                         <label class="form-label">New Value</label>
-                        <input name="rowReplaceNew" type="text" class="form-control" value="" >
+                        <input name="rowReplaceNew" type="text" class="form-control" value="">
                     </div>
                   </div>
                 </div>
@@ -114,17 +114,23 @@ foreach ($data_csv as $row) {
                   </div>
                 </div>
 
-                <!-- <div class="col-lg-6 radio-element" id="elementRegex">
+                <div class="col-lg-6 radio-element" id="elementRegex">
                   <div class="form-group">
                       <label class="form-label">Pilih Kolom Index [1 - <?= $totalKolom-1; ?>]</label>
-                      <input name="rowRemove" type="number" class="form-control"  value="1" min="1" max="<?= $totalKolom-1; ?>" >
+                      <input name="rowRegexKolomIndex" type="number" class="form-control"  value="1" min="1" max="<?= $totalKolom-1; ?>" >
                   </div>
 
-                  <div class="form-group mt-2">
-                        <label class="form-label">Regex Value</label>
-                        <input name="rowRemove" type="text" class="form-control" value="" >
+                  <div class="row row-cols-auto mt-2">
+                    <div class="form-group">
+                        <label class="form-label">Old Value</label>
+                        <input name="rowRegexReplaceOld" type="text" class="form-control" value="" placeholder="/[^0-9]/">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">New Value</label>
+                        <input name="rowRegexReplaceNew" type="text" class="form-control" value="">
+                    </div>
                   </div>
-                </div> -->
+                </div>
 
                 <!-- Button -->
                 

@@ -315,6 +315,11 @@ class Rekon extends BaseController
             $indexKolom = $this->request->getPost('rowLowerKolomIndex');
             $rule = "lowercase";
             $ruleVal = "";
+        } else if ($radioSelect == "radioRegex") {
+            log_message('info', 'TRY REGEX');
+            $indexKolom = $this->request->getPost('rowLowerKolomIndex');
+            $rule = "regex";
+            $ruleVal = $this->request->getPost('rowRegexReplaceOld') . "=>" . $this->request->getPost('rowRegexReplaceNew');
         } else {
             $this->session->setFlashdata('error', 'Failed to Save! Try Again');
             return redirect()->to(base_url('rekon/cleansing_data'));
@@ -367,6 +372,12 @@ class Rekon extends BaseController
                 $valFind = $ruleValue[0];
                 $valReplace = $ruleValue[1];
                 $newData[$indexKolom] = str_replace($valFind, $valReplace, $newData[$indexKolom]);
+            } else if($ruleOptions == "regex") {
+                log_message('info', 'TRY REGEX');
+                $ruleValue = explode("=>" ,$dataClean["rule_value"]); // rule values di split dulu khusus replace
+                $valFind = $ruleValue[0];
+                $valReplace = $ruleValue[1];
+                $newData[$indexKolom] = preg_replace($valFind, $valReplace, $newData[$indexKolom]);
             } else if ($ruleOptions == "uppercase") {
                 $newData[$indexKolom] = strtoupper($newData[$indexKolom]); // replace with new rule
             } else if ($ruleOptions == "lowercase") {
