@@ -88,7 +88,12 @@
 
 <?php
 
-    function rupiah($angka){        
+    function rupiah($angka){      
+        
+        if (!is_numeric($angka)) {
+            return '-';
+        }
+        
         $hasil_rupiah = "Rp " . number_format($angka,0,',','.');
         return $hasil_rupiah;    
     }
