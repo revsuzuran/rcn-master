@@ -5,6 +5,7 @@ use App\Models\RekonBuff;
 use App\Models\RekonBuffDetail;
 use App\Models\RekonResult;
 use App\Models\RekonUnmatch;
+use App\Models\RekonMatch;
 use App\Models\DataModels;
 use App\Models\DBModel;
 use App\Models\Postgres;
@@ -21,6 +22,7 @@ class Rekon extends BaseController
         $this->rekon_buff_detail = new RekonBuffDetail();
         $this->rekon_result = new RekonResult();
         $this->rekon_unmatch = new RekonUnmatch();
+        $this->rekon_match = new RekonMatch();
         $this->data_model = new DataModels();
         $this->dbModel = new DBModel();
         $this->pg = new Postgres();
@@ -856,6 +858,8 @@ class Rekon extends BaseController
         $rekonResult = $this->rekon_result->getRekon($id_rekon);
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 1);
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 2);
+        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, 1);
+        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon, 2);
 
         $kolomFilter1 = array();
         $kolomFilter2 = array();
@@ -877,6 +881,8 @@ class Rekon extends BaseController
         $data['data_rekon_dua'] = $dataRekonDua; 
         $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
         $data['data_rekon_unmatch_dua'] = $dataRekon2unmatch; 
+        $data['data_rekon_match_satu'] = $dataRekon1match; 
+        $data['data_rekon_match_dua'] = $dataRekon2match; 
         $data['kolom_filter_satu'] = $kolomFilter1; 
         $data['kolom_filter_dua'] = $kolomFilter2; 
         // echo json_encode($dataRekonSatu);
@@ -898,6 +904,8 @@ class Rekon extends BaseController
         $rekonResult = $this->rekon_result->getRekon($id_rekon);
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 1);
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 2);
+        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, 1);
+        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon, 2);
 
         $kolomFilter1 = array();
         $kolomFilter2 = array();
@@ -920,6 +928,8 @@ class Rekon extends BaseController
         $data['data_rekon_dua'] = $dataRekonDua; 
         $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
         $data['data_rekon_unmatch_dua'] = $dataRekon2unmatch; 
+        $data['data_rekon_match_satu'] = $dataRekon1match; 
+        $data['data_rekon_match_dua'] = $dataRekon2match; 
         $data['kolom_filter_satu'] = $kolomFilter1; 
         $data['kolom_filter_dua'] = $kolomFilter2; 
 
@@ -929,6 +939,54 @@ class Rekon extends BaseController
         $paper = 'A4';
         $orientation = "portrait";
         $html = view('pdf', $data);
+        // return $html;
+        $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+    }
+
+    public function generate_pdf2()
+    {
+
+        /* Preparing Data */
+        $id_rekon = $this->session->get('id_rekon');
+        $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
+        $rekonResult = $this->rekon_result->getRekon($id_rekon);
+        $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 2);
+        $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, 2);
+        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, 2);
+        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon, 2);
+
+        $kolomFilter1 = array();
+        $kolomFilter2 = array();
+        foreach ($rekonBuff->kolom_compare as $rowCompare) {
+            if($rowCompare->tipe == 2) array_push($kolomFilter1, $rowCompare->kolom_index);
+            if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
+        }
+
+        $dataRekonSatu = array();
+        $dataRekonDua = array();
+        foreach ($rekonResult as $row) {
+            if($row->tipe == 2) array_push($dataRekonSatu, $row);
+            if($row->tipe == 2) array_push($dataRekonDua, $row);
+        }
+        
+        $data['title'] =  $rekonBuff->nama_rekon;
+        $data['view'] = 'dashboard/rekon_result'; 
+        $data['data_rekon'] = $rekonBuff; 
+        $data['data_rekon_satu'] = $dataRekonSatu; 
+        $data['data_rekon_dua'] = $dataRekonDua; 
+        $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
+        $data['data_rekon_unmatch_dua'] = $dataRekon2unmatch; 
+        $data['data_rekon_match_satu'] = $dataRekon1match; 
+        $data['data_rekon_match_dua'] = $dataRekon2match; 
+        $data['kolom_filter_satu'] = $kolomFilter1; 
+        $data['kolom_filter_dua'] = $kolomFilter2; 
+
+        /* Preparing DomPDF */
+        $Pdfgenerator = $this->pdfGen;
+        $file_pdf = 'laporan_penjualan_toko_kita';
+        $paper = 'A4';
+        $orientation = "portrait";
+        $html = view('pdf2', $data);
         // return $html;
         $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
     }

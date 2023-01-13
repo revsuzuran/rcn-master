@@ -2,10 +2,7 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
-        <div>
-          <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf') ?>">Generate PDF 1</a>
-          <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf2') ?>">Generate PDF 2</a>
-      </div>
+        <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf') ?>">Generate PDF</a>
     </div>
     
       <div class="row mb-3">               

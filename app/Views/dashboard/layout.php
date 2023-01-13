@@ -107,7 +107,6 @@
             <?php
 
                 function rupiah($angka){
-
                     if (!is_numeric($angka)) {
                         return '-';
                     }

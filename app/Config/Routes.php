@@ -83,6 +83,7 @@ $routes->post('rm_database', 'Setting::rm_database');
 
 
 $routes->get('rekon/generate_pdf', 'Rekon::generate_pdf');
+$routes->get('rekon/generate_pdf2', 'Rekon::generate_pdf2');
 $routes->get('rekon/hehepdf', 'Rekon::hehepdf');
 
 

@@ -118,7 +118,7 @@
                 </tbody>
             </table>            
         </div>
-        <p class="header-hehe">Data Rekon #1</p>
+        <p class="header-hehe">Data Rekon #2</p>
         <table width="100%" class="tablehehe">
             <tr>
                 <td class="text-align: left">
@@ -129,15 +129,15 @@
                             </tr>
                             <tr>
                                 <td>Total Data</td>
-                                <td>: <?= $data_rekon_satu[0]->compare_result->total_data; ?></td>
+                                <td>: <?= $data_rekon_dua[0]->compare_result->total_data; ?></td>
                             </tr>
                             <tr>
                                 <td>Total Match</td>
-                                <td>: <?= $data_rekon_satu[0]->compare_result->total_match; ?></td>
+                                <td>: <?= $data_rekon_dua[0]->compare_result->total_match; ?></td>
                             </tr>
                             <tr>
                                 <td>Total UnMatch</td>
-                                <td>: <?= $data_rekon_satu[0]->compare_result->total_unmatch; ?></td>
+                                <td>: <?= $data_rekon_dua[0]->compare_result->total_unmatch; ?></td>
                             </tr>
                         </tbody>
                     </table>  
@@ -146,19 +146,19 @@
                     <table align="right">
                         <tbody>
                             <tr>
-                                <td colspan="2" class="label">Summarize Result (<?= $data_rekon_satu[0]->sum_result[0]->kolom_name ?>)</td>
+                                <td colspan="2" class="label">Summarize Result (<?= $data_rekon_dua[0]->sum_result[0]->kolom_name ?>)</td>
                             </tr>
                             <tr>
                                 <td><?= "Total "?></td>
-                                <td><?= ": " .rupiah((isset($data_rekon_satu[0]->sum_result[0]->total) ? $data_rekon_satu[0]->sum_result[0]->total : 0)); ?></td>
+                                <td><?= ": " .rupiah((isset($data_rekon_dua[0]->sum_result[0]->total) ? $data_rekon_dua[0]->sum_result[0]->total : 0)); ?></td>
                             </tr>
                             <tr>
                                 <td><?= "Total Match" ?></td>
-                                <td><?= ": " .rupiah((isset($data_rekon_satu[0]->sum_result[0]->total_match) ? $data_rekon_satu[0]->sum_result[0]->total_match : 0)); ?></td>
+                                <td><?= ": " .rupiah((isset($data_rekon_dua[0]->sum_result[0]->total_match) ? $data_rekon_dua[0]->sum_result[0]->total_match : 0)); ?></td>
                             </tr>
                             <tr>
                                 <td><?= "Total UnMatch" ?></td>
-                                <td><?= ": " .rupiah((isset($data_rekon_satu[0]->sum_result[0]->total_unmatch) ? $data_rekon_satu[0]->sum_result[0]->total_unmatch : 0)); ?></td>
+                                <td><?= ": " .rupiah((isset($data_rekon_dua[0]->sum_result[0]->total_unmatch) ? $data_rekon_dua[0]->sum_result[0]->total_unmatch : 0)); ?></td>
                             </tr>
                             
                         </tbody>
