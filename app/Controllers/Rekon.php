@@ -371,7 +371,7 @@ class Rekon extends BaseController
                 $ruleValue = explode("=>" ,$dataClean["rule_value"]); // rule values di split dulu khusus replace
                 $valFind = $ruleValue[0];
                 $valReplace = $ruleValue[1];
-                $newData[$indexKolom] = str_replace($valFind, $valReplace, $newData[$indexKolom]);
+                $newData[$indexKolom] = preg_replace('/' . $valFind . '/', $valReplace, $newData[$indexKolom], 1);
             } else if($ruleOptions == "regex") {
                 log_message('info', 'TRY REGEX');
                 $ruleValue = explode("=>" ,$dataClean["rule_value"]); // rule values di split dulu khusus replace
