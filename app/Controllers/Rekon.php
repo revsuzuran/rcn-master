@@ -535,6 +535,7 @@ class Rekon extends BaseController
         
 
         /* Prepare Preview */
+        $data['nama_rekon'] = $rekonBuff->nama_rekon;
         $data['title'] = 'Add New Rekon';
         $data['view'] = 'dashboard/add_rekon_data_tocompare';
         $data['data_csv'] = $sampleCsv;

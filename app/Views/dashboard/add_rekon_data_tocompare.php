@@ -191,7 +191,7 @@ foreach ($data_csv as $row) {
       <div class="modal-body">
 
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Setting Name" aria-label="Recipient's username" id="namaFile_">
+          <input type="text" class="form-control" placeholder="Setting Name" aria-label="Recipient's username" id="namaSetting_" value="setting rekon <?= $nama_rekon ?>">
         </div>
 
         <table>
@@ -215,6 +215,13 @@ foreach ($data_csv as $row) {
                   <td><?= $row["kolom_name"] ?> </code></td>
                 </tr>
               <?php } ?>
+              <?php foreach($data_setting['kolom_sum'] as $row) { ?>
+                <tr>
+                  <td class="fw-lighter"># Kolom to SUM</td>
+                  <td class="fw-lighter">&nbsp;:&nbsp;</td>
+                  <td><?= $row["kolom_name"] ?> </code></td>
+                </tr>
+              <?php } ?>
           </tbody>
         </table>
       </div>
@@ -234,26 +241,26 @@ foreach ($data_csv as $row) {
   $("#btnNextOk").on("click", function() {
     var sess = "<?= $_SESSION['tipe'] ?>";
     if(sess == "1") {
-      window.location.replace("<?= base_url('add_rekon_next') ?>")
+      window.location.replace("<?= base_url('rekon/add_rekon_next') ?>")
     } else {
-      window.location.replace("<?= base_url('rekon_preview') ?>")
+      window.location.replace("<?= base_url('rekon/rekon_preview') ?>")
     }
   });
 
   $("#btnSimpan").click(function() {
-        
+        var nama_setting = $("#namaSetting_").val();
         $.ajax({
-            url : "<?= base_url('setting/save_setting') ?>",
+            url : "<?= base_url('save_setting') ?>",
             method : "POST",
-            data : {},
+            data : {nama_setting : nama_setting},
             async : true,
             success: function($result){
                if($result == 'sukses'){
                   var sess = "<?= $_SESSION['tipe'] ?>";
                   if(sess == "1") {
-                    window.location.replace("<?= base_url('add_rekon_next') ?>")
+                    window.location.replace("<?= base_url('rekon/add_rekon_next') ?>")
                   } else {
-                    window.location.replace("<?= base_url('rekon_preview') ?>")
+                    window.location.replace("<?= base_url('rekon/rekon_preview') ?>")
                   }
                }
             }

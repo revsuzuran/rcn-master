@@ -93,6 +93,7 @@ $routes->get('rekon/export_match/(:any)/(:any)', 'Rekon::export_match');
 
 
 $routes->post('get_setting', 'Setting::get_setting');
+$routes->post('save_setting', 'Setting::save_setting');
 
 
 

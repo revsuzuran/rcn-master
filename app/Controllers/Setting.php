@@ -3,6 +3,7 @@
 namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\DataModels;
+use App\Models\RekonBuff;
 
 class Setting extends BaseController
 {
@@ -14,6 +15,7 @@ class Setting extends BaseController
         $this->uri = $this->request->uri; //class request digunakan untuk request uri/url
         $this->user_model = new UserModel();
         $this->data_model = new DataModels();
+        $this->rekon_buff = new RekonBuff();
     }
 
     public function profil() {
@@ -197,6 +199,7 @@ class Setting extends BaseController
         $id_rekon = $this->session->get('id_rekon');
         $tipe = $this->session->get('tipe');
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
+        $nama_setting = $this->request->getPost('nama_setting');
 
         $kolomCompare = array();
         foreach($rekonBuff->kolom_compare as $row) {
@@ -220,8 +223,8 @@ class Setting extends BaseController
             "kolom_compare" => $kolomCompare,
             "kolom_sum" => $kolomSum,
             "delimiter" => $rekonBuff->delimiter,
-            "clean_rule" => $cleanRule
-
+            "clean_rule" => $cleanRule,
+            "nama_setting" => $nama_setting
         );
         
         $this->data_model->saveSetting($data);
