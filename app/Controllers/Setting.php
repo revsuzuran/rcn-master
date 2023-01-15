@@ -185,4 +185,47 @@ class Setting extends BaseController
         $this->data_model->deleteDatabaseOne($id);
         return "sukses";
     }
+
+
+    /* config setting */
+    public function get_setting() {
+        $id = $this->request->getPost('id');
+        echo json_encode($this->data_model->getSettingOne($id));
+    }
+
+    public function save_setting() {
+        $id_rekon = $this->session->get('id_rekon');
+        $tipe = $this->session->get('tipe');
+        $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
+
+        $kolomCompare = array();
+        foreach($rekonBuff->kolom_compare as $row) {
+            if ($tipe != $row->tipe) continue;
+            array_push($kolomCompare, $row);
+        }
+
+        $kolomSum = array();
+        foreach($rekonBuff->kolom_sum as $row) {
+            if ($tipe != $row->tipe) continue;
+            array_push($kolomSum, $row);
+        }
+
+        $cleanRule = array();
+        foreach($rekonBuff->clean_rule as $row) {
+            if ($tipe != $row->tipe) continue;
+            array_push($cleanRule, $row);
+        }
+
+        $data = array(
+            "kolom_compare" => $kolomCompare,
+            "kolom_sum" => $kolomSum,
+            "delimiter" => $rekonBuff->delimiter,
+            "clean_rule" => $cleanRule
+
+        );
+        
+        $this->data_model->saveSetting($data);
+        return "sukses";
+
+    }
 }

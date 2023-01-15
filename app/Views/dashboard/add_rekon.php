@@ -5,7 +5,7 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
     </div>
-    <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/upload'); ?>">
+    <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/upload'); ?>" id="uploadForm">
     <div class="row mb-3">
       
           <div class="col-6">
@@ -104,6 +104,9 @@
                   </div>
 
                   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="btnSetting">
+                      Load Setting
+                    </button>
                     <button class="btn btn-primary me-md-2" type="submit">Next</button>
                   </div>
               </div>
@@ -111,6 +114,7 @@
           </div>
 
         <input name="tipe" type="text" class="form-control" value="1" hidden>
+        <input name="id_setting" type="text" class="form-control" id="id_setting" hidden>
       
     </div>
     </form>
@@ -118,8 +122,99 @@
 </div>
 <!---Container Fluid--> 
 
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <!-- <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/upload_with_setting'); ?>"> -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Load Settings</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group col-6 mt-2">
+            <label class="form-label">Pilih Setting</label>
+            <input type="file" name="csvFile_" id="csvFile_" accept=".csv" hidden>
+            <select class="form-select mb-3" name="opt_setting" id="opt_setting">
+              <option value="0">-</option>
+              <?php foreach ($data_setting as $rowData) { ?>
+                <option value="<?= $rowData['_id'] ?>"><?= $rowData['nama_setting'] ?></option>
+              <?php } ?>
+            </select>
+        </div>
+        <hr>
+        <label class="form-label fw-bold" style="color:#0d6efd;">Setting Details</label>
+        <div class="form-group mt-2" id="datasetting">
+                       
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitProses">Proses Data</button>
+      </div>
+
+    <!-- </form> -->
+    </div>
+  </div>
+</div>
+
 <script>
    
+  $("#opt_setting").on('change', function() {
+    var id = $(this).find(":selected").val();
+    $.ajax({
+        url : "<?= base_url('get_setting') ?>",
+        method : "POST",
+        data : {id: id},
+        success: function(hasil){
+          
+          $("#id_setting").val(id);
+          
+          let contentHehe = "<table><tbody>";
+          const anu = JSON.parse(hasil);
+          contentHehe += `<tr>
+                 <td class="fw-lighter"># Delimiter</td>
+                 <td class="fw-lighter">&nbsp;:&nbsp;</td>
+                 <td><code class="highlighter-rouge"> "${anu.delimiter}" </code></td>
+               </tr>`;
+          for (const row of anu.clean_rule) {
+              contentHehe += `<tr>
+                 <td class="fw-lighter"># Clean Rule</td>
+                 <td class="fw-lighter">&nbsp;:&nbsp;</td>
+                 <td>KOLOM ${parseInt(row.index_kolom)+1} <code class="highlighter-rouge"> [${row.rule}] </code> ${row.rule_value} </td>
+               </tr>`;
+              
+          }
+
+          for (const row of anu.kolom_compare) {
+              contentHehe += `<tr>
+                 <td class="fw-lighter"># Kolom to Compare</td>
+                 <td class="fw-lighter">&nbsp;:&nbsp;</td>
+                 <td>${row.kolom_name} </td>
+               </tr>`;
+              
+          }
+
+          for (const row of anu.kolom_sum) {
+              contentHehe += `<tr>
+                 <td class="fw-lighter"># Kolom to SUM</td>
+                 <td class="fw-lighter">&nbsp;:&nbsp;</td>
+                 <td>${row.kolom_name} </td>
+               </tr>`;
+              
+          }
+          
+          contentHehe += "</tbody></table>";
+          $("#datasetting").html(contentHehe);
+          
+        }
+    });
+  });
+
+  $("#submitProses").on("click", function(e) {
+    e.preventDefault();
+    $('#uploadForm').attr('action', "<?php echo base_url('rekon/upload_with_setting'); ?>").submit();
+  });
 
   $(".form-ftp").hide();
   $(".form-file").show();  

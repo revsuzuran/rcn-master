@@ -99,22 +99,24 @@ foreach ($data_csv as $row) {
                           <!-- <button class="btn btn-warning me-md-2" type="submit">Finish</button> -->
 
                           <a href="<?php echo base_url('rekon/cleansing_data');?>" class="btn btn-danger">Kembali</a>  
-                          <a href="<?php echo base_url('rekon/rekon_preview');?>" class="btn btn-warning">Next (Preview Data)</a>
+                          <!-- <a href="<?php echo base_url('rekon/rekon_preview');?>" class="btn btn-warning">Next (Preview Data)</a> -->
+                          <button type="button" class="btn btn-secondary btnNext" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                              Next (Preview Data)
+                          </button>
                         <?php } else {  ?>
                           <!-- <button class="btn btn-primary me-md-2" type="submit">Next (Data #2)</button> -->
 
                           <a href="<?php echo base_url('rekon/cleansing_data');?>" class="btn btn-danger">Kembali</a>  
-                          <a href="<?php echo base_url('rekon/add_rekon_next');?>" class="btn btn-primary">Next (Data #2)</a>
+                          <!-- <a href="<?php echo base_url('rekon/add_rekon_next');?>" class="btn btn-primary">Next (Data #2)</a> -->
+                          <button type="button" class="btn btn-secondary btnNext" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >
+                              Next (Data #2)
+                          </button>
 
                         <?php }  ?>
                       </div>
                     </div>
                   </div>
                 </div>
-
-                
-                
-                
 
               <input name="tipe" type="text" class="form-control" value="1" hidden>
           </div>
@@ -176,8 +178,88 @@ foreach ($data_csv as $row) {
 </div>
 <!---Container Fluid-->
 
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <!-- <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/upload_with_setting'); ?>"> -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Save Settings</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Setting Name" aria-label="Recipient's username" id="namaFile_">
+        </div>
+
+        <table>
+          <tbody>
+              <tr>
+                <td class="fw-lighter"># Delimiter</td>
+                <td class="fw-lighter">&nbsp;:&nbsp;</td>
+                <td><code class="highlighter-rouge"> <?= $data_setting['delimiter']; ?> </code></td>
+              </tr>
+              <?php foreach($data_setting['clean_rule'] as $row) { ?>
+                <tr>
+                  <td class="fw-lighter"># Clean Rule</td>
+                  <td class="fw-lighter">&nbsp;:&nbsp;</td>
+                  <td>KOLOM <?= $row["index_kolom"] ?> <code class="highlighter-rouge"> [<?= $row["rule"] ?>] </code> <?= $row["rule_value"] ?></code></td>
+                </tr>
+              <?php } ?>
+              <?php foreach($data_setting['kolom_compare'] as $row) { ?>
+                <tr>
+                  <td class="fw-lighter"># Kolom to Compare</td>
+                  <td class="fw-lighter">&nbsp;:&nbsp;</td>
+                  <td><?= $row["kolom_name"] ?> </code></td>
+                </tr>
+              <?php } ?>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="btnSimpan">Lanjut & Simpan</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnNextOk">Lanjut</button>
+      </div>
+
+    <!-- </form> -->
+    </div>
+  </div>
+</div>
+
+
 <script>
   
+  $("#btnNextOk").on("click", function() {
+    var sess = "<?= $_SESSION['tipe'] ?>";
+    if(sess == "1") {
+      window.location.replace("<?= base_url('add_rekon_next') ?>")
+    } else {
+      window.location.replace("<?= base_url('rekon_preview') ?>")
+    }
+  });
+
+  $("#btnSimpan").click(function() {
+        
+        $.ajax({
+            url : "<?= base_url('setting/save_setting') ?>",
+            method : "POST",
+            data : {},
+            async : true,
+            success: function($result){
+               if($result == 'sukses'){
+                  var sess = "<?= $_SESSION['tipe'] ?>";
+                  if(sess == "1") {
+                    window.location.replace("<?= base_url('add_rekon_next') ?>")
+                  } else {
+                    window.location.replace("<?= base_url('rekon_preview') ?>")
+                  }
+               }
+            }
+        });   
+  });  
+
   $("#addCompare").click(function() {
         var id = $('#opt_compare').val();
         var idt = $('#opt_compare option:selected').text();

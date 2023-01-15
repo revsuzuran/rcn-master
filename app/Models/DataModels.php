@@ -13,6 +13,7 @@ class DataModels {
         $database = $connection->getDatabase();
         $this->ftp = $database->ftp_data;
         $this->db = $database->db_data;
+        $this->setting = $database->setting_data;
     }
     
     function getFtp() {
@@ -150,6 +151,41 @@ class DataModels {
             return false;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while updating a rekon with ID: '  . $ex->getMessage(), 500);
+        }
+    }
+
+
+    /* Settings */
+    function getSetting() {
+        try {
+            $cursor = $this->setting->find([]);
+            $rekon = $cursor->toArray();
+            return $rekon;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
+
+    function getSettingOne($id) {
+        try {
+            $setting = $this->setting->findOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+            return $setting;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
+
+    function saveSetting($data) {
+        try {
+            $result = $this->setting->insertOne($data);
+
+            if($result->getInsertedCount() == 1) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
         }
     }
 

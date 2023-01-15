@@ -65,6 +65,8 @@ $routes->get('rekon/delimiter', 'Rekon::add_rekon_delimiter');
 $routes->get('profil', 'Setting::profil');
 $routes->post('update_user', 'Setting::update_user');
 
+$routes->post('rekon/upload_with_setting', 'Rekon::upload_with_setting');
+
 
 $routes->get('ftp', 'Setting::ftp');
 $routes->get('add_ftp', 'Setting::add_ftp');
@@ -85,6 +87,13 @@ $routes->post('rm_database', 'Setting::rm_database');
 $routes->get('rekon/generate_pdf', 'Rekon::generate_pdf');
 $routes->get('rekon/generate_pdf2', 'Rekon::generate_pdf2');
 $routes->get('rekon/hehepdf', 'Rekon::hehepdf');
+
+$routes->get('rekon/export_unmatch/(:any)/(:any)', 'Rekon::export_unmatch');
+$routes->get('rekon/export_match/(:any)/(:any)', 'Rekon::export_match');
+
+
+$routes->post('get_setting', 'Setting::get_setting');
+
 
 
 
