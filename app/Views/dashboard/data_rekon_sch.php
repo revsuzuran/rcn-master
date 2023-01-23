@@ -5,19 +5,21 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
     </div>
-    <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/upload'); ?>" id="uploadForm">
+    <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/update_rekon'); ?>" id="uploadForm">
     <div class="row mb-3">
       
           <div class="col-6">
             <div class="card mb-4 pb-4">
                 <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
-                      <h6 class="m-0 font-weight-bold text-light">Input Detail Rekon</h6>
+                      <h6 class="m-0 font-weight-bold text-light">Detail Rekon</h6>
                 </div>
                 <div class="card-body">
+                
+                  
                     <div class="col-lg-6">
                       <div class="form-group">
                           <label class="form-label">Nama Rekon</label>
-                          <input name="namaRekon" type="text" class="form-control" placeholder="ex : Rekon Bank Indonesia" value="" required>
+                          <input name="namaRekon" type="text" class="form-control" placeholder="ex : Rekon Bank Indonesia" value="" id="namaRekon" required>
                       </div>
                     </div>
 
@@ -29,27 +31,20 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-6 mt-3">
-                      <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="is_schedule" name="is_schedule">
-                        <label class="form-check-label" for="is_schedule">Jadwalkan Rekon Otomatis</label>
-                      </div>
+                    <div class="form-group col-6 mt-2">
                       <label for="clockPicker2" class="form-label mt-2 clockPicker2">Waktu Rekon</label>
                       <div class="input-group clockpicker clockPicker2" id="clockPicker2">
-                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                        <input type="text" class="form-control" value="12:30" name="waktuRekon">                  
+                        <!-- <div class="input-group-addon"> -->
+                          <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                        <!-- </div> -->
+                        <input type="text" class="form-control" value="12:30" id="waktuText">                  
                       </div>
-                    </div>  
-                    <hr>                    
-                    <div class="form-group col-6 mt-2">
-                        <label class="form-label">Pilih Channel</label>
-                        <select class="form-select mb-3" name="opt_channel" id="opt_channel">
-                          <?php foreach ($data_channel as $rowData) { ?>
-                            <option value="<?= $rowData['_id'] ?>"><?= $rowData['nama_channel'] ?></option>
-                          <?php } ?>
-                        </select>
                     </div>
-                    
+
+                    <div class="form-group col-6 mt-2">
+                      
+                    </div>
+               
                 </div>
 
             </div>
@@ -58,7 +53,7 @@
           <div class="col-6">
             <div class="card mb-4">
                 <div class="card-header d-flex flex-row align-items-center justify-content-between bg-danger">
-                      <h6 class="m-0 font-weight-bold text-light">Upload File Rekon #1</h6>
+                      <h6 class="m-0 font-weight-bold text-light">Data File Rekon #1</h6>
                 </div>
                 <div class="card-body">
                   <div class="form-group mb-3">
@@ -100,7 +95,7 @@
                         <label class="form-label">Nama File</label>
                         <div class="custom-file">
                           <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="File Name on Ftp Server" aria-label="Recipient's username" aria-describedby="basic-addon2" name="nama_file">
+                            <input type="text" class="form-control" placeholder="File Name on Ftp Server" aria-label="Recipient's username" aria-describedby="basic-addon2" name="nama_file" id="namaFTP">
                             <div class="input-group-append">
                               <span class="input-group-text" id="basic-addon2">.csv</span>
                             </div>
@@ -122,7 +117,7 @@
                       </div>
                       <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Input Query</label>
-                        <textarea class="form-control" name="query" rows="3"></textarea><br>
+                        <textarea class="form-control" name="query" rows="3" id="textAreaQuery"></textarea><br>
                         <p class="fst-italic"><code class="text-primary fw-bold">Information</code> :<br> Use single quotation marks</code></p> 
                         <p>Example : <br> SELECT * FROM data_transaksi WHERE date_insert = <code class="highlighter-rouge">'2022-12-30'</code></p> 
                       </div>
@@ -130,10 +125,10 @@
                   </div>
 
                   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="btnSetting">
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="btnSetting">
                       Load Setting
-                    </button>
-                    <button class="btn btn-primary me-md-2" type="submit">Next</button>
+                    </button> -->
+                    <button class="btn btn-primary me-md-2" type="submit">Save</button>
                   </div>
               </div>
             </div>
@@ -148,44 +143,9 @@
 </div>
 <!---Container Fluid--> 
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    <!-- <form method="post" enctype="multipart/form-data" action="<?php echo base_url('rekon/upload_with_setting'); ?>"> -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Load Settings</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group col-6 mt-2">
-            <label class="form-label">Pilih Setting</label>
-            <input type="file" name="csvFile_" id="csvFile_" accept=".csv" hidden>
-            <select class="form-select mb-3" name="opt_setting" id="opt_setting">
-              <option value="0">-</option>
-              <?php foreach ($data_setting as $rowData) { ?>
-                <option value="<?= $rowData['_id'] ?>"><?= $rowData['nama_setting'] ?></option>
-              <?php } ?>
-            </select>
-        </div>
-        <hr>
-        <label class="form-label fw-bold" style="color:#0d6efd;">Setting Details</label>
-        <div class="form-group mt-2" id="datasetting">
-                       
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitProses">Proses Data</button>
-      </div>
-
-    <!-- </form> -->
-    </div>
-  </div>
-</div>
 
 <script>
-  $(".clockPicker2").hide();
+
   $("#opt_setting").on('change', function() {
     var id = $(this).find(":selected").val();
     $.ajax({
@@ -272,13 +232,28 @@
       autoclose: true
   });
 
-  $("#is_schedule").on("change", function(e) {
-
-    if(e.target.checked) {
-      $(".clockPicker2").show();
-    } else {
-      $(".clockPicker2").hide();
-    }
-  });
+  const modeTipe = "<?= $data_rekon->detail_mode->tipe ?>";
+  const namaRekon = "<?= $data_rekon->nama_rekon ?>";
+  const tglRekon = "<?= $data_rekon->tanggal_rekon ?>";
+  const waktuSch = "<?= $data_rekon->detail_schedule->time ?>";
+  $("#waktuText").val(waktuSch);  
+  $("#tanggal_rekon").val(tglRekon);  
+  $("#namaRekon").val(namaRekon);  
+  if(modeTipe == "ftp") {
+      const ftpText = "<?= isset($data_rekon->detail_mode->nama_file) ? $data_rekon->detail_mode->nama_file : "" ?>";
+      $("#namaFTP").val(ftpText);
+      $("#radioFtp").prop("checked", true);
+      $(".form-ftp").show();
+      $(".form-file").hide();   
+      $(".form-db").hide();    
+  } else if(modeTipe == "db") {
+    const queryText = "<?= isset($data_rekon->detail_mode->query) ? $data_rekon->detail_mode->query : "" ?>";
+    $("#radioDb").prop("checked", true);
+    $("#textAreaQuery").text(queryText);
+    $(".form-ftp").hide();
+    $(".form-file").hide(); 
+    $(".form-db").show();
+  }
+ 
 
 </script>

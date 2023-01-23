@@ -1,8 +1,8 @@
 <!-- Container Fluid-->
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
-        <a type="button" class="btn btn-primary" href="<?= base_url('add_database') ?>">Add New</a>
+        <h1 class="h3 mb-0 text-gray-800"><?= $title . " " . $data_mitra->nama_mitra; ?> </h1>
+        <a type="button" class="btn btn-primary" href="<?= base_url('mitra/channel/add') ?>">Add New</a>
     </div> 
 
     <div class="row mb-3">
@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
-                    <h6 class="m-0 font-weight-bold text-light">Data Database</h6>
+                    <h6 class="m-0 font-weight-bold text-light">Data Channel</h6>
                    
                 </div>
                 <div class="table-responsive p-3">
@@ -20,35 +20,59 @@
                     <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>Nama Config</th>
-                        <th>Hostname</th>
-                        <th>Database</th>
+                        <th>Nama Channel</th>
+                        <th>Fee</th>
                         <th>Aksi</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <th>No</th>
-                        <th>Nama Config</th>
-                        <th>Hostname</th>
-                        <th>Database</th>
+                        <th>Nama Channel</th>
+                        <th>Fee</th>
                         <th>Aksi</th>
                     </tr>
                     </tfoot>
                     <tbody>
                         
-                            <?php foreach($dataDb as $index => $row) {?> 
+                            <?php
+
+                            foreach($data_channel as $index => $row) {
+
+                                $dataFee = "";
+                                $dataFee .= "(";
+                                $dataFee .= convert($row['fee1']);
+                                $dataFee .= "/";
+                                $dataFee .= convert($row['fee2']);
+                                $dataFee .= "/";
+                                $dataFee .= convert($row['fee3']);
+                                $dataFee .= "/";
+                                $dataFee .= convert($row['fee4']);
+                                $dataFee .= "/";
+                                $dataFee .= convert($row['fee5']);
+                                $dataFee .= ")";
+
+                                ?> 
                                 <tr>
                                 <td><?= ($index+1) ?></td>
-                                <td><?= $row['db_name'] ?></td>     
-                                <td><?= $row['hostname'] ?></td>     
-                                <td><?= $row['database'] ?></td>   
+                                <td><?= $row['nama_channel'] ?></td>    
+                                <td><?= $dataFee ?></td>   
                                 <td>
-                                    <a type="button" class="btn btn-primary btn-sm editBtn" href="<?= base_url('edit_database/' . $row->_id->__toString()) ?>">Edit</a>
+                                    <button type="button" class="btn btn-primary btn-sm editBtn" data-id="<?= $row->_id->__toString() ?>" >Edit</button>
                                     <button type="button" class="btn btn-danger btn-sm deleteBtn" data-id="<?= $row->_id->__toString() ?>" >Delete</button>
                                 </td>  
                                 </tr>
-                            <?php } ?>                    
+                            <?php } 
+                            
+                            function convert($data) {
+                                if ($data['is_prosentase']) {
+                                   return  $data['nilai'] . '%';
+                                } else {
+                                    return $data['nilai'];
+                                }
+                            }
+                            
+                            ?>                    
                         
                     </tbody>
                 </table>
@@ -56,15 +80,28 @@
             </div>
         </div>
         <!-- tables-->
-
-
-
      
     </div>
     <!--Row-->
 </div>
 
 <script>
+$('.editBtn').on('click', function(e) {
+    const idChannel = $(this).data("id");
+
+    $.ajax({
+        url : "<?= base_url('mitra/channel/temp') ?>",
+        method : "POST",
+        data : {id:idChannel},
+        async : true,
+        dataType : 'html',
+        success: function($hasil){
+            window.location.replace("<?= base_url('mitra/channel/edit') ?>")
+        }
+    });
+
+});
+
 $('.deleteBtn').on('click', function(event) {
 
     const id = $(this).data("id");
@@ -81,7 +118,7 @@ $('.deleteBtn').on('click', function(event) {
             if (result.isConfirmed) {
 
                 $.ajax({
-                    url : "<?= base_url('rm_database') ?>",
+                    url : "<?= base_url('mitra/channel/rm') ?>",
                     method : "POST",
                     data : {id:id},
                     async : true,

@@ -33,48 +33,88 @@ $routes->set404Override();
  * --------------------------------------------------------------------
  */
 
-// We get a performance increase by specifying the default
-// route since we don't have to scan directories.
 $routes->get('/login', 'Login::login');
 $routes->post('/do_auth', 'Login::do_auth');
 $routes->get('/do_unauth', 'Login::do_unauth');
-// $routes->post('mantab', 'Home::do_upload_csv');
-
 $routes->get('/', 'Rekon::data_rekon_master');
 $routes->get('rekon', 'Rekon::data_rekon_master');
-$routes->get('rekon/add', 'Rekon::add_rekon_master');
-$routes->post('rekon/upload', 'Rekon::upload_data_rekon');
-$routes->post('rekon/save_delimiter', 'Rekon::save_delimiter');
-$routes->get('rekon/cleansing_data/(:any)', 'Rekon::cleansing_data');
-$routes->get('rekon/cleansing_data', 'Rekon::cleansing_data');
-$routes->post('rekon/save_cleansing', 'Rekon::save_cleansing');
-$routes->get('rekon/add_rekon_next', 'Rekon::add_rekon_next');
-$routes->get('rekon/add_compare', 'Rekon::add_rekon_data_to_compare');
-$routes->post('rekon/add_kolom_compare', 'Rekon::add_kolom_compare');
-$routes->post('rekon/rm_kolom_compare', 'Rekon::rm_kolom_compare');
-$routes->post('rekon/add_kolom_sum', 'Rekon::add_kolom_sum');
-$routes->post('rekon/rm_kolom_sum', 'Rekon::rm_kolom_sum');
-$routes->get('rekon/rekon_preview', 'Rekon::add_rekon_preview');
-$routes->get('rekon/add_rekon_finish', 'Rekon::add_rekon_finish');
-$routes->post('rekon/save_compare', 'Rekon::save_compare');
-$routes->get('rekon/rekon_preview_sum', 'Rekon::add_rekon_preview_sum');
-$routes->post('rekon/save_compare_sum', 'Rekon::save_compare_sum');
-$routes->get('rekon/rekon_result', 'Rekon::rekon_result');
-$routes->post('rekon/rekon_result_post', 'Rekon::rekon_result_post');
-$routes->get('rekon/delimiter', 'Rekon::add_rekon_delimiter');
+
+$routes->group('rekon', function ($routes) {
+    $routes->get('rekon_sch', 'Rekon::add_rekon_sch');
+    $routes->get('add', 'Rekon::add_rekon_master');
+    $routes->post('upload', 'Rekon::upload_data_rekon');
+    $routes->post('save_delimiter', 'Rekon::save_delimiter');
+    $routes->get('cleansing_data/(:any)', 'Rekon::cleansing_data');
+    $routes->get('cleansing_data', 'Rekon::cleansing_data');
+    $routes->post('save_cleansing', 'Rekon::save_cleansing');
+    $routes->get('add_rekon_next', 'Rekon::add_rekon_next');
+    $routes->get('add_compare', 'Rekon::add_rekon_data_to_compare');
+    $routes->post('add_kolom_compare', 'Rekon::add_kolom_compare');
+    $routes->post('rm_kolom_compare', 'Rekon::rm_kolom_compare');
+    $routes->post('add_kolom_sum', 'Rekon::add_kolom_sum');
+    $routes->post('rm_kolom_sum', 'Rekon::rm_kolom_sum');
+    $routes->get('rekon_preview', 'Rekon::add_rekon_preview');
+    $routes->get('add_rekon_finish', 'Rekon::add_rekon_finish');
+    $routes->post('save_compare', 'Rekon::save_compare');
+    $routes->get('rekon_preview_sum', 'Rekon::add_rekon_preview_sum');
+    $routes->post('save_compare_sum', 'Rekon::save_compare_sum');
+    $routes->get('rekon_result', 'Rekon::rekon_result');
+    $routes->get('rekon_result_amount', 'Rekon::rekon_result_amount');
+    $routes->post('rekon_result_post', 'Rekon::rekon_result_post');
+    $routes->get('delimiter', 'Rekon::add_rekon_delimiter');
+    $routes->post('upload_with_setting', 'Rekon::upload_with_setting');
+    $routes->get('data_rekon_sch', 'Rekon::data_rekon_sch');
+    $routes->post('data_rekon_sch_temp', 'Rekon::data_rekon_sch_temp');
+
+    $routes->get('generate_pdf', 'Rekon::generate_pdf');
+    $routes->get('generate_pdf2', 'Rekon::generate_pdf2');
+    $routes->get('hehepdf', 'Rekon::hehepdf');
+    
+    $routes->get('export_unmatch/(:any)/(:any)', 'Rekon::export_unmatch');
+    $routes->get('export_match/(:any)/(:any)', 'Rekon::export_match');
+});
+
+
+$routes->group('mitra', function ($routes) {
+    $routes->get('/', 'Mitra::index', ['filter' => 'isadmin']);
+    $routes->get('add', 'Mitra::add', ['filter' => 'isadmin']);
+    $routes->post('save_mitra', 'Mitra::save_mitra', ['filter' => 'isadmin']);
+    $routes->post('rm_mitra', 'Mitra::rm_mitra', ['filter' => 'isadmin']);
+    $routes->post('mitra_temp', 'Mitra::mitra_temp');
+    $routes->get('edit_mitra', 'Mitra::edit_mitra');
+    $routes->post('update_mitra', 'Mitra::update_mitra');
+
+    /* Channel */
+    $routes->group('channel', function ($routes) {
+        $routes->get('/', 'Channel::index');
+        $routes->get('add', 'Channel::add');
+        $routes->post('save', 'Channel::save_channel');
+        $routes->post('temp', 'Channel::channel_temp');
+        $routes->get('edit', 'Channel::edit_channel');
+        $routes->post('update', 'Channel::update_channel');
+        $routes->post('rm', 'Channel::rm_channel');
+    });
+
+    /* Bank */
+    $routes->group('bank', function ($routes) {
+        $routes->get('/', 'Bank::index');
+        $routes->get('add', 'Bank::add');
+        $routes->post('save', 'Bank::save_bank');
+        $routes->post('temp', 'Bank::bank_temp');
+        $routes->get('edit', 'Bank::edit_bank');
+        $routes->post('update', 'Bank::update_bank');
+        $routes->post('rm', 'Bank::rm_bank');
+    });
+});
+
 $routes->get('profil', 'Setting::profil');
 $routes->post('update_user', 'Setting::update_user');
-
-$routes->post('rekon/upload_with_setting', 'Rekon::upload_with_setting');
-
-
 $routes->get('ftp', 'Setting::ftp');
 $routes->get('add_ftp', 'Setting::add_ftp');
 $routes->post('save_ftp', 'Setting::save_ftp');
 $routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
 $routes->post('update_ftp', 'Setting::update_ftp');
 $routes->post('rm_ftp', 'Setting::rm_ftp');
-
 
 $routes->get('database', 'Setting::database');
 $routes->get('add_database', 'Setting::add_database');
@@ -83,17 +123,9 @@ $routes->get('edit_database/(:any)', 'Setting::edit_database');
 $routes->post('update_database', 'Setting::update_database');
 $routes->post('rm_database', 'Setting::rm_database');
 
-
-$routes->get('rekon/generate_pdf', 'Rekon::generate_pdf');
-$routes->get('rekon/generate_pdf2', 'Rekon::generate_pdf2');
-$routes->get('rekon/hehepdf', 'Rekon::hehepdf');
-
-$routes->get('rekon/export_unmatch/(:any)/(:any)', 'Rekon::export_unmatch');
-$routes->get('rekon/export_match/(:any)/(:any)', 'Rekon::export_match');
-
-
 $routes->post('get_setting', 'Setting::get_setting');
 $routes->post('save_setting', 'Setting::save_setting');
+
 
 
 

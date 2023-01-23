@@ -224,7 +224,8 @@ class Setting extends BaseController
             "kolom_sum" => $kolomSum,
             "delimiter" => $rekonBuff->delimiter,
             "clean_rule" => $cleanRule,
-            "nama_setting" => $nama_setting
+            "nama_setting" => $nama_setting,
+            "id_mitra" => $this->session->get('id_mitra')
         );
         
         $this->data_model->saveSetting($data);

@@ -3,8 +3,8 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
         <div>
-          <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf') ?>">Generate PDF 1</a>
-          <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf2') ?>">Generate PDF 2</a>
+          <!-- <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf') ?>">Generate PDF 1</a>
+          <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf2') ?>">Generate PDF 2</a> -->
       </div>
     </div>
         
@@ -75,6 +75,20 @@
                         <span><?= "TOTAL MATCH : " . rupiah((isset($data_rekon_satu[0]->sum_result->total_sum_match) ? $data_rekon_satu[0]->sum_result->total_sum_match : 0)); ?></span><br>  
                         <span><?= "TOTAL UNMATCH : " . rupiah((isset($data_rekon_satu[0]->sum_result->total_sum_unmatch) ? $data_rekon_satu[0]->sum_result->total_sum_unmatch : 0 )); ?></span><br>    
                     </div> 
+                </div>
+                <div class="row row-cols-auto mt-2">
+                    <div class="form-group mt-2 col-6">
+                        <label class="form-label fw-bolder">SUMMERIZE DATA</label><br>
+                        <?php $totalFee = (int) $data_rekon_satu[0]->fee_detail->fee1->total + $data_rekon_satu[0]->fee_detail->fee2->total + (int) $data_rekon_satu[0]->fee_detail->fee3->total + (int) $data_rekon_satu[0]->fee_detail->fee4->total  + (int) $data_rekon_satu[0]->fee_detail->fee5->total + 0 ; ?>
+                        <span>Fee Company : <?= 0 ?></span><br>  
+                        <span>Fee 1 : <?= $data_rekon_satu[0]->fee_detail->fee1->total; ?></span><br>   
+                        <span>Fee 2 : <?= $data_rekon_satu[0]->fee_detail->fee2->total; ?></span><br>
+                        <span>Fee 3 : <?= $data_rekon_satu[0]->fee_detail->fee3->total; ?></span><br> 
+                        <span>Fee 4 : <?= $data_rekon_satu[0]->fee_detail->fee4->total; ?></span><br> 
+                        <span>Fee 5 : <?= $data_rekon_satu[0]->fee_detail->fee5->total; ?></span><br>
+                        <span>Total Fee : <?= $totalFee ?></span><br> 
+                        <span>Nett Amount : <?=  rupiah((int)$data_rekon_satu[0]->sum_result->total_sum_match - (int) $totalFee) ?></span><br> </span>                     
+                    </div>
                 </div>
               </div>
 
@@ -207,6 +221,21 @@
                         <span><?= "TOTAL MATCH : " . rupiah((isset($data_rekon_dua[0]->sum_result->total_sum_match) ? $data_rekon_dua[0]->sum_result->total_sum_match :0 )); ?></span><br>  
                         <span><?= "TOTAL UNMATCH : " . rupiah((isset($data_rekon_dua[0]->sum_result->total_sum_unmatch) ? $data_rekon_dua[0]->sum_result->total_sum_unmatch : 0)); ?></span><br>  
                     </div> 
+                </div>
+
+                <div class="row row-cols-auto mt-2">
+                    <div class="form-group mt-2 col-6">
+                        <label class="form-label fw-bolder">SUMMERIZE DATA</label><br>
+                        <?php $totalFee = (int) $data_rekon_dua[0]->fee_detail->fee1->total + $data_rekon_dua[0]->fee_detail->fee2->total + (int) $data_rekon_dua[0]->fee_detail->fee3->total + (int) $data_rekon_dua[0]->fee_detail->fee4->total  + (int) $data_rekon_dua[0]->fee_detail->fee5->total + 0 ; ?>
+                        <span>Fee Company : <?= 0 ?></span><br>  
+                        <span>Fee 1 : <?= $data_rekon_dua[0]->fee_detail->fee1->total; ?></span><br>   
+                        <span>Fee 2 : <?= $data_rekon_dua[0]->fee_detail->fee2->total; ?></span><br>
+                        <span>Fee 3 : <?= $data_rekon_dua[0]->fee_detail->fee3->total; ?></span><br> 
+                        <span>Fee 4 : <?= $data_rekon_dua[0]->fee_detail->fee4->total; ?></span><br> 
+                        <span>Fee 5 : <?= $data_rekon_dua[0]->fee_detail->fee5->total; ?></span><br>
+                        <span>Total Fee : <?= $totalFee ?></span><br> 
+                        <span>Nett Amount : <?=  rupiah((int)$data_rekon_dua[0]->sum_result->total_sum_match - (int) $totalFee) ?></span><br> </span>                     
+                    </div>
                 </div>
 
               </div>

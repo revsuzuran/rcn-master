@@ -10,12 +10,15 @@ class RekonResult {
     function __construct() {
         $connection = new DatabaseConnector();
         $database = $connection->getDatabase();
+        $this->session = session();
+        $this->id_mitra = $this->session->get('id_mitra');
         $this->rekon_result = $database->rekon_result;
     }
 
     function getRekons($limit = 10) {
         try {
-            $cursor = $this->rekon_result->find([], ['limit' => $limit]);
+            $desc = -1;
+            $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ]], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -24,9 +27,9 @@ class RekonResult {
         }
     }
 
-    function getRekon($id) {
+    function getRekon($id, $id_rekon_result) {
         try {
-            $rekon = $this->rekon_result->find(['id_rekon' => (int) $id]);
+            $rekon = $this->rekon_result->find(['id_rekon' => (int) $id, "id_rekon_result" => (int) $id_rekon_result]);
             $rekon = $rekon->toArray();
 
             return $rekon;
@@ -37,12 +40,12 @@ class RekonResult {
 
     function getRekonAll($limit = 10) {
         try {
-            $cursor = $this->rekon_result->find([], ['limit' => $limit]);
+            $cursor = $this->rekon_result->find(['id_mitra' => (int) $this->id_mitra], ['limit' => $limit]);
             $rekon = $cursor->toArray();
 
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while fetching rekon with ID: ' . $id . $ex->getMessage(), 500);
+            show_error('Error while fetching rekon with ID: ' . $ex->getMessage(), 500);
         }
     }
 
@@ -55,6 +58,7 @@ class RekonResult {
                 'kolom_sum' => array(),
                 'is_proses' => "",
                 'timestamp' => date("Y-m-d h:i:sa"),
+                'id_mitra' => (int) $this->id_mitra,
             ]);
 
             if($insertOneResult->getInsertedCount() == 1) {

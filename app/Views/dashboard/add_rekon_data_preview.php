@@ -308,7 +308,7 @@
                           <input type="text" name="tipe" class="form-check-input" value="2" hidden>
                           <button class="btn btn-secondary" type="submit" id="saveCompareDataDua">Save & Preview</button>
                           <a href="<?php echo base_url('rekon/add_compare');?>" class="btn btn-danger">Kembali</a>  
-                          <a class="btn btn-primary" href="<?php echo base_url('rekon/rekon_preview_sum');?>" id="btnNext">Next</a>
+                          <a class="btn btn-primary" href="<?php echo base_url('rekon/add_rekon_finish');?>" id="btnNext">Finish</a>
                         </div>
 
                   </div>

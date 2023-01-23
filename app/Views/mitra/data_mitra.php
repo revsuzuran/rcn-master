@@ -2,7 +2,7 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
-        <a type="button" class="btn btn-primary" href="<?= base_url('add_database') ?>">Add New</a>
+        <a type="button" class="btn btn-primary" href="<?= base_url('add_mitra') ?>">Add New</a>
     </div> 
 
     <div class="row mb-3">
@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-danger">
-                    <h6 class="m-0 font-weight-bold text-light">Data Database</h6>
+                    <h6 class="m-0 font-weight-bold text-light">Data Mitra</h6>
                    
                 </div>
                 <div class="table-responsive p-3">
@@ -20,31 +20,31 @@
                     <thead class="thead-light">
                     <tr>
                         <th>No</th>
-                        <th>Nama Config</th>
-                        <th>Hostname</th>
-                        <th>Database</th>
+                        <th>Nama Mitra</th>
+                        <th>Data Bank</th>
+                        <th>Data Channel</th>
                         <th>Aksi</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <th>No</th>
-                        <th>Nama Config</th>
-                        <th>Hostname</th>
-                        <th>Database</th>
+                        <th>Nama Mitra</th>
+                        <th>Data Bank</th>
+                        <th>Data Channel</th>
                         <th>Aksi</th>
                     </tr>
                     </tfoot>
                     <tbody>
                         
-                            <?php foreach($dataDb as $index => $row) {?> 
+                            <?php foreach($dataMitra as $index => $row) {?> 
                                 <tr>
                                 <td><?= ($index+1) ?></td>
-                                <td><?= $row['db_name'] ?></td>     
-                                <td><?= $row['hostname'] ?></td>     
-                                <td><?= $row['database'] ?></td>   
+                                <td><?= $row['nama_mitra'] ?></td>     
+                                <td><button type="button" class="btn btn-primary btn-sm bankBtn" data-id="<?= $row->id_mitra ?>">Lihat</button></td>     
+                                <td><button type="button" class="btn btn-primary btn-sm channelBtn" data-id="<?= $row->id_mitra ?>">Lihat</button></td>   
                                 <td>
-                                    <a type="button" class="btn btn-primary btn-sm editBtn" href="<?= base_url('edit_database/' . $row->_id->__toString()) ?>">Edit</a>
+                                    <button type="button" class="btn btn-primary btn-sm editBtn" data-id="<?= $row->id_mitra ?>" >Edit</button>
                                     <button type="button" class="btn btn-danger btn-sm deleteBtn" data-id="<?= $row->_id->__toString() ?>" >Delete</button>
                                 </td>  
                                 </tr>
@@ -56,15 +56,60 @@
             </div>
         </div>
         <!-- tables-->
-
-
-
      
     </div>
     <!--Row-->
 </div>
 
 <script>
+$('.bankBtn').on('click', function(e) {
+    const idMitra = $(this).data("id");
+
+    $.ajax({
+        url : "<?= base_url('mitra/mitra_temp') ?>",
+        method : "POST",
+        data : {id:idMitra},
+        async : true,
+        dataType : 'html',
+        success: function($hasil){
+            window.location.href = "<?= base_url('mitra/bank/') ?>";
+        }
+    });
+
+});
+
+$('.channelBtn').on('click', function(e) {
+    const idMitra = $(this).data("id");
+
+    $.ajax({
+        url : "<?= base_url('mitra/mitra_temp') ?>",
+        method : "POST",
+        data : {id:idMitra},
+        async : true,
+        dataType : 'html',
+        success: function($hasil){
+            window.location.href = "<?= base_url('mitra/channel/') ?>";
+        }
+    });
+
+});
+
+$('.editBtn').on('click', function(e) {
+    const idMitra = $(this).data("id");
+
+    $.ajax({
+        url : "<?= base_url('mitra/mitra_temp') ?>",
+        method : "POST",
+        data : {id:idMitra},
+        async : true,
+        dataType : 'html',
+        success: function($hasil){
+            window.location.replace("<?= base_url('mitra/edit_mitra') ?>")
+        }
+    });
+
+});
+
 $('.deleteBtn').on('click', function(event) {
 
     const id = $(this).data("id");
@@ -81,7 +126,7 @@ $('.deleteBtn').on('click', function(event) {
             if (result.isConfirmed) {
 
                 $.ajax({
-                    url : "<?= base_url('rm_database') ?>",
+                    url : "<?= base_url('mitra/rm_mitra') ?>",
                     method : "POST",
                     data : {id:id},
                     async : true,

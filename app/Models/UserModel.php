@@ -34,39 +34,6 @@ class UserModel {
         }
     }
 
-    function insertRekon($title, $author, $pages) {
-        try {
-            $insertOneResult = $this->user->insertOne([
-                'title' => $title,
-                'author' => $author,
-                'pages' => $pages,
-                'pagesRead' => 0,
-            ]);
-
-            if($insertOneResult->getInsertedCount() == 1) {
-                return true;
-            }
-
-            return false;
-        } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
-        }
-    }
-
-    function insertRekonMany($data) {
-        try {
-            $insertOneResult = $this->user->insertMany($data);
-
-            if($insertOneResult->getInsertedCount() == 1) {
-                return true;
-            }
-
-            return false;
-        } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
-        }
-    }
-
     function updateUser($uname, $password, $name) {
         try {
 
@@ -98,51 +65,7 @@ class UserModel {
             show_error('Error while updating a rekon with ID: ' . $id . $ex->getMessage(), 500);
         }
     }
-
-    function deleteRekon($id) {
-        try {
-            $result = $this->user->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
-
-            if($result->getDeletedCount() == 1) {
-                return true;
-            }
-
-            return false;
-        } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while deleting a rekon with ID: ' . $id . $ex->getMessage(), 500);
-        }
-    }
-
-    function insertRekonMaster($namaRekon, $idRekon) {
-        try {
-            $insertOneResult = $this->user->insertOne([
-                'id_rekon' => $idRekon,
-                'nama_rekon' => $namaRekon
-            ]);
-
-            if($insertOneResult->getInsertedCount() == 1) {
-                return true;
-            }
-
-            return false;
-        } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
-        }
-    }
-
-    function getNextSequenceRekon(){
-        global $user;
-        
-        $retval = $user->findAndModify(
-            array('_id' => 'id_rekon'),
-            array('$inc' => array("seq" => 1)),
-            null,
-            array(
-                "new" => true,
-            )
-        );
-        return $retval['seq'];
-    }
+    
     
     
 }

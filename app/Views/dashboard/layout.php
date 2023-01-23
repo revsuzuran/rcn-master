@@ -19,7 +19,19 @@
 
     <script src="<?= base_url() ?>/assets/base/js/moment-with-locales.js"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap DatePicker -->  
+        <!-- <link href="<?php echo base_url() ?>/assets/dashboard/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
+        <script src="<?php echo base_url() ?>/assets/dashboard/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> -->
+
+    
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" rel="stylesheet" >
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script> -->
+
+    <!-- ClockPicker -->
+    <link href="<?php echo base_url() ?>/assets/dashboard/vendor/clock-picker/clockpicker.css" rel="stylesheet">
+    <script src="<?php echo base_url() ?>/assets/dashboard/vendor/clock-picker/clockpicker.js"></script>
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -48,7 +60,7 @@
         </a>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('rekon'); ?>">
+            <a class="nav-link" href="<?= base_url('/'); ?>">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Data Rekon</span></a>
         </li>
@@ -57,6 +69,19 @@
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Add Data Rekon</span></a>
         </li>
+        <li class="nav-item" hidden>
+            <a class="nav-link" href="<?= base_url('rekon/rekon_sch'); ?>">
+                <i class="fas fa-stopwatch"></i>
+                <span>Rekon Schedule Master</span></a>
+        </li>
+        <?php if(isset($_SESSION['masukAdmin'])) { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('mitra'); ?>">
+                <i class="fas fa-address-card"></i>
+                <span>Data Mitra</span></a>
+            </li>
+        <?php } ?>
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
                 <i class="fas fa-cogs"></i>

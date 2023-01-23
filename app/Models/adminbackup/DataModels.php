@@ -14,8 +14,6 @@ class DataModels {
         $this->ftp = $database->ftp_data;
         $this->db = $database->db_data;
         $this->setting = $database->setting_data;
-        $this->session = session();
-        $this->id_mitra = $this->session->get('id_mitra');
     }
     
     function getFtp() {
@@ -160,7 +158,7 @@ class DataModels {
     /* Settings */
     function getSetting() {
         try {
-            $cursor = $this->setting->find(['id_mitra' => $this->id_mitra]);
+            $cursor = $this->setting->find([]);
             $rekon = $cursor->toArray();
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {

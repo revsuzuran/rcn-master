@@ -12,9 +12,9 @@ class RekonBuff {
         $connection = new DatabaseConnector();
         $database = $connection->getDatabase();
         $this->session = session();
-        $this->id_mitra = $this->session->get('id_mitra');
         $this->rekon_buff = $database->rekon_buff;
         $this->rekon_buff_seq = $database->rekon_buff_seq;
+        $this->id_mitra = $this->session->get('id_mitra');
     }
 
     function getRekons($limit = 10) {
@@ -50,7 +50,7 @@ class RekonBuff {
 
     function getRekonAll($limit = 10) {
         try {
-            $cursor = $this->rekon_buff->find(['id_mitra' => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+            $cursor = $this->rekon_buff->find(['id_mitra' => $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -62,7 +62,7 @@ class RekonBuff {
 
     function getRekonSchAll($limit = 10) {
         try {
-            $cursor = $this->rekon_buff->find(["is_schedule" => ['$ne' => null], 'id_mitra' => $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+            $cursor = $this->rekon_buff->find(["is_schedule" => ['$ne' => null]], ['limit' => $limit, 'sort' => ['_id' => -1]]);
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -71,7 +71,7 @@ class RekonBuff {
         }
     }
 
-    function insertRekon($namaRekon, $idRekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggalRekon) {
+    function insertRekon($namaRekon, $idRekon, $detailMode, $isSch, $timeSch, $idChannel) {
         try {
             $insertOneResult = $this->rekon_buff->insertOne([
                 'id_rekon' => $idRekon,
@@ -86,9 +86,7 @@ class RekonBuff {
                 'detail_schedule' => (object) array(
                     'time' => $timeSch
                 ),
-                'id_channel' => $idChannel,
-                'id_mitra' => $this->id_mitra,
-                'tanggal_rekon' => $tanggalRekon
+                'id_channel' => $idChannel
             ]);
             if($insertOneResult->getInsertedCount() == 1) {
                 return true;

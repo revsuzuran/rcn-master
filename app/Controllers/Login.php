@@ -16,12 +16,21 @@ class Login extends BaseController
     public function do_auth(){
 
         $uname = $this->request->getPost('uname');
-        $pwd = md5($this->request->getPost('password'));
-        $hasil = $this->login_model->getUserOne($uname, $pwd);
+        $pwd = $this->request->getPost('password');
+        $hasil = $this->login_model->getUserOne($uname, md5($pwd));
+        $mitra = $this->login_model->getUserMitra($uname);
+
         if(isset($hasil->name))
         {
-            // set session
-            $sess_data = array('masukAdmin' => TRUE, 'uname' => $hasil->name, 'uname_admin' => $hasil->username);
+            // set session admin
+            $sess_data = array('masukAdmin' => TRUE, 'uname' => $hasil->name, 'uname_admin' => $hasil->username, 'isLogin' => TRUE);
+            $this->session->set($sess_data);
+            return redirect()->to(base_url());
+            exit();
+        } else if(isset($mitra->id_mitra) && password_verify($pwd, $mitra->passw) == true)
+        {
+            // set session mitra
+            $sess_data = array('masukMitra' => TRUE, 'uname' => $mitra->uname, 'uname_admin' => $mitra->uname, 'id_mitra' => $mitra->id_mitra, 'isLogin' => TRUE);
             $this->session->set($sess_data);
             return redirect()->to(base_url());
             exit();

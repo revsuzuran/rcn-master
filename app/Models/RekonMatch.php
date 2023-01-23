@@ -35,9 +35,9 @@ class RekonMatch {
         }
     }
 
-    function getRekonAll($id_rekon,$tipe, $limit = 0) {
+    function getRekonAll($id_rekon, $id_rekon_result, $tipe, $limit = 0) {
         try {
-            $cursor = $this->rekon_match->find(['id_rekon' => (int) $id_rekon, 'tipe' => (int) $tipe], ['limit' => $limit]);
+            $cursor = $this->rekon_match->find(['id_rekon' => (int) $id_rekon, 'id_rekon_result' => (int) $id_rekon_result, 'tipe' => (int) $tipe], ['limit' => $limit]);
             $rekon = $cursor->toArray();
 
             return $rekon;

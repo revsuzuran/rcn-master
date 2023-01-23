@@ -19,10 +19,10 @@ class AuthAdmin implements FilterInterface
             return;
         } 
 
-        if(!session()->has('masukAdmin'))
+        if(!session()->has('isLogin'))
         {
         	return redirect()->to(base_url('login'));
-        }
+        } 
         
     }
 

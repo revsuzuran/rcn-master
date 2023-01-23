@@ -4,25 +4,22 @@ namespace App\Models;
 
 use App\Libraries\DatabaseConnector;
 
-class RekonBuff {
-    private $rekon_buff;
-    private $rekon_buff_seq;
+class RekonResult {
+    private $rekon_result;
 
     function __construct() {
         $connection = new DatabaseConnector();
         $database = $connection->getDatabase();
-        $this->session = session();
-        $this->id_mitra = $this->session->get('id_mitra');
-        $this->rekon_buff = $database->rekon_buff;
-        $this->rekon_buff_seq = $database->rekon_buff_seq;
+        $this->rekon_result = $database->rekon_result;
     }
 
     function getRekons($limit = 10) {
         try {
-            $cursor = $this->rekon_buff->find([], ['limit' => $limit]);
+            $desc = -1;
+            $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ]], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
             $rekon = $cursor->toArray();
 
-            return $rekons;
+            return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
         }
@@ -30,17 +27,8 @@ class RekonBuff {
 
     function getRekon($id) {
         try {
-            $rekon = $this->rekon_buff->findOne(['id_rekon' => (int)  $id]);
-
-            return $rekon;
-        } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while fetching rekon with ID: ' . $id . $ex->getMessage(), 500);
-        }
-    }
-
-    function getRekonSch($id) {
-        try {
-            $rekon = $this->rekon_buff->findOne(['id_rekon' => (int)  $id]);
+            $rekon = $this->rekon_result->find(['id_rekon' => (int) $id, "id_rekon_result" => [ '$ne' => null ]]);
+            $rekon = $rekon->toArray();
 
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
@@ -50,7 +38,7 @@ class RekonBuff {
 
     function getRekonAll($limit = 10) {
         try {
-            $cursor = $this->rekon_buff->find(['id_mitra' => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+            $cursor = $this->rekon_result->find([], ['limit' => $limit]);
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -59,37 +47,17 @@ class RekonBuff {
         }
     }
 
-
-    function getRekonSchAll($limit = 10) {
+    function insertRekon($namaRekon, $idRekon) {
         try {
-            $cursor = $this->rekon_buff->find(["is_schedule" => ['$ne' => null], 'id_mitra' => $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
-            $rekon = $cursor->toArray();
-
-            return $rekon;
-        } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while fetching rekon with ID: ' . $id . $ex->getMessage(), 500);
-        }
-    }
-
-    function insertRekon($namaRekon, $idRekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggalRekon) {
-        try {
-            $insertOneResult = $this->rekon_buff->insertOne([
+            $insertOneResult = $this->rekon_result->insertOne([
                 'id_rekon' => $idRekon,
                 'nama_rekon' => $namaRekon,
                 'kolom_compare' => array(),
                 'kolom_sum' => array(),
                 'is_proses' => "",
-                'timestamp' => date("Y-m-d H:i:s"),
-                'timestamp_complete' => "-",
-                'detail_mode' => $detailMode,
-                'is_schedule' => $isSch,
-                'detail_schedule' => (object) array(
-                    'time' => $timeSch
-                ),
-                'id_channel' => $idChannel,
-                'id_mitra' => $this->id_mitra,
-                'tanggal_rekon' => $tanggalRekon
+                'timestamp' => date("Y-m-d h:i:sa"),
             ]);
+
             if($insertOneResult->getInsertedCount() == 1) {
                 return true;
             }
@@ -102,7 +70,7 @@ class RekonBuff {
 
     function updateRekon($id, $data) {
         try {
-            $result = $this->rekon_buff->updateOne(
+            $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id],
                 ['$set' => $data ]
             );
@@ -119,7 +87,7 @@ class RekonBuff {
 
     function updateRekonPush($id, $data) {
         try {
-            $result = $this->rekon_buff->updateOne(
+            $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id],
                 ['$push' => $data ]
             );
@@ -136,7 +104,7 @@ class RekonBuff {
 
     function deleteRekon($id) {
         try {
-            $result = $this->rekon_buff->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+            $result = $this->rekon_result->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
 
             if($result->getDeletedCount() == 1) {
                 return true;
@@ -150,7 +118,7 @@ class RekonBuff {
 
     function deleteKolomCompare($id_rekon, $tipe, $kolomIndex, $kolomName) {
         try {
-            $result = $this->rekon_buff->updateOne(
+            $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id_rekon],
                 ['$pull' => 
                     [
@@ -175,7 +143,7 @@ class RekonBuff {
 
     function deleteKolomSum($id_rekon, $tipe, $kolomIndex, $kolomName) {
         try {
-            $result = $this->rekon_buff->updateOne(
+            $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id_rekon],
                 ['$pull' => 
                     [
@@ -198,14 +166,5 @@ class RekonBuff {
         }
     }
 
-
-    function getNextSequenceRekon(){     
-        $ret = $this->rekon_buff_seq->findOneAndUpdate(
-            array("_id" => "id_rekon"),
-            array('$inc' => array("seq" => 1)),
-            array("new" => true, "upsert" => true)
-        );
-        return $ret->seq;
-    }
     
 }

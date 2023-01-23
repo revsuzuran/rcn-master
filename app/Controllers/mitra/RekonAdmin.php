@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\RekonBuff;
+use App\Models\mitra\RekonBuff;
 use App\Models\RekonBuffDetail;
 use App\Models\RekonResult;
 use App\Models\RekonUnmatch;
@@ -11,7 +11,6 @@ use App\Models\DBModel;
 use App\Models\Postgres;
 use App\Models\ChannelModel;
 use App\Libraries\PdfGenerator;
-
 
 class Rekon extends BaseController
 {
@@ -44,26 +43,25 @@ class Rekon extends BaseController
         $data['view'] = 'dashboard/rekon_master';
         $dataRekon = $this->rekon_buff->getRekonAll(0);
         $rekonResult = $this->rekon_result->getRekons(1000);
-        
+
         $result = array();
         foreach($dataRekon as $rowRekon) {
-            foreach ($rekonResult as $rowResult) {                
+            foreach ($rekonResult as $rowResult) {
                 if ($rowResult->id_rekon == $rowRekon->id_rekon && $rowResult->tipe == 1) {
-                    $temp = $rowRekon;
-                    $temp['data_result1'] = $rowResult;
-                    array_push($result, $temp);
+                    $rowRekon->data_result1 = $rowResult;
+                    array_push($result, $rowRekon);
                 }
             }
-        }
-        // echo json_encode($result);
-        // die;
+        }    
+
         foreach ($rekonResult as $rowResult) {
             foreach($result as $key => $row) {
                 if($rowResult->id_rekon == $row->id_rekon && $rowResult->tipe == 2 && $rowResult->id_rekon_result == $row->data_result1->id_rekon_result) {
                     $result[$key]->data_result2 = $rowResult;
+                    // array_push($result, $row);
                 }
             }
-        } 
+        }
 
         $data['data_rekon'] = $result;
         return view('dashboard/layout', $data);
@@ -103,8 +101,8 @@ class Rekon extends BaseController
         $data['dataFtp'] = $this->data_model->getFtp();
         $data['dataDb'] = $this->data_model->getDatabase();
         $data['data_setting'] = $this->data_model->getSetting();
-        $id_mitra = $this->session->get('id_mitra');
-        $data['data_channel'] = $this->channel_model->getAllChannel($id_mitra);
+        $id_rekon = $this->session->get('id_rekon');
+        $data['data_channel'] = $this->channel_model->getAllChannel($id_rekon);
         
         return view('dashboard/layout', $data);
     }
@@ -116,7 +114,6 @@ class Rekon extends BaseController
         $csv = $this->request->getFile('csvFile');
         $schPost = $this->request->getPost('is_schedule');
         $idChannel = $this->request->getPost('opt_channel');
-        $tanggal_rekon = $this->request->getPost('tanggal_rekon');
 
         $isSch = 0;
         $timeSch = 0;
@@ -141,7 +138,6 @@ class Rekon extends BaseController
                 $ftpOptionID = $this->request->getPost('ftp_option') ;
                 $detailMode->nama_file = $namaFile;
                 $detailMode->option_id = $ftpOptionID;
-                $detailMode->tipe =  "ftp";
                 $dataFtp = $this->data_model->getFtpOne($ftpOptionID);
                 $pathFile = $dataFtp->path;
                 $source = "$pathFile$namaFile.csv";
@@ -164,7 +160,6 @@ class Rekon extends BaseController
                 $detailMode->nama_file = $namaFile;
                 $detailMode->option_id = $dbOptionID;
                 $detailMode->query = $query;
-                $detailMode->tipe =  "db";
                 $dataDB = $this->data_model->getDatabaseOne($dbOptionID);
                 $this->dbModel->initConnection($dataDB->hostname, $dataDB->username, $dataDB->password, $dataDB->database, $dataDB->driver, $dataDB->port);
                 $result = $this->dbModel->getData($query);
@@ -183,7 +178,7 @@ class Rekon extends BaseController
             /* Create New Rekon and Save Id to Sessions */
             $id_rekon = $this->rekon_buff->getNextSequenceRekon(); // get id sequence
             $timestamp = date("Y-m-d h:i:sa");
-            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggal_rekon);
+            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel);
             $this->session->set('id_rekon', $id_rekon); // save id_rekon to session untuk nanti (tipe 2)
         } else {
             $id_rekon = $this->session->get('id_rekon');
@@ -966,7 +961,7 @@ class Rekon extends BaseController
         $id_rekon = $this->session->get('id_rekon');
         $id_rekon_result = $this->session->get('id_rekon_result');
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
-        $rekonResult = $this->rekon_result->getRekon($id_rekon, $id_rekon_result);
+        $rekonResult = $this->rekon_result->getRekon($id_rekon);
         
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 1);
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2);
@@ -989,45 +984,6 @@ class Rekon extends BaseController
         // echo json_encode($rekonResult[0]->tipe);
         $data['title'] = "Rekon Result $rekonBuff->nama_rekon";
         $data['view'] = 'dashboard/rekon_result'; 
-        $data['data_rekon_satu'] = $dataRekonSatu; 
-        $data['data_rekon_dua'] = $dataRekonDua; 
-        $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
-        $data['data_rekon_unmatch_dua'] = $dataRekon2unmatch; 
-        $data['data_rekon_match_satu'] = $dataRekon1match; 
-        $data['data_rekon_match_dua'] = $dataRekon2match; 
-        $data['kolom_filter_satu'] = $kolomFilter1; 
-        $data['kolom_filter_dua'] = $kolomFilter2; 
-        // echo json_encode($dataRekonSatu);
-        return view('dashboard/layout', $data);
-    }
-
-    public function rekon_result_amount() {
-        $id_rekon = $this->session->get('id_rekon');
-        $id_rekon_result = $this->session->get('id_rekon_result');
-        $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
-        $rekonResult = $this->rekon_result->getRekon($id_rekon, $id_rekon_result);
-        
-        $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 1);
-        $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2);
-        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 1);
-        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 2);
-
-        $kolomFilter1 = array();
-        $kolomFilter2 = array();
-        foreach ($rekonBuff->kolom_compare as $rowCompare) {
-            if($rowCompare->tipe == 1) array_push($kolomFilter1, $rowCompare->kolom_index);
-            if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
-        }
-
-        $dataRekonSatu = array();
-        $dataRekonDua = array();
-        foreach ($rekonResult as $row) {
-            if($row->tipe == 1) array_push($dataRekonSatu, $row);
-            if($row->tipe == 2) array_push($dataRekonDua, $row);
-        }
-        // echo json_encode($dataRekonSatu);
-        $data['title'] = "Result Amount $rekonBuff->nama_rekon";
-        $data['view'] = 'dashboard/rekon_result_amount'; 
         $data['data_rekon_satu'] = $dataRekonSatu; 
         $data['data_rekon_dua'] = $dataRekonDua; 
         $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
@@ -1275,8 +1231,6 @@ class Rekon extends BaseController
         
     }
 
-
-    /* AUTO UPLOAD WITH SETTING */
     public function upload_with_setting() {
         /* Preparing Data */
         $id_rekon = $this->session->get('id_rekon');
@@ -1284,25 +1238,6 @@ class Rekon extends BaseController
         $namaRekon =$this->request->getPost('namaRekon');
         $tipe = $this->request->getPost('tipe');
         $radioTipe = $this->request->getPost('radioUpload');
-
-        $schPost = $this->request->getPost('is_schedule');
-        $idChannel = $this->request->getPost('opt_channel');
-
-        $isSch = 0;
-        $timeSch = 0;
-        if($schPost == "on") {
-            $timeSch = $this->request->getPost('waktuRekon');
-            $isSch = 1;
-
-            if($radioTipe != "ftp" && $radioTipe != "db") {
-                $this->session->setFlashdata('error', 'Failed! Penjadwalan rekon hanya untuk opsi FTP dan DB');
-                if($tipe == 1) return redirect()->to(base_url('rekon/add'));
-                else return redirect()->to(base_url('rekon/add_rekon_next'));
-            }
-
-        }
-
-        $detailMode = (object) array();
 
         if($id_setting == "0") {
             $this->session->setFlashdata('error', 'Failed to get data setting');
@@ -1312,6 +1247,7 @@ class Rekon extends BaseController
 
         /* Load Setting */
         $setting = $this->data_model->getSettingOne($id_setting);
+
         $dataFtp = $this->data_model->getFtp();
         
         if($radioTipe == "ftp") {
@@ -1320,8 +1256,6 @@ class Rekon extends BaseController
                 $ftpOptionID = $this->request->getPost('ftp_option') ;
                 $dataFtp = $this->data_model->getFtpOne($ftpOptionID);
                 $pathFile = $dataFtp->path;
-                $detailMode->nama_file = $namaFile;
-                $detailMode->option_id = $ftpOptionID;
                 $source = "$pathFile$namaFile.csv";
                 $target = fopen($source, "w");
                 $conn = ftp_connect($dataFtp->domain) or die("Could not connect");
@@ -1339,16 +1273,13 @@ class Rekon extends BaseController
                 $namaFile = $this->request->getPost('nama_file');
                 $dbOptionID = $this->request->getPost('db_option');
                 $query = $this->request->getPost('query');
-                $detailMode->nama_file = $namaFile;
-                $detailMode->option_id = $dbOptionID;
-                $detailMode->query = $query;
                 $dataDB = $this->data_model->getDatabaseOne($dbOptionID);
 
                 $this->dbModel->initConnection($dataDB->hostname, $dataDB->username, $dataDB->password, $dataDB->database, $dataDB->driver, $dataDB->port);
                 $result = $this->dbModel->getData($query);
 
             } catch (\Throwable $th) {
-                $this->session->setFlashdata('error', "DB Error! $th");
+                $this->session->setFlashdata('error', 'FTP Error! Failed to get file or file not found');
                 if($tipe == 1) return redirect()->to(base_url('rekon/add'));
                 else return redirect()->to(base_url('rekon/add_rekon_next'));
             }
@@ -1361,7 +1292,7 @@ class Rekon extends BaseController
             /* Create New Rekon and Save Id to Sessions */
             $id_rekon = $this->rekon_buff->getNextSequenceRekon(); // get id sequence
             $timestamp = date("Y-m-d h:i:sa");
-            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel);
+            $this->rekon_buff->insertRekon($namaRekon, $id_rekon);
             $this->session->set('id_rekon', $id_rekon); // save id_rekon to session untuk nanti (tipe 2)
         } else {
             $id_rekon = $this->session->get('id_rekon');
