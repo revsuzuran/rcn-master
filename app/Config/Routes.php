@@ -105,23 +105,39 @@ $routes->group('mitra', function ($routes) {
         $routes->post('update', 'Bank::update_bank');
         $routes->post('rm', 'Bank::rm_bank');
     });
+
+    /* Lain lain */
+    $routes->get('profil', 'Setting::profil_mitra');
+    $routes->post('update_user', 'Setting::update_user_mitra');
+    $routes->get('ftp', 'Setting::ftp');
+    $routes->get('add_ftp', 'Setting::add_ftp');
+    $routes->post('save_ftp', 'Setting::save_ftp');
+    $routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
+    $routes->post('update_ftp', 'Setting::update_ftp');
+    $routes->post('rm_ftp', 'Setting::rm_ftp');
+    $routes->get('database', 'Setting::database');
+    $routes->get('add_database', 'Setting::add_database');
+    $routes->post('save_database', 'Setting::save_database');
+    $routes->get('edit_database/(:any)', 'Setting::edit_database');
+    $routes->post('update_database', 'Setting::update_database');
+    $routes->post('rm_database', 'Setting::rm_database');
 });
 
-$routes->get('profil', 'Setting::profil');
-$routes->post('update_user', 'Setting::update_user');
-$routes->get('ftp', 'Setting::ftp');
-$routes->get('add_ftp', 'Setting::add_ftp');
-$routes->post('save_ftp', 'Setting::save_ftp');
-$routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
-$routes->post('update_ftp', 'Setting::update_ftp');
-$routes->post('rm_ftp', 'Setting::rm_ftp');
+$routes->get('profil', 'Setting::profil', ['filter' => 'isadmin']);
+$routes->post('update_user', 'Setting::update_user', ['filter' => 'isadmin']);
+// $routes->get('ftp', 'Setting::ftp');
+// $routes->get('add_ftp', 'Setting::add_ftp');
+// $routes->post('save_ftp', 'Setting::save_ftp');
+// $routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
+// $routes->post('update_ftp', 'Setting::update_ftp');
+// $routes->post('rm_ftp', 'Setting::rm_ftp');
 
-$routes->get('database', 'Setting::database');
-$routes->get('add_database', 'Setting::add_database');
-$routes->post('save_database', 'Setting::save_database');
-$routes->get('edit_database/(:any)', 'Setting::edit_database');
-$routes->post('update_database', 'Setting::update_database');
-$routes->post('rm_database', 'Setting::rm_database');
+// $routes->get('database', 'Setting::database');
+// $routes->get('add_database', 'Setting::add_database');
+// $routes->post('save_database', 'Setting::save_database');
+// $routes->get('edit_database/(:any)', 'Setting::edit_database');
+// $routes->post('update_database', 'Setting::update_database');
+// $routes->post('rm_database', 'Setting::rm_database');
 
 $routes->post('get_setting', 'Setting::get_setting');
 $routes->post('save_setting', 'Setting::save_setting');

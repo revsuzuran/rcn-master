@@ -40,7 +40,12 @@ class RekonResult {
 
     function getRekonAll($limit = 10) {
         try {
-            $cursor = $this->rekon_result->find(['id_mitra' => (int) $this->id_mitra], ['limit' => $limit]);
+            if ($this->session->has('masukAdmin')) {
+                $cursor = $this->rekon_result->find([], ['limit' => $limit]);
+            } else {
+                $cursor = $this->rekon_result->find(['id_mitra' => (int) $this->id_mitra], ['limit' => $limit]);
+            }
+          
             $rekon = $cursor->toArray();
 
             return $rekon;

@@ -64,11 +64,14 @@
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Data Rekon</span></a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('rekon/add'); ?>">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Add Data Rekon</span></a>
-        </li>
+        
+        <?php if(!isset($_SESSION['masukAdmin'])) { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('rekon/add'); ?>">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Add Data Rekon</span></a>
+            </li>
+        <?php } ?>
         <li class="nav-item" hidden>
             <a class="nav-link" href="<?= base_url('rekon/rekon_sch'); ?>">
                 <i class="fas fa-stopwatch"></i>
@@ -89,9 +92,20 @@
             </a>
             <div id="collapseBootstrap" class="collapse dropdown-menu" aria-labelledby="headingBootstrap" data-bs-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="<?= base_url('ftp'); ?>">FTP</a>
-                    <a class="collapse-item" href="<?= base_url('database'); ?>">Database</a>
-                    <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
+
+                    <?php if(isset($_SESSION['masukAdmin'])) { ?>
+                         <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
+                    <?php } ?>
+                    
+                    <?php if(isset($_SESSION['masukMitra'])) { ?>
+                        <a class="collapse-item" href="<?= base_url('mitra/profil'); ?>">Profil</a>
+                        <a class="collapse-item" href="<?= base_url('mitra/channel'); ?>">Channel</a>
+                        <a class="collapse-item" href="<?= base_url('mitra/bank'); ?>">Bank</a>
+                        <a class="collapse-item" href="<?= base_url('mitra/ftp'); ?>">FTP</a>
+                        <a class="collapse-item" href="<?= base_url('mitra/database'); ?>">Database</a>
+                        <a class="collapse-item" href="<?= base_url('mitra/profil'); ?>">Profil</a>
+                    <?php } ?>
+                    
                 </div>
             </div>
         </li>
@@ -194,6 +208,8 @@
  $(document).ready(function () {
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTable2').DataTable(); // ID From dataTable
+      $('#dataTable3').DataTable(); // ID From dataTable 
+      $('#dataTable4').DataTable(); // ID From dataTable
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
     });
 </script>

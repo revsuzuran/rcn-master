@@ -25,11 +25,11 @@
                         <label for="simpleDataInput" class="form-label">Tanggal Rekon</label>
                         <div class="input-group date">
                             <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-                          <input type="date" class="form-control" value="01/06/2020" id="tanggal_rekon">
+                          <input type="date" class="form-control" value="01/06/2020" id="tanggal_rekon" name="tanggal_rekon">
                         </div>
                     </div>
 
-                    <div class="form-group col-6 mt-3">
+                    <div class="form-group col-6 mt-3" hidden>
                       <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="is_schedule" name="is_schedule">
                         <label class="form-check-label" for="is_schedule">Jadwalkan Rekon Otomatis</label>

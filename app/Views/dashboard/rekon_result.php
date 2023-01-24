@@ -143,7 +143,7 @@
                   </div>
               </div>
               <div class="table-responsive p-3">
-                <table class="table align-items-center table-flush" id="dataTable">
+                <table class="table align-items-center table-flush" id="dataTable3">
                   <thead class="table-dark">
                     <tr>
                       <th>No</th>
@@ -276,7 +276,7 @@
                   </div>
               </div>
               <div class="table-responsive p-3">
-                <table class="table align-items-center table-flush" id="dataTable2">
+                <table class="table align-items-center table-flush" id="dataTable4">
                   <thead class="table-dark">
                     <tr>
                       <th>No</th>

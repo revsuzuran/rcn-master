@@ -86,7 +86,7 @@
                         <span>Fee 3 : <?= $data_rekon_satu[0]->fee_detail->fee3->total; ?></span><br> 
                         <span>Fee 4 : <?= $data_rekon_satu[0]->fee_detail->fee4->total; ?></span><br> 
                         <span>Fee 5 : <?= $data_rekon_satu[0]->fee_detail->fee5->total; ?></span><br>
-                        <span>Total Fee : <?= $totalFee ?></span><br> 
+                        <span>Total Fee : <?= rupiah($totalFee) ?></span><br> 
                         <span>Nett Amount : <?=  rupiah((int)$data_rekon_satu[0]->sum_result->total_sum_match - (int) $totalFee) ?></span><br> </span>                     
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                   </div>
               </div>
               <div class="table-responsive p-3">
-                <table class="table align-items-center table-flush" id="dataTable">
+                <table class="table align-items-center table-flush" id="dataTable3">
                   <thead class="table-dark">
                     <tr>
                       <th>No</th>
@@ -233,7 +233,7 @@
                         <span>Fee 3 : <?= $data_rekon_dua[0]->fee_detail->fee3->total; ?></span><br> 
                         <span>Fee 4 : <?= $data_rekon_dua[0]->fee_detail->fee4->total; ?></span><br> 
                         <span>Fee 5 : <?= $data_rekon_dua[0]->fee_detail->fee5->total; ?></span><br>
-                        <span>Total Fee : <?= $totalFee ?></span><br> 
+                        <span>Total Fee : <?= rupiah($totalFee) ?></span><br> 
                         <span>Nett Amount : <?=  rupiah((int)$data_rekon_dua[0]->sum_result->total_sum_match - (int) $totalFee) ?></span><br> </span>                     
                     </div>
                 </div>
@@ -305,7 +305,7 @@
                   </div>
               </div>
               <div class="table-responsive p-3">
-                <table class="table align-items-center table-flush" id="dataTable2">
+                <table class="table align-items-center table-flush" id="dataTable4">
                   <thead class="table-dark">
                     <tr>
                       <th>No</th>

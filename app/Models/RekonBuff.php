@@ -50,7 +50,14 @@ class RekonBuff {
 
     function getRekonAll($limit = 10) {
         try {
-            $cursor = $this->rekon_buff->find(['id_mitra' => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+
+            if($this->session->has('masukAdmin')) {
+                $cursor = $this->rekon_buff->find([], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+            } else {
+                $cursor = $this->rekon_buff->find(['id_mitra' => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+            }
+
+            
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -62,7 +69,12 @@ class RekonBuff {
 
     function getRekonSchAll($limit = 10) {
         try {
-            $cursor = $this->rekon_buff->find(["is_schedule" => ['$ne' => null], 'id_mitra' => $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+            if ($this->session->has('masukAdmin')) {
+                $cursor = $this->rekon_buff->find(["is_schedule" => ['$ne' => null]], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+            } else {
+                $cursor = $this->rekon_buff->find(["is_schedule" => ['$ne' => null], 'id_mitra' => $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+            }
+            
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -78,6 +90,7 @@ class RekonBuff {
                 'nama_rekon' => $namaRekon,
                 'kolom_compare' => array(),
                 'kolom_sum' => array(),
+                'clean_rule' => array(),
                 'is_proses' => "",
                 'timestamp' => date("Y-m-d H:i:s"),
                 'timestamp_complete' => "-",
@@ -88,7 +101,8 @@ class RekonBuff {
                 ),
                 'id_channel' => $idChannel,
                 'id_mitra' => $this->id_mitra,
-                'tanggal_rekon' => $tanggalRekon
+                'tanggal_rekon' => $tanggalRekon,
+                'delimiter' => ''
             ]);
             if($insertOneResult->getInsertedCount() == 1) {
                 return true;

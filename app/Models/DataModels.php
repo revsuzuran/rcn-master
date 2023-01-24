@@ -20,7 +20,7 @@ class DataModels {
     
     function getFtp() {
         try {
-            $cursor = $this->ftp->find([]);
+            $cursor = $this->ftp->find(['id_mitra' => $this->id_mitra]);
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -94,7 +94,7 @@ class DataModels {
 
     function getDatabase() {
         try {
-            $cursor = $this->db->find([]);
+            $cursor = $this->db->find(['id_mitra' => $this->id_mitra]);
             $rekon = $cursor->toArray();
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {

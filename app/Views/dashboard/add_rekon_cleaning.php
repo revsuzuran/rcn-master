@@ -1,12 +1,6 @@
 <!-- Container Fluid-->
 <?php
 
-// foreach ($data_csv as $row) {
-//   echo json_encode($data_csv);
-// }
-// die();
-
-
 $totalData = count($data_csv);
 $totalKolom = 0;
 foreach ($data_csv as $row) {

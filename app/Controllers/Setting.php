@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\DataModels;
 use App\Models\RekonBuff;
+use App\Models\MitraModel;
 
 class Setting extends BaseController
 {
@@ -16,6 +17,7 @@ class Setting extends BaseController
         $this->user_model = new UserModel();
         $this->data_model = new DataModels();
         $this->rekon_buff = new RekonBuff();
+        $this->mitra = new MitraModel();
     }
 
     public function profil() {
@@ -39,7 +41,7 @@ class Setting extends BaseController
 
     public function ftp() {
         $data['title'] = 'Data FTP';
-        $data['view'] = 'ftp';
+        $data['view'] = 'setting/ftp';
         $data['dataFtp'] = $this->data_model->getFtp();
         
         return view('dashboard/layout', $data);
@@ -48,7 +50,7 @@ class Setting extends BaseController
 
     public function edit_ftp() {
         $data['title'] = 'Edit Data FTP';
-        $data['view'] = 'edit_ftp';
+        $data['view'] = 'setting/edit_ftp';
         $id = $this->uri->getSegment(2);
         $data['data_ftp'] = $this->data_model->getFtpOne($id);
         // die($data['dataFtp']);
@@ -74,7 +76,8 @@ class Setting extends BaseController
             "password" => $passw,
             "domain" => $domain,
             "ftp_name" => $ftpName,
-            "path" => $path
+            "path" => $path,
+            "id_mitra" => $this->session->get('id_mitra')
         );
 
         $this->data_model->updateFtp($id, $data);
@@ -83,7 +86,7 @@ class Setting extends BaseController
     }
     public function add_ftp() {
         $data['title'] = 'Add Data FTP';
-        $data['view'] = 'add_ftp';
+        $data['view'] = 'setting/add_ftp';
         return view('dashboard/layout', $data);
     }
 
@@ -99,7 +102,8 @@ class Setting extends BaseController
             "password" => $passw,
             "domain" => $domain,
             "ftp_name" => $ftpName,
-            "path" => $path
+            "path" => $path,
+            'id_mitra' => $this->session->get('id_mitra'),
         );
 
         $this->data_model->saveFtp($data);
@@ -112,7 +116,7 @@ class Setting extends BaseController
     /* ============================================= */
     public function database() {
         $data['title'] = 'Data Database';
-        $data['view'] = 'database_view';
+        $data['view'] = 'setting/database_view';
         $data['dataDb'] = $this->data_model->getDatabase();
         
         return view('dashboard/layout', $data);
@@ -120,7 +124,7 @@ class Setting extends BaseController
 
     public function edit_database() {
         $data['title'] = 'Edit Data Database';
-        $data['view'] = 'edit_database';
+        $data['view'] = 'setting/edit_database';
         $id = $this->uri->getSegment(2);
         $data['data_db'] = $this->data_model->getDatabaseOne($id);
         // die($data['dataFtp']);
@@ -144,7 +148,8 @@ class Setting extends BaseController
             "password" => $password,
             "hostname" => $hostname,
             "db_name" => $dbName,
-            "port" => $port
+            "port" => $port,
+            "id_mitra" => $this->session->get('id_mitra')
         );
 
         $this->data_model->updateDatabase($id, $data);
@@ -154,7 +159,7 @@ class Setting extends BaseController
 
     public function add_database() {
         $data['title'] = 'Add New Database';
-        $data['view'] = 'add_database';
+        $data['view'] = 'setting/add_database';
         return view('dashboard/layout', $data);
     }
 
@@ -174,7 +179,8 @@ class Setting extends BaseController
             "password" => $password,
             "hostname" => $hostname,
             "db_name" => $dbName,
-            "port" => $port
+            "port" => $port,
+            "id_mitra" => $this->session->get('id_mitra')
         );
         
         $this->data_model->saveDatabase($data);
@@ -229,6 +235,50 @@ class Setting extends BaseController
         );
         
         $this->data_model->saveSetting($data);
+        return "sukses";
+
+    }
+
+
+
+    /* Mitra */
+    public function profil_mitra() {
+        $id = $this->session->get('id_mitra');
+        $data['title'] = 'Pengaturan User';
+        $data['view'] = 'setting/profil_mitra';
+        $data['data_mitra'] = $this->mitra->getMitra($id);
+        return view('dashboard/layout', $data);
+    }
+
+    public function update_user_mitra() {
+        $uname = $this->request->getPost('username');
+        $passw = $this->request->getPost('password');
+        $namaMitra = $this->request->getPost('name');
+        $email = $this->request->getPost('email');
+        $alamat = $this->request->getPost('alamat');
+        $phone = $this->request->getPost('phone');
+
+        $id = $this->session->get('id_mitra');
+        if(isset($passw) && $passw != null) {
+            $data = array(
+                "nama_mitra" => $namaMitra,
+                "email" => $email,
+                "phone" => $phone,
+                "alamat" => $alamat,
+                "uname" => $uname,
+                "passw" =>  password_hash($passw, PASSWORD_ARGON2I)
+            );
+        } else {
+            $data = array(
+                "nama_mitra" => $namaMitra,
+                "email" => $email,
+                "phone" => $phone,
+                "alamat" => $alamat,
+                "uname" => $uname,
+            );
+        }
+        
+        $this->mitra->updateMitra($id, $data);
         return "sukses";
 
     }

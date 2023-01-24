@@ -63,7 +63,13 @@ class Rekon extends BaseController
                     $result[$key]->data_result2 = $rowResult;
                 }
             }
-        } 
+        }
+
+        foreach ($dataRekon as $rowRekon) {
+            if($rowRekon->is_proses == "pending") {
+                array_push($result, $rowRekon);
+            }
+        }
 
         $data['data_rekon'] = $result;
         return view('dashboard/layout', $data);
@@ -1284,7 +1290,7 @@ class Rekon extends BaseController
         $namaRekon =$this->request->getPost('namaRekon');
         $tipe = $this->request->getPost('tipe');
         $radioTipe = $this->request->getPost('radioUpload');
-
+        $tanggal_rekon = $this->request->getPost('tanggal_rekon');
         $schPost = $this->request->getPost('is_schedule');
         $idChannel = $this->request->getPost('opt_channel');
 
@@ -1361,7 +1367,7 @@ class Rekon extends BaseController
             /* Create New Rekon and Save Id to Sessions */
             $id_rekon = $this->rekon_buff->getNextSequenceRekon(); // get id sequence
             $timestamp = date("Y-m-d h:i:sa");
-            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel);
+            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggal_rekon);
             $this->session->set('id_rekon', $id_rekon); // save id_rekon to session untuk nanti (tipe 2)
         } else {
             $id_rekon = $this->session->get('id_rekon');
