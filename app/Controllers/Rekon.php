@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+use App\Models\MitraModel;
 use App\Models\RekonBuff;
 use App\Models\RekonBuffDetail;
 use App\Models\RekonResult;
@@ -29,6 +30,7 @@ class Rekon extends BaseController
         $this->pg = new Postgres();
         $this->channel_model = new ChannelModel();
         $this->pdfGen = new PdfGenerator();
+        $this->mitra = new MitraModel();
     
 		$this->uri = $this->request->uri;
     }
@@ -42,36 +44,14 @@ class Rekon extends BaseController
     {
         $data['title'] = 'Data Rekon Master';
         $data['view'] = 'dashboard/rekon_master';
-        $dataRekon = $this->rekon_buff->getRekonAll(0);
-        $rekonResult = $this->rekon_result->getRekons(1000);
+        $rekonResult = $this->rekon_result->getRekons();
         
-        $result = array();
-        foreach($dataRekon as $rowRekon) {
-            foreach ($rekonResult as $rowResult) {                
-                if ($rowResult->id_rekon == $rowRekon->id_rekon && $rowResult->tipe == 1) {
-                    $temp = $rowRekon;
-                    $temp['data_result1'] = $rowResult;
-                    array_push($result, $temp);
-                }
-            }
-        }
-        // echo json_encode($result);
-        // die;
-        foreach ($rekonResult as $rowResult) {
-            foreach($result as $key => $row) {
-                if($rowResult->id_rekon == $row->id_rekon && $rowResult->tipe == 2 && $rowResult->id_rekon_result == $row->data_result1->id_rekon_result) {
-                    $result[$key]->data_result2 = $rowResult;
-                }
-            }
+        foreach($rekonResult as $index => $row) {
+            $dataMitra = $this->mitra->getMitra($row['id_mitra']);
+            $rekonResult[$index]->nama_mitra = $dataMitra->nama_mitra;
         }
 
-        foreach ($dataRekon as $rowRekon) {
-            if($rowRekon->is_proses == "pending") {
-                array_push($result, $rowRekon);
-            }
-        }
-
-        $data['data_rekon'] = $result;
+        $data['data_rekon'] = $rekonResult;
         return view('dashboard/layout', $data);
     }
 
@@ -109,9 +89,14 @@ class Rekon extends BaseController
         $data['dataFtp'] = $this->data_model->getFtp();
         $data['dataDb'] = $this->data_model->getDatabase();
         $data['data_setting'] = $this->data_model->getSetting();
-        $id_mitra = $this->session->get('id_mitra');
-        $data['data_channel'] = $this->channel_model->getAllChannel($id_mitra);
+        $dataChannel = $this->channel_model->getAllChannel();
         
+        foreach($dataChannel as $key => $row) {
+            $dataMitra = $this->mitra->getMitra($row->id_mitra);
+            $dataChannel[$key]->nama_mitra = $dataMitra->nama_mitra;
+        }
+        
+        $data['data_channel'] = $dataChannel;        
         return view('dashboard/layout', $data);
     }
 
@@ -187,9 +172,12 @@ class Rekon extends BaseController
 
         if($tipe == 1) {
             /* Create New Rekon and Save Id to Sessions */
+            $dataChannel = $this->channel_model->getChannel($idChannel);
+            $this->session->set('id_mitra', $dataChannel->id_mitra);
+            $id_mitra = $dataChannel->id_mitra;
             $id_rekon = $this->rekon_buff->getNextSequenceRekon(); // get id sequence
             $timestamp = date("Y-m-d h:i:sa");
-            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggal_rekon);
+            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggal_rekon, $id_mitra);
             $this->session->set('id_rekon', $id_rekon); // save id_rekon to session untuk nanti (tipe 2)
         } else {
             $id_rekon = $this->session->get('id_rekon');
@@ -257,6 +245,7 @@ class Rekon extends BaseController
         $arrData = array();
         $strDataPreview = "";
         foreach($file as $key => $hehe) {
+            $hehe = iconv('UTF-8', 'UTF-8//IGNORE', $hehe);
             $drow = array(
                 "data_asli" => $hehe,
                 "data_string" => $hehe,
@@ -457,7 +446,7 @@ class Rekon extends BaseController
                 $ruleValue = explode("=>" ,$dataClean["rule_value"]); // rule values di split dulu khusus replace
                 $valFind = $ruleValue[0];
                 $valReplace = $ruleValue[1];
-                $newData[$indexKolom] = preg_replace('/' . $valFind . '/', $valReplace, $newData[$indexKolom], 1);
+                $newData[$indexKolom] = str_replace( $valFind, $valReplace, $newData[$indexKolom]);
             } else if($ruleOptions == "regex") {
                 log_message('info', 'TRY REGEX');
                 $ruleValue = explode("=>" ,$dataClean["rule_value"]); // rule values di split dulu khusus replace
@@ -965,6 +954,15 @@ class Rekon extends BaseController
         // }
 
         $this->rekon_buff->updateRekon($id_rekon, ["is_proses" => "pending"]);
+
+        /* pindah ke rekon result */
+        $dataRekon = $this->rekon_buff->getRekon($id_rekon);
+        unset($dataRekon->_id);
+        $dataRekon->detail_result1 = (object) array();
+        $dataRekon->detail_result2 = (object)  array();
+        $dataRekon->id_rekon_result = rand(100000,999999);
+        $this->rekon_result->insertRekon($dataRekon);
+        
         return redirect()->to(base_url('rekon'));
     }
 
@@ -986,13 +984,9 @@ class Rekon extends BaseController
             if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
         }
 
-        $dataRekonSatu = array();
-        $dataRekonDua = array();
-        foreach ($rekonResult as $row) {
-            if($row->tipe == 1) array_push($dataRekonSatu, $row);
-            if($row->tipe == 2) array_push($dataRekonDua, $row);
-        }
-        // echo json_encode($rekonResult[0]->tipe);
+        $dataRekonSatu = $rekonResult[0]->data_result1;
+        $dataRekonDua = $rekonResult[0]->data_result2;
+        
         $data['title'] = "Rekon Result $rekonBuff->nama_rekon";
         $data['view'] = 'dashboard/rekon_result'; 
         $data['data_rekon_satu'] = $dataRekonSatu; 
@@ -1025,12 +1019,9 @@ class Rekon extends BaseController
             if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
         }
 
-        $dataRekonSatu = array();
-        $dataRekonDua = array();
-        foreach ($rekonResult as $row) {
-            if($row->tipe == 1) array_push($dataRekonSatu, $row);
-            if($row->tipe == 2) array_push($dataRekonDua, $row);
-        }
+        $dataRekonSatu = $rekonResult[0]->data_result1;
+        $dataRekonDua = $rekonResult[0]->data_result2;
+        
         // echo json_encode($dataRekonSatu);
         $data['title'] = "Result Amount $rekonBuff->nama_rekon";
         $data['view'] = 'dashboard/rekon_result_amount'; 
@@ -1060,7 +1051,7 @@ class Rekon extends BaseController
         $id_rekon = $this->session->get('id_rekon');
         $id_rekon_result = $this->session->get('id_rekon_result');
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
-        $rekonResult = $this->rekon_result->getRekon($id_rekon);
+        $rekonResult = $this->rekon_result->getRekon($id_rekon, $id_rekon_result);
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 1, 25);
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2, 25);
         $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 1, 25);
@@ -1072,13 +1063,9 @@ class Rekon extends BaseController
             if($rowCompare->tipe == 1) array_push($kolomFilter1, $rowCompare->kolom_index);
             if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
         }
-
-        $dataRekonSatu = array();
-        $dataRekonDua = array();
-        foreach ($rekonResult as $row) {
-            if($row->tipe == 1) array_push($dataRekonSatu, $row);
-            if($row->tipe == 2) array_push($dataRekonDua, $row);
-        }
+        
+        $dataRekonSatu = $rekonResult[0]->data_result1;
+        $dataRekonDua = $rekonResult[0]->data_result2;
         
         $data['title'] =  $rekonBuff->nama_rekon;
         $data['view'] = 'dashboard/rekon_result'; 
@@ -1094,7 +1081,9 @@ class Rekon extends BaseController
 
         /* Preparing DomPDF */
         $Pdfgenerator = $this->pdfGen;
-        $file_pdf = 'Result '.$rekonBuff->nama_rekon;
+        $originalDate = $rekonBuff->tanggal_rekon;
+        $newDate = date("Ymd", strtotime($originalDate));
+        $file_pdf = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH";
         $paper = 'A4';
         $orientation = "portrait";
         $html = view('pdf', $data);
@@ -1109,7 +1098,7 @@ class Rekon extends BaseController
         $id_rekon = $this->session->get('id_rekon');
         $id_rekon_result = $this->session->get('id_rekon_result');
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
-        $rekonResult = $this->rekon_result->getRekon($id_rekon);
+        $rekonResult = $this->rekon_result->getRekon($id_rekon, $id_rekon_result);
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 2, 25);
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 2, 25);
         $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 2, 25);
@@ -1122,12 +1111,8 @@ class Rekon extends BaseController
             if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
         }
 
-        $dataRekonSatu = array();
-        $dataRekonDua = array();
-        foreach ($rekonResult as $row) {
-            if($row->tipe == 2) array_push($dataRekonSatu, $row);
-            if($row->tipe == 2) array_push($dataRekonDua, $row);
-        }
+        $dataRekonSatu = $rekonResult[0]->data_result1;
+        $dataRekonDua = $rekonResult[0]->data_result2;
         
         $data['title'] =  $rekonBuff->nama_rekon;
         $data['view'] = 'dashboard/rekon_result'; 
@@ -1143,7 +1128,9 @@ class Rekon extends BaseController
 
         /* Preparing DomPDF */
         $Pdfgenerator = $this->pdfGen;
-        $file_pdf = 'Result '.$rekonBuff->nama_rekon;
+        $originalDate = $rekonBuff->tanggal_rekon;
+        $newDate = date("Ymd", strtotime($originalDate));
+        $file_pdf = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH";
         $paper = 'A4';
         $orientation = "portrait";
         $html = view('pdf2', $data);
@@ -1160,7 +1147,6 @@ class Rekon extends BaseController
         $tipe = $this->uri->getSegment(4);
 
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
-        $rekonResult = $this->rekon_result->getRekon($id_rekon);
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 1);
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 2);
 
@@ -1182,7 +1168,9 @@ class Rekon extends BaseController
         }
         
         $delimiter = ","; 
-        $filename = 'Result '.$rekonBuff->nama_rekon . "#$id-unmatch.csv"; 
+        $originalDate = $rekonBuff->tanggal_rekon;
+        $newDate = date("Ymd", strtotime($originalDate));
+        $filename = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH.csv";
         
         // Create a file pointer 
         $f = fopen('php://memory', 'w'); 
@@ -1225,7 +1213,6 @@ class Rekon extends BaseController
         $tipe = $this->uri->getSegment(4);
 
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
-        $rekonResult = $this->rekon_result->getRekon($id_rekon);
         $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 1);
         $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 2);
 
@@ -1247,7 +1234,9 @@ class Rekon extends BaseController
         }
         
         $delimiter = ","; 
-        $filename = 'Result '.$rekonBuff->nama_rekon . "#$id-match.csv"; 
+        $originalDate = $rekonBuff->tanggal_rekon;
+        $newDate = date("Ymd", strtotime($originalDate));
+        $filename = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH.csv";
         
         // Create a file pointer 
         $f = fopen('php://memory', 'w'); 
@@ -1365,9 +1354,13 @@ class Rekon extends BaseController
 
         if($tipe == 1) {
             /* Create New Rekon and Save Id to Sessions */
+            $dataChannel = $this->channel_model->getChannel($idChannel);
+            $this->session->set('id_mitra', $dataChannel->id_mitra);
+            $id_mitra = $dataChannel->id_mitra;
+
             $id_rekon = $this->rekon_buff->getNextSequenceRekon(); // get id sequence
             $timestamp = date("Y-m-d h:i:sa");
-            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggal_rekon);
+            $this->rekon_buff->insertRekon($namaRekon, $id_rekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggal_rekon, $id_mitra);
             $this->session->set('id_rekon', $id_rekon); // save id_rekon to session untuk nanti (tipe 2)
         } else {
             $id_rekon = $this->session->get('id_rekon');
@@ -1442,6 +1435,7 @@ class Rekon extends BaseController
         $arrData = array();
         $strDataPreview = "";
         foreach($file as $key => $hehe) {
+            $hehe = iconv('UTF-8', 'UTF-8//IGNORE', $hehe);
             $drow = array(
                 "data_asli" => $hehe,
                 "data_string" => $hehe,
@@ -1570,7 +1564,7 @@ class Rekon extends BaseController
                 $ruleValue = explode("=>" ,$dataClean["rule_value"]); // rule values di split dulu khusus replace
                 $valFind = $ruleValue[0];
                 $valReplace = $ruleValue[1];
-                $newData[$indexKolom] = preg_replace('/' . $valFind . '/', $valReplace, $newData[$indexKolom], 1);
+                $newData[$indexKolom] = str_replace( $valFind, $valReplace, $newData[$indexKolom]);
             } else if($ruleOptions == "regex") {
                 log_message('info', 'TRY REGEX');
                 $ruleValue = explode("=>" ,$dataClean["rule_value"]); // rule values di split dulu khusus replace

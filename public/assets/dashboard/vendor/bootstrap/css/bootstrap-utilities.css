@@ -46,7 +46,7 @@
 }
 
 .link-danger {
-  color: #dc3545;
+  color: #e74c3c;
 }
 .link-danger:hover, .link-danger:focus {
   color: #b02a37;
@@ -441,7 +441,7 @@
 }
 
 .border-danger {
-  border-color: #dc3545 !important;
+  border-color: #e74c3c !important;
 }
 
 .border-light {
@@ -1270,7 +1270,7 @@
 }
 
 .text-danger {
-  color: #dc3545 !important;
+  color: #e74c3c !important;
 }
 
 .text-light {
@@ -1326,7 +1326,7 @@
 }
 
 .bg-danger {
-  background-color: #dc3545 !important;
+  background-color: #e74c3c !important;
 }
 
 .bg-light {

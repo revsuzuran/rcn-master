@@ -75,7 +75,7 @@
                                 <label class="form-label">Data Compare</label>
                                 <?php foreach ($data_compare_satu as $row) { ?>
                                   <div>
-                                    <p style="margin: 3px;border-bottom: 3.5px solid #dc3545;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?>]</code> </p>
+                                    <p style="margin: 3px;border-bottom: 3.5px solid #e74c3c;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?>]</code> </p>
                                   </div>
                                 <?php } ?>
                                 
@@ -227,7 +227,7 @@
                                 <label class="form-label">Data Compare</label>
                                 <?php foreach ($data_compare_dua as $row) { ?>
                                   <div>
-                                    <p style="margin: 3px;border-bottom: 3.5px solid #dc3545;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
+                                    <p style="margin: 3px;border-bottom: 3.5px solid #e74c3c;" class="fw-lighter mb-3"> <?= $row['kolom_name'] ?> =&gt;  <?= $row['to_compare_name'] ?><code class="highlighter-rouge"> [<?= $row['rule'] ?><?php if($row['rule'] != "equal") echo "='" . $row['rule_value'] . "'" ?>]</code> </p>
                                   </div>
                                 <?php } ?>
                                 

@@ -19,13 +19,15 @@ class Channel extends BaseController
     {
         $idMitra = $this->session->get('id_mitra');
         $data['data_mitra'] = $this->mitra->getMitra($idMitra);
-        $data['data_channel'] = $this->channel->getAllChannel($idMitra);
+        $data['data_channel'] = $this->channel->getAllChannelMitra($idMitra);
         $data['view'] = 'channel/data_channel';
         $data['title'] = 'Data Channel';
         return view('dashboard/layout', $data);
     }
 
     public function add() {
+        $idMitra = $this->session->get('id_mitra');
+        $data['data_mitra'] = $this->mitra->getMitra($idMitra);
         $data['title'] = 'Add Data Channel';
         $data['view'] = 'channel/add_channel';
         return view('dashboard/layout', $data);

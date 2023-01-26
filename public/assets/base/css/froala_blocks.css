@@ -589,7 +589,7 @@ textarea.form-control {
   width: 100%;
   margin-top: 0.25rem;
   font-size: 80%;
-  color: #dc3545; }
+  color: #e74c3c; }
 
 .invalid-tooltip {
   position: absolute;
@@ -608,11 +608,11 @@ textarea.form-control {
 .was-validated .form-control:invalid, .form-control.is-invalid, .was-validated
 .custom-select:invalid,
 .custom-select.is-invalid {
-  border-color: #dc3545; }
+  border-color: #e74c3c; }
   .was-validated .form-control:invalid:focus, .form-control.is-invalid:focus, .was-validated
   .custom-select:invalid:focus,
   .custom-select.is-invalid:focus {
-    border-color: #dc3545;
+    border-color: #e74c3c;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
   .was-validated .form-control:invalid ~ .invalid-feedback,
   .was-validated .form-control:invalid ~ .invalid-tooltip, .form-control.is-invalid ~ .invalid-feedback,
@@ -630,7 +630,7 @@ textarea.form-control {
   display: block; }
 
 .was-validated .form-check-input:invalid ~ .form-check-label, .form-check-input.is-invalid ~ .form-check-label {
-  color: #dc3545; }
+  color: #e74c3c; }
 
 .was-validated .form-check-input:invalid ~ .invalid-feedback,
 .was-validated .form-check-input:invalid ~ .invalid-tooltip, .form-check-input.is-invalid ~ .invalid-feedback,
@@ -638,7 +638,7 @@ textarea.form-control {
   display: block; }
 
 .was-validated .custom-control-input:invalid ~ .custom-control-label, .custom-control-input.is-invalid ~ .custom-control-label {
-  color: #dc3545; }
+  color: #e74c3c; }
   .was-validated .custom-control-input:invalid ~ .custom-control-label::before, .custom-control-input.is-invalid ~ .custom-control-label::before {
     background-color: #efa2a9; }
 
@@ -654,7 +654,7 @@ textarea.form-control {
   box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(220, 53, 69, 0.25); }
 
 .was-validated .custom-file-input:invalid ~ .custom-file-label, .custom-file-input.is-invalid ~ .custom-file-label {
-  border-color: #dc3545; }
+  border-color: #e74c3c; }
   .was-validated .custom-file-input:invalid ~ .custom-file-label::after, .custom-file-input.is-invalid ~ .custom-file-label::after {
     border-color: inherit; }
 
@@ -860,8 +860,8 @@ fieldset:disabled a.btn {
 
 .btn-danger {
   color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545; }
+  background-color: #e74c3c;
+  border-color: #e74c3c; }
   .btn-danger:hover {
     color: #fff;
     background-color: #c82333;
@@ -870,8 +870,8 @@ fieldset:disabled a.btn {
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); }
   .btn-danger.disabled, .btn-danger:disabled {
     color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545; }
+    background-color: #e74c3c;
+    border-color: #e74c3c; }
   .btn-danger:not(:disabled):not(.disabled):active, .btn-danger:not(:disabled):not(.disabled).active,
   .show > .btn-danger.dropdown-toggle {
     color: #fff;
@@ -1043,24 +1043,24 @@ fieldset:disabled a.btn {
       box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5); }
 
 .btn-outline-danger {
-  color: #dc3545;
+  color: #e74c3c;
   background-color: transparent;
   background-image: none;
-  border-color: #dc3545; }
+  border-color: #e74c3c; }
   .btn-outline-danger:hover {
     color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545; }
+    background-color: #e74c3c;
+    border-color: #e74c3c; }
   .btn-outline-danger:focus, .btn-outline-danger.focus {
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); }
   .btn-outline-danger.disabled, .btn-outline-danger:disabled {
-    color: #dc3545;
+    color: #e74c3c;
     background-color: transparent; }
   .btn-outline-danger:not(:disabled):not(.disabled):active, .btn-outline-danger:not(:disabled):not(.disabled).active,
   .show > .btn-outline-danger.dropdown-toggle {
     color: #fff;
-    background-color: #dc3545;
-    border-color: #dc3545; }
+    background-color: #e74c3c;
+    border-color: #e74c3c; }
     .btn-outline-danger:not(:disabled):not(.disabled):active:focus, .btn-outline-danger:not(:disabled):not(.disabled).active:focus,
     .show > .btn-outline-danger.dropdown-toggle:focus {
       box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5); }
@@ -1302,7 +1302,7 @@ header + header {
   color: #444444; }
 
 .navbar{
-  background: linear-gradient(to right, #dc3545 0%, #00c6f9 100%) !important;
+  background: linear-gradient(to right, #e74c3c 0%, #00c6f9 100%) !important;
 }
 
 .konten{
@@ -1327,23 +1327,23 @@ header + header {
 }
 
 .cover{
-  background-image: linear-gradient(to right, #dc3545 0%, #00c6f9 100%) !important;
+  background-image: linear-gradient(to right, #e74c3c 0%, #00c6f9 100%) !important;
   position: relative;
   min-height: 700px;
 }
 
 .cover-tema{
-  background-image: linear-gradient(to right, #dc3545 0%, #00c6f9 100%) !important;
+  background-image: linear-gradient(to right, #e74c3c 0%, #00c6f9 100%) !important;
   position: relative;
   min-height: 150px;
 }
 
 .btn-pesan{
-  color: #dc3545; 
+  color: #e74c3c; 
 }
 
 .footer{
-  background: linear-gradient(to right, #dc3545 0%, #00c6f9 100%) !important;
+  background: linear-gradient(to right, #e74c3c 0%, #00c6f9 100%) !important;
 }
 
 .text-footer{
@@ -1356,9 +1356,9 @@ header + header {
 }
 
 .btn-order:hover{
-  background-image: -webkit-linear-gradient(bottom right, #dc3545, #00c6f9);
-  background-image: -o-linear-gradient(bottom right, #dc3545, #00c6f9);
-  background-image: linear-gradient(to top left, #dc3545, #00c6f9);
+  background-image: -webkit-linear-gradient(bottom right, #e74c3c, #00c6f9);
+  background-image: -o-linear-gradient(bottom right, #e74c3c, #00c6f9);
+  background-image: linear-gradient(to top left, #e74c3c, #00c6f9);
 }
 
 .btn-order-secondary:hover{
@@ -1368,8 +1368,8 @@ header + header {
 }
 
 .btn-dark {
-  background-color: #dc3545 !important;
-  border-color: #dc3545 !important;
+  background-color: #e74c3c !important;
+  border-color: #e74c3c !important;
   border-radius: 5px;
 }
 
@@ -1423,11 +1423,11 @@ header + header {
 
 .upload-area-icon-main{
   font-size: 40px;
-  color: #dc3545;
+  color: #e74c3c;
 }
 
 .upload-area-button{
-  background-image: linear-gradient(to top left, #dc3545, #00c6f9);
+  background-image: linear-gradient(to top left, #e74c3c, #00c6f9);
   border-radius: 5px;
   padding: 10px;
   margin-top: 10px;
@@ -1436,7 +1436,7 @@ header + header {
 }
 
 .upload-area-button:hover{
-  background: #dc3545;
+  background: #e74c3c;
 }
 
 .preview-uploads{

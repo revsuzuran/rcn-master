@@ -83,7 +83,7 @@ class RekonBuff {
         }
     }
 
-    function insertRekon($namaRekon, $idRekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggalRekon) {
+    function insertRekon($namaRekon, $idRekon, $detailMode, $isSch, $timeSch, $idChannel, $tanggalRekon, $id_mitra) {
         try {
             $insertOneResult = $this->rekon_buff->insertOne([
                 'id_rekon' => $idRekon,
@@ -100,7 +100,7 @@ class RekonBuff {
                     'time' => $timeSch
                 ),
                 'id_channel' => $idChannel,
-                'id_mitra' => $this->id_mitra,
+                'id_mitra' => $id_mitra,
                 'tanggal_rekon' => $tanggalRekon,
                 'delimiter' => ''
             ]);

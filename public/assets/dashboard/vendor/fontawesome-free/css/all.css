@@ -4262,6 +4262,9 @@ readers do not read off random characters that represent icons */
 .fa-yarn:before {
   content: "\f7e3"; }
 
+.file-invoice-dollar:before {
+    content: "\f571"; }  
+
 .fa-yelp:before {
   content: "\f1e9"; }
 

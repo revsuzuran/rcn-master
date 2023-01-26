@@ -63,7 +63,7 @@
             }
 
             .header-hehe {
-                background:#dc3545;
+                background:#e74c3c;
                 font-weight: 700;
                 color: #fff;
                 margin: 0px 0px 10px 0px !important;
@@ -129,15 +129,15 @@
                             </tr>
                             <tr>
                                 <td>Total Data</td>
-                                <td>: <?= $data_rekon_dua[0]->compare_result->total_data; ?></td>
+                                <td>: <?= $data_rekon_dua->compare_result->total_data; ?></td>
                             </tr>
                             <tr>
                                 <td>Total Match</td>
-                                <td>: <?= $data_rekon_dua[0]->compare_result->total_match; ?></td>
+                                <td>: <?= $data_rekon_dua->compare_result->total_match; ?></td>
                             </tr>
                             <tr>
                                 <td>Total UnMatch</td>
-                                <td>: <?= $data_rekon_dua[0]->compare_result->total_unmatch; ?></td>
+                                <td>: <?= $data_rekon_dua->compare_result->total_unmatch; ?></td>
                             </tr>
                         </tbody>
                     </table>  
@@ -150,15 +150,15 @@
                             </tr>
                             <tr>
                                 <td><?= "Total "?></td>
-                                <td><?= ": " .rupiah((isset($data_rekon_dua[0]->sum_result->total_sum) ? $data_rekon_dua[0]->sum_result->total_sum : 0)); ?></td>
+                                <td><?= ": " .rupiah((isset($data_rekon_dua->sum_result->total_sum) ? $data_rekon_dua->sum_result->total_sum : 0)); ?></td>
                             </tr>
                             <tr>
                                 <td><?= "Total Match" ?></td>
-                                <td><?= ": " .rupiah((isset($data_rekon_dua[0]->sum_result->total_sum_match) ? $data_rekon_dua[0]->sum_result->total_sum_match : 0)); ?></td>
+                                <td><?= ": " .rupiah((isset($data_rekon_dua->sum_result->total_sum_match) ? $data_rekon_dua->sum_result->total_sum_match : 0)); ?></td>
                             </tr>
                             <tr>
                                 <td><?= "Total UnMatch" ?></td>
-                                <td><?= ": " .rupiah((isset($data_rekon_dua[0]->sum_result->total_sum_unmatch) ? $data_rekon_dua[0]->sum_result->total_sum_unmatch : 0)); ?></td>
+                                <td><?= ": " .rupiah((isset($data_rekon_dua->sum_result->total_sum_unmatch) ? $data_rekon_dua->sum_result->total_sum_unmatch : 0)); ?></td>
                             </tr>
                             
                         </tbody>

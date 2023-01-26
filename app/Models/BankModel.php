@@ -13,7 +13,9 @@ class BankModel
     {
         $connection = new DatabaseConnector();
         $database = $connection->getDatabase();
+        $this->session = session();
         $this->bank = $database->bank_data;
+        $this->id_mitra = $this->session->get('id_mitra');
     }
 
     function getAllBank($id) {

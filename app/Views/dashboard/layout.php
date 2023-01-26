@@ -9,9 +9,10 @@
     <meta name="author" content="">
     <link href="<?= base_url('assets/base'); ?>/img/favicon.png" rel="icon">
     <title><?= SITE_NAME; ?> - <?= $title; ?></title>
+    <link href="<?= base_url('assets/dashboard/'); ?>/css/ruang-admin.css" rel="stylesheet">
     <link href="<?= base_url('assets/dashboard/'); ?>/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="<?= base_url('assets/dashboard/'); ?>/vendor/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
-    <link href="<?= base_url('assets/dashboard/'); ?>/css/ruang-admin.css" rel="stylesheet">
+    
     <link href="<?= base_url('assets/dashboard/'); ?>/vendor/datatables/datatables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/base/css/croppie.min.css">
     <link rel="stylesheet" href="<?php echo base_url() ?>/assets/base/css/pikaday.css">
@@ -19,6 +20,8 @@
 
     <script src="<?= base_url() ?>/assets/base/js/moment-with-locales.js"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/jquery/jquery.min.js"></script>
+    <script src="<?= base_url('assets/dashboard'); ?>/vendor/crypto-js-4.1.1/crypto-js.js"></script>
+    <script src="<?= base_url('assets/dashboard'); ?>/js/Encryption.js"></script>
     <!-- Bootstrap DatePicker -->  
         <!-- <link href="<?php echo base_url() ?>/assets/dashboard/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
         <script src="<?php echo base_url() ?>/assets/dashboard/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script> -->
@@ -61,23 +64,32 @@
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
             <a class="nav-link" href="<?= base_url('/'); ?>">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Data Rekon</span></a>
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Data Rekon</span></a>
         </li>
         
-        <?php if(!isset($_SESSION['masukAdmin'])) { ?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('rekon/add'); ?>">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Add Data Rekon</span></a>
-            </li>
-        <?php } ?>
         <li class="nav-item" hidden>
             <a class="nav-link" href="<?= base_url('rekon/rekon_sch'); ?>">
-                <i class="fas fa-stopwatch"></i>
-                <span>Rekon Schedule Master</span></a>
+            <i class="fas fa-stopwatch"></i>
+            <span>Rekon Schedule Master</span></a>
         </li>
+
         <?php if(isset($_SESSION['masukAdmin'])) { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('rekon/add'); ?>">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Add Data Rekon</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('settlement'); ?>">
+                <i class="fas fa-money-check-alt"></i>
+                <span>Settlement</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('settlement/monit_disbursment'); ?>">
+                <i class="fas fa-business-time"></i>
+                <span>Monitoring Disbursement</span></a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('mitra'); ?>">
                 <i class="fas fa-address-card"></i>
@@ -94,15 +106,14 @@
                 <div class="bg-white py-2 collapse-inner rounded">
 
                     <?php if(isset($_SESSION['masukAdmin'])) { ?>
-                         <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
+                        <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
+                        <!-- <a class="collapse-item" href="<?= base_url('mitra/channel'); ?>">Channel</a>
+                        <a class="collapse-item" href="<?= base_url('mitra/bank'); ?>">Bank</a> -->
+                        <a class="collapse-item" href="<?= base_url('mitra/ftp'); ?>">FTP</a>
+                        <a class="collapse-item" href="<?= base_url('mitra/database'); ?>">Database</a>
                     <?php } ?>
                     
                     <?php if(isset($_SESSION['masukMitra'])) { ?>
-                        <a class="collapse-item" href="<?= base_url('mitra/profil'); ?>">Profil</a>
-                        <a class="collapse-item" href="<?= base_url('mitra/channel'); ?>">Channel</a>
-                        <a class="collapse-item" href="<?= base_url('mitra/bank'); ?>">Bank</a>
-                        <a class="collapse-item" href="<?= base_url('mitra/ftp'); ?>">FTP</a>
-                        <a class="collapse-item" href="<?= base_url('mitra/database'); ?>">Database</a>
                         <a class="collapse-item" href="<?= base_url('mitra/profil'); ?>">Profil</a>
                     <?php } ?>
                     

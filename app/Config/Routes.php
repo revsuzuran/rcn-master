@@ -121,6 +121,7 @@ $routes->group('mitra', function ($routes) {
     $routes->get('edit_database/(:any)', 'Setting::edit_database');
     $routes->post('update_database', 'Setting::update_database');
     $routes->post('rm_database', 'Setting::rm_database');
+    
 });
 
 $routes->get('profil', 'Setting::profil', ['filter' => 'isadmin']);
@@ -144,6 +145,13 @@ $routes->post('save_setting', 'Setting::save_setting');
 
 
 
+/* disbursement and settlement */
+$routes->post('add_disbursement', 'Disbursement::add_disbursement', ['filter' => 'isadmin']);
+$routes->get('settlement', 'Settlement::data_settlement');
+$routes->post('settlement/proses_temp', 'Settlement::proses_temp');
+$routes->get('settlement/proses_settlement', 'Settlement::proses_settlement');
+$routes->post('settlement/proses_inq', 'Settlement::proses_inq');
+$routes->get('settlement/monit_disbursment', 'Disbursement::monitoring_disburse');
 
 
 

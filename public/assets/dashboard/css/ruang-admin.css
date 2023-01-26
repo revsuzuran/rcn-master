@@ -8,11 +8,12 @@
 html {
   position: relative;
   min-height: 100%;
-  font-family: 'Nunito';
+  font-family: 'Nunito' !important;
 }
 
 body {
   height: 100%;
+  font-family: 'Nunito' !important;
 }
 
 a:focus {
@@ -152,9 +153,9 @@ a:focus {
 
 
 .bg-gradient-primary {
-  background-color: #dc3545;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #dc3545), to(#00c6f9));
-  background-image: linear-gradient(180deg, #dc3545 10%, #00c6f9 100%);
+  background-color: #e74c3c;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #e74c3c), to(#00c6f9));
+  background-image: linear-gradient(180deg, #e74c3c 10%, #00c6f9 100%);
   background-size: cover;
 }
 
@@ -318,11 +319,11 @@ a:focus {
 }
 
 .border-left-primary {
-  border-left: 0.25rem solid #dc3545 !important;
+  border-left: 0.25rem solid #e74c3c !important;
 }
 
 .border-bottom-primary {
-  border-bottom: 0.25rem solid #dc3545 !important;
+  border-bottom: 0.25rem solid #e74c3c !important;
 }
 
 .border-left-secondary {
@@ -523,8 +524,8 @@ a:focus {
 }
 
 .topbar .dropdown-list .dropdown-header {
-  background-color: #dc3545;
-  border: 1px solid #dc3545;
+  background-color: #e74c3c;
+  border: 1px solid #e74c3c;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   color: #fff;
@@ -608,7 +609,7 @@ a:focus {
 }
 
 .bg-navbar {
-  background-color: #dc3545;
+  background-color: #e74c3c;
 }
 
 .sidebar {
@@ -1033,7 +1034,7 @@ a:focus {
 
   .sidebar.toggled .nav-item .collapse .collapse-inner .collapse-item.active,
   .sidebar.toggled .nav-item .collapsing .collapse-inner .collapse-item.active {
-    color: #dc3545;
+    color: #e74c3c;
     font-weight: 800;
   }
 
@@ -1111,7 +1112,7 @@ a:focus {
 
 .sidebar-light .sidebar-brand {
   color: #fafafa;
-  background-color: #dc3545;
+  background-color: #e74c3c;
 }
 
 .sidebar-light hr.sidebar-divider {
@@ -1812,7 +1813,7 @@ a:focus {
   content: attr(data-text);
   position: absolute;
   left: -2px;
-  text-shadow: 1px 0 #dc3545;
+  text-shadow: 1px 0 #e74c3c;
   top: 0;
   color: #5a5c69;
   background: #f8f9fc;
@@ -1921,23 +1922,23 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .form-control:focus {
-  border: 1px solid #dc3545;
+  border: 1px solid #e74c3c;
 }
 
 .input-group-append span {
   -webkit-box-shadow: 0 0.125rem 0.25rem 0 rgba(58, 59, 69, 0.2) !important;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(58, 59, 69, 0.2) !important;
   color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
+  background-color: #e74c3c;
+  border-color: #e74c3c;
 }
 
 .input-group-prepend span {
   -webkit-box-shadow: 0 0.125rem 0.25rem 0 rgba(58, 59, 69, 0.2) !important;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(58, 59, 69, 0.2) !important;
   color: #fff;
-  background-color: #dc3545;
-  border-color: #dc3545;
+  background-color: #e74c3c;
+  border-color: #e74c3c;
 }
 
 .file-upload {
@@ -1981,11 +1982,11 @@ body.sidebar-toggled footer.sticky-footer {
 
 .upload-area-icon-main{
   font-size: 40px;
-  color: #dc3545;
+  color: #e74c3c;
 }
 
 .upload-area-button{
-  background-image: linear-gradient(to top left, #dc3545, #00c6f9);
+  background-image: linear-gradient(to top left, #e74c3c, #00c6f9);
   border-radius: 5px;
   padding: 10px;
   margin-top: 10px;
@@ -1994,7 +1995,7 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .upload-area-button:hover{
-  background: #dc3545;
+  background: #e74c3c;
 }
 
 .preview-uploads{

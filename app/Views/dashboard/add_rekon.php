@@ -40,12 +40,12 @@
                         <input type="text" class="form-control" value="12:30" name="waktuRekon">                  
                       </div>
                     </div>  
-                    <hr>                    
+                    <hr>               
                     <div class="form-group col-6 mt-2">
                         <label class="form-label">Pilih Channel</label>
                         <select class="form-select mb-3" name="opt_channel" id="opt_channel">
                           <?php foreach ($data_channel as $rowData) { ?>
-                            <option value="<?= $rowData['_id'] ?>"><?= $rowData['nama_channel'] ?></option>
+                            <option value="<?= $rowData['_id'] ?>"><?= "[".$rowData['nama_mitra']. "] " . $rowData['nama_channel'] ?></option>
                           <?php } ?>
                         </select>
                     </div>

@@ -15,10 +15,14 @@ class RekonResult {
         $this->rekon_result = $database->rekon_result;
     }
 
-    function getRekons($limit = 10) {
+    function getRekons($limit = 0) {
         try {
             $desc = -1;
-            $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ]], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            if ($this->session->has('masukAdmin')) {
+                $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ]], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            } else {
+                $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], "id_mitra" => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            }
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -54,18 +58,9 @@ class RekonResult {
         }
     }
 
-    function insertRekon($namaRekon, $idRekon) {
+    function insertRekon($data) {
         try {
-            $insertOneResult = $this->rekon_result->insertOne([
-                'id_rekon' => $idRekon,
-                'nama_rekon' => $namaRekon,
-                'kolom_compare' => array(),
-                'kolom_sum' => array(),
-                'is_proses' => "",
-                'timestamp' => date("Y-m-d h:i:sa"),
-                'id_mitra' => (int) $this->id_mitra,
-            ]);
-
+            $insertOneResult = $this->rekon_result->insertOne($data);
             if($insertOneResult->getInsertedCount() == 1) {
                 return true;
             }
@@ -80,6 +75,23 @@ class RekonResult {
         try {
             $result = $this->rekon_result->updateOne(
                 ['id_rekon' => $id],
+                ['$set' => $data ]
+            );
+
+            if($result->getModifiedCount()) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while updating a rekon with ID: ' . $id . $ex->getMessage(), 500);
+        }
+    }
+
+    function updateRekonResult($id, $data) {
+        try {
+            $result = $this->rekon_result->updateOne(
+                ['id_rekon_result' => (int) $id],
                 ['$set' => $data ]
             );
 
@@ -174,5 +186,51 @@ class RekonResult {
         }
     }
 
+
+    /* Settlement */
+    function getRekonSetlementAll($limit = 0) {
+        try {
+            $desc = -1;
+            // if ($this->session->has('masukAdmin')) {
+                $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], "is_ready_disburse" => (int) 1], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            // } else {
+            //     $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], "is_ready_disburse" => (int) 1, "id_mitra" => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            // }
+            $rekon = $cursor->toArray();
+
+            return $rekon;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
+
+    function getRekonSetlement($id_rekon_result) {
+        try {
+            $rekon = $this->rekon_result->find(["id_rekon_result" => (int) $id_rekon_result]);
+            $rekon = $rekon->toArray();
+
+            return $rekon;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekon with ID: ' . $ex->getMessage(), 500);
+        }
+    }
+
+
+    /* Disburse */
+    function getRekonDisburseAll($limit = 0) {
+        try {
+            $desc = -1;
+            // if ($this->session->has('masukAdmin')) {
+                $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], "is_ready_disburse" => (int) 2, "is_settlement" => (int) 1], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            // } else {
+            //     $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], "is_ready_disburse" => (int) 2, "is_settlement" => (int) 1, "id_mitra" => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            // }
+            $rekon = $cursor->toArray();
+
+            return $rekon;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
     
 }

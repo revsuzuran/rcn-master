@@ -20,7 +20,7 @@ class DataModels {
     
     function getFtp() {
         try {
-            $cursor = $this->ftp->find(['id_mitra' => $this->id_mitra]);
+            $cursor = $this->ftp->find([]);
             $rekon = $cursor->toArray();
 
             return $rekon;
@@ -94,7 +94,7 @@ class DataModels {
 
     function getDatabase() {
         try {
-            $cursor = $this->db->find(['id_mitra' => $this->id_mitra]);
+            $cursor = $this->db->find([]);
             $rekon = $cursor->toArray();
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
@@ -160,7 +160,7 @@ class DataModels {
     /* Settings */
     function getSetting() {
         try {
-            $cursor = $this->setting->find(['id_mitra' => $this->id_mitra]);
+            $cursor = $this->setting->find([]);
             $rekon = $cursor->toArray();
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {

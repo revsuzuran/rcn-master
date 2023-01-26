@@ -15,9 +15,20 @@ class ChannelModel
         $this->channel = $database->channel_data;
     }
 
-    function getAllChannel($id) {
+    function getAllChannel() {
         try {
-            $cursor = $this->channel->find(['id_mitra' => (int) $id], ['limit' => 0]);
+            $cursor = $this->channel->find([], ['limit' => 0]);
+            $usr = $cursor->toArray();
+
+            return $usr;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
+
+    function getAllChannelMitra($idMitra) {
+        try {
+            $cursor = $this->channel->find(["id_mitra" => (int) $idMitra], ['limit' => 0]);
             $usr = $cursor->toArray();
 
             return $usr;
