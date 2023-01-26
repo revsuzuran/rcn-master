@@ -36,10 +36,10 @@ class Channel extends BaseController
     public function save_channel() {
         $namaChannel = $this->request->getPost('namaChannel');
         $fee_admin = $this->request->getPost('feeAdmin');
-        $fee1 = $this->request->getPost('fee1');
         $fee2 = $this->request->getPost('fee2');
         $fee3 = $this->request->getPost('fee3');
         $fee4 = $this->request->getPost('fee4');
+        $fee1 = $this->request->getPost('fee1');
         $fee5 = $this->request->getPost('fee5');
 
         $is_persen_admin = $this->request->getPost('is_persen_admin') == 'true' ? 1 : 0;
@@ -58,27 +58,27 @@ class Channel extends BaseController
             "id_mitra" => (int) $idMitra,
             "nama_channel" => $namaChannel,
             "fee1" => array(
-                "nilai" => $fee1,
+                "nilai" => (int) $fee1,
                 "is_prosentase" => $is_persen1
             ),
             "fee2" => array(
-                "nilai" => $fee2,
+                "nilai" => (int) $fee2,
                 "is_prosentase" => $is_persen2
             ),
             "fee3" => array(
-                "nilai" => $fee3,
+                "nilai" => (int) $fee3,
                 "is_prosentase" => $is_persen3
             ),
             "fee4" => array(
-                "nilai" => $fee4,
+                "nilai" => (int) $fee4,
                 "is_prosentase" => $is_persen4
             ),
             "fee5" => array(
-                "nilai" => $fee5,
+                "nilai" => (int) $fee5,
                 "is_prosentase" => $is_persen5
             ),
             "fee_admin" => array(
-                "nilai" => $fee_admin,
+                "nilai" => (int) $fee_admin,
                 "is_prosentase" => $is_persen_admin
             ),
         );
