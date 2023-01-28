@@ -292,28 +292,48 @@ class Rekon extends BaseController
         $id_rekon = $this->session->get('id_rekon');
         $tipe = $this->session->get('tipe');
 
+        $isSaveHeader = $this->request->getPost('isSaveHeader');
+        $saveHeader = 0;
+        if($isSaveHeader == "on") {
+            $saveHeader = 1;
+        }
+        
         $sampleCsv = $this->rekon_buff_detail->getRekons($id_rekon, $tipe, 0);
         
         /* Split data and save to Array to preview in tables */
         $dataCsvArr = array();
+        $dataHeader = array();
         $dataCsvSample = array();
+        $no_index = 0;
         foreach ($sampleCsv as $key => $valueRow) {
+
             $dataObj = str_getcsv($valueRow->data_asli, $delimiter);
 
             /* untuk diinsert ulang */
             $drow = array(
-                "row_index" => $key,
+                "row_index" => $no_index,
                 "data_asli" => $valueRow->data_asli,
                 "data_row" => $dataObj,
                 "tipe" => $valueRow->tipe,
                 "id_rekon" => $valueRow->id_rekon,
             );
-            array_push($dataCsvArr, $drow);
 
+            /* Simpan data header */
+            if($saveHeader == 1) {
+                if($key == 0) {
+                    array_push($dataHeader, $drow);
+                    continue;
+                }
+            }
+
+            array_push($dataCsvArr, $drow);
+            
             /* untuk preview sample */
             if($key < 20) {
                 array_push($dataCsvSample, $drow);
             }
+
+            $no_index++;
             
         }
         
@@ -327,10 +347,16 @@ class Rekon extends BaseController
         $this->rekon_buff_detail->insertRekonMany($dataCsvArr);
         log_message('info', 'DONE.. Writes ' .count($dataCsvArr).'  To DATABASE...');
 
+        /* insert header */
+        $this->rekon_buff_detail->deleteRekonManyHeader($id_rekon, $tipe);
+        $this->rekon_buff_detail->insertRekonManyHeader($dataHeader);
+
         /* Save data delimiter to DB */
         $data = array(
-            "delimiter" => $delimiter
+            "delimiter" => $delimiter,
+            "is_save_header" => $saveHeader
         );
+
         $this->rekon_buff->updateRekon($id_rekon, $data);
 
         return redirect()->to(base_url('rekon/cleansing_data'));
@@ -1056,6 +1082,7 @@ class Rekon extends BaseController
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2, 25);
         $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 1, 25);
         $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 2, 25);
+        $dataHeader = $this->rekon_buff_detail->getHeader($id_rekon, "1", 1);
 
         $kolomFilter1 = array();
         $kolomFilter2 = array();
@@ -1078,12 +1105,14 @@ class Rekon extends BaseController
         $data['data_rekon_match_dua'] = $dataRekon2match; 
         $data['kolom_filter_satu'] = $kolomFilter1; 
         $data['kolom_filter_dua'] = $kolomFilter2; 
+        $data['data_header'] = $dataHeader;
 
         /* Preparing DomPDF */
         $Pdfgenerator = $this->pdfGen;
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
-        $file_pdf = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH";
+        $file_pdf = $newDate . "_" . $rekonBuff->nama_rekon . "_#1";
+        $data['nama_pdf'] = $file_pdf;
         $paper = 'A4';
         $orientation = "portrait";
         $html = view('pdf', $data);
@@ -1103,6 +1132,9 @@ class Rekon extends BaseController
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 2, 25);
         $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 2, 25);
         $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 2, 25);
+        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 2, 25);
+
+        $dataHeader = $this->rekon_buff_detail->getHeader($id_rekon, "2", 1);
 
         $kolomFilter1 = array();
         $kolomFilter2 = array();
@@ -1122,15 +1154,20 @@ class Rekon extends BaseController
         $data['data_rekon_unmatch_satu'] = $dataRekon1unmatch; 
         $data['data_rekon_unmatch_dua'] = $dataRekon2unmatch; 
         $data['data_rekon_match_satu'] = $dataRekon1match; 
-        $data['data_rekon_match_dua'] = $dataRekon2match; 
+        $data['data_rekon_match_dua'] = $dataRekon2match;
+        $data['data_header'] = $dataHeader;
         $data['kolom_filter_satu'] = $kolomFilter1; 
-        $data['kolom_filter_dua'] = $kolomFilter2; 
+        $data['kolom_filter_dua'] = $kolomFilter2;
+
+        // echo json_encode($data['data_header']);
+        // die;
 
         /* Preparing DomPDF */
         $Pdfgenerator = $this->pdfGen;
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
-        $file_pdf = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH";
+        $file_pdf = $newDate . "_" . $rekonBuff->nama_rekon . "_#2";
+        $data['nama_pdf'] = $file_pdf;
         $paper = 'A4';
         $orientation = "portrait";
         $html = view('pdf2', $data);
@@ -1174,6 +1211,16 @@ class Rekon extends BaseController
         
         // Create a file pointer 
         $f = fopen('php://memory', 'w'); 
+        
+        $dataHeader = $this->rekon_buff_detail->getHeader($id_rekon, $id, 1);
+        foreach($dataHeader as $row) {
+            $dataUnmatch = array();
+            foreach ($row['data_row'] as $key => $rowData) {
+                array_push($dataUnmatch, $rowData);
+            }
+            fputcsv($f, $dataUnmatch, $delimiter); 
+        }
+
         
         foreach($dataRekonUnmatch as $row) {
             $dataUnmatch = array();
@@ -1240,6 +1287,15 @@ class Rekon extends BaseController
         
         // Create a file pointer 
         $f = fopen('php://memory', 'w'); 
+
+        $dataHeader = $this->rekon_buff_detail->getHeader($id_rekon, $id, 1);
+        foreach($dataHeader as $row) {
+            $dataUnmatch = array();
+            foreach ($row['data_row'] as $key => $rowData) {
+                array_push($dataUnmatch, $rowData);
+            }
+            fputcsv($f, $dataUnmatch, $delimiter); 
+        }
         
         foreach($dataRekonMatch as $row) {
             $dataMatch = array();

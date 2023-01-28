@@ -103,20 +103,34 @@
     <body>
         <h3><?=$title;?></h3>
         <div style="margin-bottom:10px;">
-            <table class="tablehehe">
-                <tbody>
-                    <tr>
-                        <td>Time Submit</td>
-                        <td>:</td>
-                        <td><?= $data_rekon->timestamp; ?></td>
-                    </tr>
-                    <tr>
-                        <td>Time Completed</td>
-                        <td>:</td>
-                        <td><?= isset($data_rekon->timestamp_complete) ? $data_rekon->timestamp_complete : "-"; ?></td>
-                    </tr>
-                </tbody>
-            </table>            
+            <table width="100%" class="tablehehe">
+                <tr>
+                    <td class="text-align: left">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Time Submit</td>
+                                    <td>:</td>
+                                    <td><?= $data_rekon->timestamp; ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Time Completed</td>
+                                    <td>:</td>
+                                    <td><?= isset($data_rekon->timestamp_complete) ? $data_rekon->timestamp_complete : "-"; ?></td>
+                                </tr>
+                            </tbody>
+                        </table>   
+                    </td>
+                    <td style="vertical-align:top">
+                        <table align="right">
+                                <tr>
+                                    <td><?= "File "?></td>
+                                    <td>: <?= $nama_pdf ?></td>
+                                </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>        
         </div>
         <p class="header-hehe">Data Rekon #2</p>
         <table width="100%" class="tablehehe">
@@ -171,10 +185,10 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <?php foreach ($data_rekon_unmatch_satu as $row) { ?>
-                        <?php foreach ($row['row_data'] as $key => $rowData) { 
+                    <?php foreach ($data_header as $row) { ?>
+                        <?php foreach ($row['data_row'] as $key => $rowData) { 
                             if (!in_array($key, $kolom_filter_satu)) continue; ?>
-                            <th><?= "KOLOM " . ($key+1) ?> </th>
+                            <th><?= $rowData ?> </th>
                         <?php } ?>
                     <?php break;} ?>
                 </tr>
@@ -197,8 +211,8 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <?php foreach ($data_rekon_match_satu as $row) { ?>
-                        <?php foreach ($row['row_data'] as $key => $rowData) { 
+                    <?php foreach ($data_header as $row) { ?>
+                        <?php foreach ($row['data_row'] as $key => $rowData) { 
                             if (!in_array($key, $kolom_filter_satu)) continue; ?>
                             <th><?= "KOLOM " . ($key+1) ?> </th>
                         <?php } ?>

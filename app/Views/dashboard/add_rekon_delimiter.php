@@ -33,6 +33,11 @@
                         <label class="form-label">Input Delimiter</label>
                         <input class="form-control mb-3" name="delimiter" placeholder="Example | ; , -" required></input>
                     </div>
+                    <hr>
+                    <div class="custom-control custom-checkbox" hidden>
+                        <input type="checkbox" class="custom-control-input" id="isSaveHeader" name="isSaveHeader" checked >
+                        <label class="custom-control-label" for="isSaveHeader">Simpan data header (index ke 0)</label>
+                    </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <?php if ($_SESSION['tipe'] == "2") { ?>
                         <a class="btn btn-danger me-md-2" href="<?php echo base_url('rekon/add_rekon_next');?>">Kembali</a>

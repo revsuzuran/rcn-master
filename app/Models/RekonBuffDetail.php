@@ -5,12 +5,13 @@ namespace App\Models;
 use App\Libraries\DatabaseConnector;
 
 class RekonBuffDetail {
-    private $rekon_buff_detail;
+    private $rekon_buff_header;
 
     function __construct() {
         $connection = new DatabaseConnector();
         $database = $connection->getDatabase();
         $this->rekon_buff_detail = $database->rekon_buff_detail;
+        $this->rekon_buff_header = $database->rekon_buff_header;
     }
 
     function getRekons($id_rekon, $tipe, $limit = 0) {
@@ -115,5 +116,43 @@ class RekonBuffDetail {
             show_error('Error while deleting a rekon with ID: ' . $id . $ex->getMessage(), 500);
         }
     }    
+
+    function deleteRekonManyHeader($id, $tipe) {
+        try {
+            $result = $this->rekon_buff_header->deleteMany(['id_rekon' => $id, "tipe" => $tipe]);
+
+            if($result->getDeletedCount() == 1) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while deleting a rekon with ID: ' . $id . $ex->getMessage(), 500);
+        }
+    }    
     
+    function insertRekonManyHeader($data) {
+        try {
+            $insertOneResult = $this->rekon_buff_header->insertMany($data);
+
+            if($insertOneResult->getInsertedCount() == 1) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
+        }
+    }
+
+    function getHeader($id_rekon, $tipe, $limit = 0) {
+        try {
+            $cursor = $this->rekon_buff_header->find(['id_rekon' => (int) $id_rekon, "tipe" => $tipe], ['limit' => $limit]);
+            $rekons = $cursor->toArray();
+
+            return $rekons;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
 }
