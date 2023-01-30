@@ -8,6 +8,13 @@ use App\Models\MitraModel;
 
 class Setting extends BaseController
 {
+    protected $user_model;
+    protected $data_model;
+    protected $mitra;
+    protected $uri;
+    protected $session;
+    protected $rekon_buff;
+
     public function __construct()
     {
         // mengisi variable global dengan data

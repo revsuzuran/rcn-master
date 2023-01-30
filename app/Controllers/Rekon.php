@@ -17,20 +17,20 @@ use App\Libraries\PdfGenerator;
 class Rekon extends BaseController
 {
 
-    private $request;
-    private $session;
-    private $rekon_buff;
-    private $rekon_buff_detail;
-    private $rekon_result;
-    private $rekon_unmatch;
-    private $rekon_match;
-    private $data_model;
-    private $dbModel;
-    private $pg;
-    private $channel_model;
-    private $pdfGen;
-    private $mitra;
-    private $uri;
+    protected $request;
+    protected $session;
+    protected $rekon_buff;
+    protected $rekon_buff_detail;
+    protected $rekon_result;
+    protected $rekon_unmatch;
+    protected $rekon_match;
+    protected $data_model;
+    protected $dbModel;
+    protected $pg;
+    protected $channel_model;
+    protected $pdfGen;
+    protected $mitra;
+    protected $uri;
 
     public function __construct() {
         //mengisi variable global dengan data

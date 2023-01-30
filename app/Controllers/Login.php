@@ -5,6 +5,11 @@ use App\Models\LoginModel;
 
 class Login extends BaseController
 {
+    protected $session;
+    protected $request;
+    protected $uri;
+    protected $login_model;
+
     public function __construct() {
         // mengisi variable global dengan data
         $this->session = session();
@@ -26,14 +31,12 @@ class Login extends BaseController
             $sess_data = array('masukAdmin' => TRUE, 'uname' => $hasil->name, 'uname_admin' => $hasil->username, 'isLogin' => TRUE);
             $this->session->set($sess_data);
             return redirect()->to(base_url());
-            exit();
         } else if(isset($mitra->id_mitra) && password_verify($pwd, $mitra->passw) == true)
         {
             // set session mitra
             $sess_data = array('masukMitra' => TRUE, 'uname' => $mitra->uname, 'uname_admin' => $mitra->uname, 'id_mitra' => $mitra->id_mitra, 'isLogin' => TRUE);
             $this->session->set($sess_data);
             return redirect()->to(base_url());
-            exit();
         }
         else
         {

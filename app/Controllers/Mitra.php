@@ -5,6 +5,12 @@ use App\Models\MitraModel;
 
 class Mitra extends BaseController
 {
+
+    protected $request;
+    protected $session;
+    protected $mitra;
+    protected $uri;
+    
     public function __construct()
     {
         $this->request = \Config\Services::request();
