@@ -16,6 +16,22 @@ use App\Libraries\PdfGenerator;
 
 class Rekon extends BaseController
 {
+
+    private $request;
+    private $session;
+    private $rekon_buff;
+    private $rekon_buff_detail;
+    private $rekon_result;
+    private $rekon_unmatch;
+    private $rekon_match;
+    private $data_model;
+    private $dbModel;
+    private $pg;
+    private $channel_model;
+    private $pdfGen;
+    private $mitra;
+    private $uri;
+
     public function __construct() {
         //mengisi variable global dengan data
         $this->request = \Config\Services::request(); 
@@ -30,8 +46,7 @@ class Rekon extends BaseController
         $this->pg = new Postgres();
         $this->channel_model = new ChannelModel();
         $this->pdfGen = new PdfGenerator();
-        $this->mitra = new MitraModel();
-    
+        $this->mitra = new MitraModel();    
 		$this->uri = $this->request->uri;
     }
 
@@ -209,6 +224,7 @@ class Rekon extends BaseController
                 }
 
                 /* untuk diinsert ulang */
+                $row = utf8_encode($row);
                 $drow = array(
                     "row_index" => $index+1,
                     "data_asli" => $row,
@@ -245,7 +261,7 @@ class Rekon extends BaseController
         $arrData = array();
         $strDataPreview = "";
         foreach($file as $key => $hehe) {
-            $hehe = iconv('UTF-8', 'UTF-8//IGNORE', $hehe);
+            $hehe = utf8_encode($hehe);
             $drow = array(
                 "data_asli" => $hehe,
                 "data_string" => $hehe,
@@ -1448,6 +1464,7 @@ class Rekon extends BaseController
                 }
 
                 /* untuk diinsert ulang */
+                $row = utf8_encode($row);
                 $drow = array(
                     "row_index" => $index+1,
                     "data_asli" => $row,
@@ -1491,7 +1508,7 @@ class Rekon extends BaseController
         $arrData = array();
         $strDataPreview = "";
         foreach($file as $key => $hehe) {
-            $hehe = iconv('UTF-8', 'UTF-8//IGNORE', $hehe);
+            $hehe = utf8_encode($hehe);
             $drow = array(
                 "data_asli" => $hehe,
                 "data_string" => $hehe,
