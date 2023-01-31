@@ -1012,8 +1012,10 @@ class Rekon extends BaseController
         $id_rekon = $this->session->get('id_rekon');
         $id_rekon_result = $this->session->get('id_rekon_result');
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
-        $rekonResult = $this->rekon_result->getRekon($id_rekon, $id_rekon_result);
-        
+        $rekonResult = $this->rekon_result->getRekon($id_rekon, $id_rekon_result);        
+        $data['data_channel'] = $this->channel_model->getChannel($rekonResult[0]->id_channel);
+        $data['data_mitra'] = $this->mitra->getMitra($rekonResult[0]->id_mitra);
+
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 1);
         $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2);
         $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 1);
@@ -1030,6 +1032,8 @@ class Rekon extends BaseController
         $dataRekonDua = $rekonResult[0]->data_result2;
         
         $data['title'] = "Rekon Result $rekonBuff->nama_rekon";
+        $data['nama_rekon'] = $rekonBuff->nama_rekon;
+        $data['data_rekon_result'] = $rekonResult;
         $data['view'] = 'dashboard/rekon_result'; 
         $data['data_rekon_satu'] = $dataRekonSatu; 
         $data['data_rekon_dua'] = $dataRekonDua; 
@@ -1133,7 +1137,7 @@ class Rekon extends BaseController
         $orientation = "portrait";
         $html = view('pdf', $data);
         // return $html;
-        $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
+        return $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation, false);
     }
 
     public function generate_pdf2()

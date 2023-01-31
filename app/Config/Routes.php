@@ -126,24 +126,8 @@ $routes->group('mitra', function ($routes) {
 
 $routes->get('profil', 'Setting::profil', ['filter' => 'isadmin']);
 $routes->post('update_user', 'Setting::update_user', ['filter' => 'isadmin']);
-// $routes->get('ftp', 'Setting::ftp');
-// $routes->get('add_ftp', 'Setting::add_ftp');
-// $routes->post('save_ftp', 'Setting::save_ftp');
-// $routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
-// $routes->post('update_ftp', 'Setting::update_ftp');
-// $routes->post('rm_ftp', 'Setting::rm_ftp');
-
-// $routes->get('database', 'Setting::database');
-// $routes->get('add_database', 'Setting::add_database');
-// $routes->post('save_database', 'Setting::save_database');
-// $routes->get('edit_database/(:any)', 'Setting::edit_database');
-// $routes->post('update_database', 'Setting::update_database');
-// $routes->post('rm_database', 'Setting::rm_database');
-
 $routes->post('get_setting', 'Setting::get_setting');
 $routes->post('save_setting', 'Setting::save_setting');
-
-
 
 /* disbursement and settlement */
 $routes->post('add_disbursement', 'Disbursement::add_disbursement', ['filter' => 'isadmin']);
@@ -153,6 +137,11 @@ $routes->get('settlement/proses_settlement', 'Settlement::proses_settlement');
 $routes->post('settlement/proses_inq', 'Settlement::proses_inq');
 $routes->get('settlement/monit_disbursment', 'Disbursement::monitoring_disburse');
 
+
+/* Mail */
+$routes->get('mail', 'Email::get_email');
+$routes->post('update_smtp', 'Email::update_email');
+$routes->post('send_email', 'Email::kirim_email');
 
 
 /*

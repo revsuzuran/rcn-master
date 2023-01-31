@@ -7,6 +7,8 @@ use App\Libraries\DatabaseConnector;
 class DataModels {
     private $ftp;
     private $db;
+    private $setting;
+    private $mailconf;
 
     function __construct() {
         $connection = new DatabaseConnector();
@@ -14,8 +16,7 @@ class DataModels {
         $this->ftp = $database->ftp_data;
         $this->db = $database->db_data;
         $this->setting = $database->setting_data;
-        $this->session = session();
-        $this->id_mitra = $this->session->get('id_mitra');
+        $this->mailconf = $database->email_data;
     }
     
     function getFtp() {
@@ -188,6 +189,35 @@ class DataModels {
             return false;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
             show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
+
+
+    /* Email Config Setting */
+    function getSettingEmail() {
+        try {
+            $cursor = $this->mailconf->find([]);
+            $rekon = $cursor->toArray();
+            return $rekon;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
+
+    function updateSettingEmail($id, $data) {
+        try {
+            $result = $this->mailconf->updateOne(
+                ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                ['$set' => $data]
+            );
+
+            if($result->getModifiedCount()) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while updating a rekon with ID: ' . $id . $ex->getMessage(), 500);
         }
     }
 

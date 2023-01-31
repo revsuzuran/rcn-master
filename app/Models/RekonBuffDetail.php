@@ -147,7 +147,7 @@ class RekonBuffDetail {
 
     function getHeader($id_rekon, $tipe, $limit = 0) {
         try {
-            $cursor = $this->rekon_buff_header->find(['id_rekon' => (int) $id_rekon, "tipe" => $tipe], ['limit' => $limit]);
+            $cursor = $this->rekon_buff_header->find(['id_rekon' => (int) $id_rekon, "tipe" => (string) $tipe], ['limit' => $limit]);
             $rekons = $cursor->toArray();
 
             return $rekons;

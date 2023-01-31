@@ -3,6 +3,9 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
         <div>
+          <?php if(isset($_SESSION["masukAdmin"])) { ?>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-secondary">Send Email</button>
+          <?php } ?>
           <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf') ?>">Generate PDF 1</a>
           <a type="button" class="btn btn-success" href="<?= base_url('rekon/generate_pdf2') ?>">Generate PDF 2</a>
       </div>
@@ -323,4 +326,75 @@
     <!--Row-->
 </div>
 <!---Container Fluid-->
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <form method="post" enctype="multipart/form-data" action="<?php echo base_url('send_email'); ?>">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Kirim Email</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="form-group">       
+        <div class="form-group">
+            <label class="form-label">Email to</label>
+            <input name="emailTo" type="text" class="form-control" placeholder="nama@gmail.com;nama@gmail.com" value="" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email cc</label>
+            <input name="emailCC" type="text" class="form-control" placeholder="cc@gmail.com" value="">
+        </div>
+        <hr>
+        <label class="form-label">Subject</label>
+            <input name="subject" type="text" class="form-control" placeholder="Email Rekon" value="<?= $data_rekon_result[0]->tanggal_rekon ." ". $data_mitra->nama_mitra ." ". $data_channel->nama_channel ." ". $nama_rekon ." Reconciliation Result"; ?>">
+        </div>
+        <div class="form-group pt-0">
+            <label class="form-label">Body Email</label>
+            <textarea rows="6" type="text" class="form-control" placeholder="" name="bodyEmail" style="white-space: pre-wrap;">
+Executive Summary
+            
+Data Rekon #1 - Count Data
+Total Data : <?= $data_rekon_satu->compare_result->total_data; ?>
+
+Total Match : <?= $data_rekon_satu->compare_result->total_match; ?>
+
+Total UnMatch : <?= $data_rekon_satu->compare_result->total_unmatch; ?>
+      
+
+Data Rekon #1 - Amount Data
+TOTAL         :<?= rupiah($data_rekon_satu->sum_result->total_sum); ?>
+
+TOTAL MATCH   :<?= rupiah((isset($data_rekon_satu->sum_result->total_sum_match) ? $data_rekon_satu->sum_result->total_sum_match : 0)); ?>
+
+TOTAL UNMATCH :<?= rupiah((isset($data_rekon_satu->sum_result->total_sum_unmatch) ? $data_rekon_satu->sum_result->total_sum_unmatch : 0 )); ?>
+
+
+Data Rekon #2 - Count Data
+Total Data    : <?= $data_rekon_dua->compare_result->total_data; ?> 
+Total Match   : <?= $data_rekon_dua->compare_result->total_match; ?>
+
+Total UnMatch : <?= $data_rekon_dua->compare_result->total_unmatch; ?>   
+
+Data Rekon #2 - Amount Data     
+TOTAL         :<?= rupiah($data_rekon_dua->sum_result->total_sum); ?>
+
+TOTAL MATCH   :<?= rupiah((isset($data_rekon_dua->sum_result->total_sum_match) ? $data_rekon_dua->sum_result->total_sum_match :0 )); ?>
+
+TOTAL UNMATCH :<?= rupiah((isset($data_rekon_dua->sum_result->total_sum_unmatch) ? $data_rekon_dua->sum_result->total_sum_unmatch : 0)); ?>
+            </textarea>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="submitProses">Kirim Email</button>
+      </div>
+
+    </form>
+    </div>
+  </div>
+</div>
 
