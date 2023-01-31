@@ -1137,7 +1137,7 @@ class Rekon extends BaseController
         $orientation = "portrait";
         $html = view('pdf', $data);
         // return $html;
-        return $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation, false);
+        $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
     }
 
     public function generate_pdf2()
