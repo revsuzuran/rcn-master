@@ -111,6 +111,7 @@
                         <a class="collapse-item" href="<?= base_url('mitra/bank'); ?>">Bank</a> -->
                         <a class="collapse-item" href="<?= base_url('mitra/ftp'); ?>">FTP</a>
                         <a class="collapse-item" href="<?= base_url('mitra/database'); ?>">Database</a>
+                        <a class="collapse-item" href="<?= base_url('mail'); ?>">Mail</a>
                     <?php } ?>
                     
                     <?php if(isset($_SESSION['masukMitra'])) { ?>
