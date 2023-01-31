@@ -118,18 +118,18 @@
 
                         /* Sum */
                         $percentageSumSatu = "-";
-                        $totalSumDataSatu = isset($row['data_result1']->sum_result->total_sum) ? $row['data_result1']->sum_result->total_sum : "0";
-                        $sumMatchSatu = isset($row['data_result1']->sum_result->total_sum_match) ? $row['data_result1']->sum_result->total_sum_match : "0";
-                        $sumUnMatchSatu = isset($row['data_result1']->sum_result->total_sum_unmatch) ? $row['data_result1']->sum_result->total_sum_unmatch : "0";
-                        if($totalSumDataSatu != "0" || $sumMatchSatu != "0" || $sumUnMatchSatu != "0") {
+                        $totalSumDataSatu = isset($row['data_result1']->sum_result->total_sum) ? $row['data_result1']->sum_result->total_sum : 0;
+                        $sumMatchSatu = isset($row['data_result1']->sum_result->total_sum_match) ? $row['data_result1']->sum_result->total_sum_match : 0;
+                        $sumUnMatchSatu = isset($row['data_result1']->sum_result->total_sum_unmatch) ? $row['data_result1']->sum_result->total_sum_unmatch : 0;
+                        if($totalSumDataSatu != 0 || $sumMatchSatu != 0 || $sumUnMatchSatu != 0) {
                           $percentageSumSatu = ($sumMatchSatu / $totalSumDataSatu) * 100;
                         }
 
                         $percentageSumDua = "-";
-                        $totalSumDataDua = isset($row['data_result2']->sum_result->total_sum) ? $row['data_result2']->sum_result->total_sum : "0";
-                        $sumMatchDua = isset($row['data_result2']->sum_result->total_sum_match) ? $row['data_result2']->sum_result->total_sum_match : "0";
-                        $sumUnMatchDua = isset($row['data_result2']->sum_result->total_sum_unmatch) ? $row['data_result2']->sum_result->total_sum_unmatch : "0";
-                        if($totalSumDataDua != "0" || $sumMatchDua != "0" || $sumUnMatchDua != "0") {
+                        $totalSumDataDua = isset($row['data_result2']->sum_result->total_sum) ? $row['data_result2']->sum_result->total_sum : 0;
+                        $sumMatchDua = isset($row['data_result2']->sum_result->total_sum_match) ? $row['data_result2']->sum_result->total_sum_match : 0;
+                        $sumUnMatchDua = isset($row['data_result2']->sum_result->total_sum_unmatch) ? $row['data_result2']->sum_result->total_sum_unmatch : 0;
+                        if($totalSumDataDua != 0 || $sumMatchDua != 0 || $sumUnMatchDua != 0) {
                           $percentageSumDua = ($sumMatchDua / $totalSumDataDua) * 100;
                         }
                         
