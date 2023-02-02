@@ -205,7 +205,7 @@ class Email extends BaseController
         $id_rekon = $this->session->get('id_rekon');
         $id_rekon_result = $this->session->get('id_rekon_result');
         $tipe = 1;
-        $id = 2;
+        $id = 1;
 
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 1);
