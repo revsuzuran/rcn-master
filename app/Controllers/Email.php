@@ -63,9 +63,14 @@ class Email extends BaseController
         $emailTo = $this->request->getPost('emailTo'); 
         $emailCC = $this->request->getPost('emailCC'); 
         $subject = $this->request->getPost('subject'); 
-        $bodyEmail = $this->request->getPost('bodyEmail'); 
+        $bodyEmail = $this->request->getPost('bodyEmail');
 
         $loadConfig = $this->data_model->getSettingEmail();
+
+        if($loadConfig[0]->host != null) {
+            $this->session->setFlashdata('error', 'Failed Send! Setting SMTP Error');
+            return redirect()->to(base_url('rekon/rekon_result'));
+        }
 
         $config['SMTPHost'] = $loadConfig[0]->host;
         $config['SMTPUser'] = $loadConfig[0]->username;
@@ -80,7 +85,7 @@ class Email extends BaseController
         $this->email->initialize($config);
         $this->email->setTo(explode(";", $emailTo));
         $this->email->setCc(explode(";", $emailCC));
-        $this->email->setFrom($loadConfig[0]->username, 'Rekon LinkQu');
+        $this->email->setFrom('operasional.yokke@cs.linkqu.id', 'Rekon LinkQu');
         $this->email->setSubject($subject);
         $this->email->setMessage($bodyEmail);
         
@@ -167,7 +172,7 @@ class Email extends BaseController
 
         if($password == "") {
             $data = array(
-                "hostname" => $hostname,
+                "host" => $hostname,
                 "username" => $username,
                 "port" => $port,
                 "path" => $path,
@@ -177,7 +182,7 @@ class Email extends BaseController
             );
         } else {
             $data = array(
-                "hostname" => $hostname,
+                "host" => $hostname,
                 "username" => $username,
                 "password" => $password,
                 "port" => $port,
