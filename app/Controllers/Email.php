@@ -90,8 +90,10 @@ class Email extends BaseController
         $this->email->setMessage($bodyEmail);
         
         $dataPDF = $this->generatePDF();
+        $dataCsvMatch = $this->export_match();
         $dataCsvUnmatch = $this->export_unmatch();
         $this->email->attach($dataPDF['file_pdf'], 'attachment', $dataPDF['nama_pdf'], 'application/pdf');
+        $this->email->attach($dataCsvMatch['file_data'], 'attachment', $dataCsvMatch['file_name'], 'text/csv');
         $this->email->attach($dataCsvUnmatch['file_data'], 'attachment', $dataCsvUnmatch['file_name'], 'text/csv');
     
         if ($this->email->send()) 
@@ -264,4 +266,86 @@ class Email extends BaseController
         return $data;
         
     }
+
+    public function export_match()
+    {
+        /* Preparing Data */
+        $id_rekon = $this->session->get('id_rekon');
+        $id_rekon_result = $this->session->get('id_rekon_result');
+        $id = 1;
+        $tipe = 1;
+
+        $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
+        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 1);
+        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 2);
+
+        $kolomFilter1 = array();
+        $kolomFilter2 = array();
+        foreach ($rekonBuff->kolom_compare as $rowCompare) {
+            if($rowCompare->tipe == 2) array_push($kolomFilter1, $rowCompare->kolom_index);
+            if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
+        }
+
+        if($id == 1) {
+            $dataRekonMatch = $dataRekon1match;
+            $kolomFilter = $kolomFilter1;
+        } else if($id == 2) {
+            $dataRekonMatch = $dataRekon2match;
+            $kolomFilter = $kolomFilter2;
+        } else {
+            die("no data");
+        }
+        
+        $delimiter = ","; 
+        $originalDate = $rekonBuff->tanggal_rekon;
+        $newDate = date("Ymd", strtotime($originalDate));
+        $data['file_name'] = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH.csv";
+        
+        // Create a file pointer 
+        $f = fopen('php://memory', 'w'); 
+
+        $dataHeader = $this->rekon_buff_detail->getHeader($id_rekon, $id, 1);
+        foreach($dataHeader as $row) {
+            $dataUnmatch = array();
+            foreach ($row['data_row'] as $key => $rowData) {
+                array_push($dataUnmatch, $rowData);
+            }
+            fputcsv($f, $dataUnmatch, $delimiter); 
+        }
+        
+        foreach($dataRekonMatch as $row) {
+            $dataMatch = array();
+            foreach ($row['row_data'] as $key => $rowData) {
+                if($tipe == 0) {
+                    if (!in_array($key, $kolomFilter)) continue;
+                    array_push($dataMatch, $rowData);
+                } else if($tipe == 1) {
+                    array_push($dataMatch, $rowData);
+                } else {
+                    die("no data");
+                }
+                
+            }
+            fputcsv($f, $dataMatch, $delimiter); 
+        }
+        
+
+        // Move back to beginning of file 
+        fseek($f, 0);
+        
+        // Set headers to download file rather than displayed 
+        header('Content-Type: text/csv'); 
+        header('Content-Disposition: attachment; filename="' . $filename . '";'); 
+        
+        //output all remaining data on a file pointer 
+        // Move back to beginning of file 
+        fseek($f, 0);
+        
+        // Return the data
+        $data['file_data'] = stream_get_contents($f);
+        return $data;
+        
+        
+    }
+
 }
