@@ -67,10 +67,10 @@ class Email extends BaseController
 
         $loadConfig = $this->data_model->getSettingEmail();
 
-        if($loadConfig[0]->host != null) {
-            $this->session->setFlashdata('error', 'Failed Send! Setting SMTP Error');
-            return redirect()->to(base_url('rekon/rekon_result'));
-        }
+        // if($loadConfig[0]->host != null) {
+        //     $this->session->setFlashdata('error', 'Failed Send! Setting SMTP Error');
+        //     return redirect()->to(base_url('rekon/rekon_result'));
+        // }
 
         $config['SMTPHost'] = $loadConfig[0]->host;
         $config['SMTPUser'] = $loadConfig[0]->username;
