@@ -226,7 +226,7 @@ class Email extends BaseController
         $delimiter = ","; 
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
-        $data['file_name'] = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH.csv";
+        $data['file_name'] = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH_#".$id.".csv";
         
         // Create a file pointer 
         $f = fopen('php://memory', 'w'); 
@@ -299,7 +299,7 @@ class Email extends BaseController
         $delimiter = ","; 
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
-        $data['file_name'] = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH.csv";
+        $data['file_name'] = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH_#".$id.".csv";
         
         // Create a file pointer 
         $f = fopen('php://memory', 'w'); 

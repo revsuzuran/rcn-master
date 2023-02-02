@@ -1227,7 +1227,7 @@ class Rekon extends BaseController
         $delimiter = ","; 
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
-        $filename = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH.csv";
+        $filename = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH_#".$id.".csv";
         
         // Create a file pointer 
         $f = fopen('php://memory', 'w'); 
@@ -1303,7 +1303,7 @@ class Rekon extends BaseController
         $delimiter = ","; 
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
-        $filename = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH.csv";
+        $filename = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH_#".$id.".csv";
         
         // Create a file pointer 
         $f = fopen('php://memory', 'w'); 
