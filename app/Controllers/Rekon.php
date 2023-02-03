@@ -433,7 +433,7 @@ class Rekon extends BaseController
             $ruleVal = "";
         } else if ($radioSelect == "radioRegex") {
             log_message('info', 'TRY REGEX');
-            $indexKolom = $this->request->getPost('rowLowerKolomIndex');
+            $indexKolom = $this->request->getPost('rowRegexKolomIndex');
             $rule = "regex";
             $ruleVal = $this->request->getPost('rowRegexReplaceOld') . "=>" . $this->request->getPost('rowRegexReplaceNew');
         } else if ($radioSelect == "radioSubstr") {
