@@ -65,7 +65,12 @@ class Email extends BaseController
         $subject = $this->request->getPost('subject'); 
         $bodyEmail = $this->request->getPost('bodyEmail');
         $id = $this->request->getPost('id');
-        
+        log_message('info', 'Sending Email.. ');
+        log_message('info',"emailTo" . $emailTo);
+        log_message('info',"emailCC" . $emailCC);
+        log_message('info',"subject" . $subject);
+        log_message('info',"bodyEmail" . $bodyEmail);
+        log_message('info',"id" . $id);
         $loadConfig = $this->data_model->getSettingEmail();
 
         $config['SMTPHost'] = $loadConfig[0]->host;
