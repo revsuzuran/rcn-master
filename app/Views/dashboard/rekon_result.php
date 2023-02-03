@@ -338,7 +338,18 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-      <div class="form-group">       
+      <div class="form-group">  
+      
+        <div class="form-group mt-2 col-6">
+            <label class="form-label">Pilih Data Rekon</label>
+            <select class="form-select mb-3" name="id">
+                <option value="1">Rekon #1</option>
+                <option value="2">Rekon #2</option>
+            </select>
+        </div>                  
+
+        <hr>                  
+      
         <div class="form-group">
             <label class="form-label">Email to</label>
             <input name="emailTo" type="text" class="form-control" placeholder="nama@gmail.com;nama@gmail.com" value="" required>

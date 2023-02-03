@@ -436,6 +436,10 @@ class Rekon extends BaseController
             $indexKolom = $this->request->getPost('rowLowerKolomIndex');
             $rule = "regex";
             $ruleVal = $this->request->getPost('rowRegexReplaceOld') . "=>" . $this->request->getPost('rowRegexReplaceNew');
+        } else if ($radioSelect == "radioSubstr") {
+            $indexKolom = $this->request->getPost('rowSubstrKolomIndex');
+            $rule = "substr";
+            $ruleVal = $this->request->getPost('rowSubstrStart') . "=>" . $this->request->getPost('rowSubstrEnd');
         } else {
             $this->session->setFlashdata('error', 'Failed to Save! Try Again');
             return redirect()->to(base_url('rekon/cleansing_data'));
@@ -501,6 +505,16 @@ class Rekon extends BaseController
                 $newData[$indexKolom] = strtolower($newData[$indexKolom]); // replace with new rule
             } else if ($ruleOptions == "removeRow") {
                 if (in_array($rowDB->row_index, $ruleRemove)) continue;
+            } else if ($ruleOptions == "substr") {
+                $ruleValue = explode("=>" ,$dataClean["rule_value"]); // rule values di split dulu
+                $position1 = (int) $ruleValue[0];
+                $position2 = (int) $ruleValue[1];
+                if($position2 !== 0) {
+                    $newData[$indexKolom] = substr($newData[$indexKolom], $position1, $position2);
+                } else {
+                    $newData[$indexKolom] = substr($newData[$indexKolom], $position1);
+                }
+                
             }
 
             /* untuk diinsert ulang */

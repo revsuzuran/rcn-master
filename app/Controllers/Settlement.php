@@ -87,77 +87,98 @@ class Settlement extends BaseController
 
         $decryptedData = json_decode($decryptedData);
 
-        $response = $this->sender_inq();
+        $response = $this->sender_inq("014", "12454695", 20000, $decryptedData->id_rekon_result);
         $jsonResponse = json_decode($response);
         $rekonResult = $this->rekon_result->getRekonSetlement($decryptedData->id_rekon_result);
+        
+        if(isset($jsonResponse->response_code) && $jsonResponse->response_code == "00") {
+            $dataUp = array(
+                "is_settlement" => 1,
+                "is_ready_disburse" => 2,
+                "settlement_status" => '00', // set sukses
+                "is_proses" => "settlement"
+            );
 
-        $dataUp = array(
-            "is_settlement" => 1,
-            "is_ready_disburse" => 2,
-            "settlement_status" => '05', // set pending
-            "is_proses" => "settlement"
-        );
-        $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
-        echo "sukses";
-        // if($jsonResponse->response_code == "00") {
-            
-        // } else {
+            $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
+            echo "sukses";
 
-        // }
+        } else {
+            $dataUp = array(
+                "is_settlement" => 1,
+                "is_ready_disburse" => 2,
+                "settlement_status" => '00', // set sukses
+                "is_proses" => "settlement"
+            );
+
+            $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
+            echo "pending";
+        }        
+        
     }
 
-    public function sender_inq() {
+    public function sender_inq($bankCodeTujuan, $bankRekTujuan, $nominal, $idInq) {
         // // initialize cURL
-        // $curl = curl_init();
+        $curl = curl_init();
 
-        // // set options
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => "/linkqu-partner/transaction/withdraw/payment",
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_ENCODING => "",
-        //     CURLOPT_MAXREDIRS => 10,
-        //     CURLOPT_TIMEOUT => 0,
-        //     CURLOPT_FOLLOWLOCATION => true,
-        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        //     CURLOPT_CUSTOMREQUEST => "POST",
-        //     CURLOPT_POSTFIELDS =>"{\n\t\"username\" : \"LI307GXIN\",\n\t\"pin\" : \"2K2NPCBBNNTovgB\",\n\t\"bankcode\" : \"008\",\n\t\"accountnumber\" : \"1234566788234\",\n\t\"amount\" : 50000,\n\t\"partner_reff\" : \"54321\",\n\t\"inquiry_reff\" : \"70291\"\n}",
-        //     CURLOPT_HTTPHEADER => array(
-        //         "Content-Type: application/json",
-        //         "client-id: testing",
-        //         "client-secret: 123"
-        //     ),
-        // ));
+        $transaction = [
+            "username" => getenv("USERNAME_LINKQU"),
+            "pin" => getenv("PIN_LINKQU"),
+            "bankcode" => $bankCodeTujuan,
+            "accountnumber" => $bankRekTujuan,
+            "amount" => $nominal,
+            "partner_reff" => $idInq,
+        ];
 
-        // // execute request
-        // $response = curl_exec($curl);
+        $headerReq = array(
+            "Content-Type:application/json",
+            "client-id:".getenv("CLIENT_ID_LINKQU"),
+            "client-secret:".getenv("CLIENT_SECRET_LINKQU"),
+        );
 
-        // // close cURL
-        // curl_close($curl);
+        // set options
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => getenv("DOMAIN_LINKQU") . getenv("PATH_INQ_LINKQU") ,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => json_encode($transaction),
+            CURLOPT_HTTPHEADER => $headerReq,
+        ));
 
-        $response = '{
-            "bankcode": "008",
-            "accountnumber": "1234566788234",
-            "accountname": "Henda Sujiadi",
-            "remark": "Syalalalal",
-            "serialnumber": "569861617400",
-            "amount": 50000,
-            "additionalfee": 2500,
-            "balance": 790000,
-            "time": 1082,
-            "dst_app": "",
-            "username": "LI307GXIN",
-            "pin": "------",
-            "status": "SUCCESS",
-            "response_code": "00",
-            "response_desc": "SUCCESS",
-            "partner_reff": "54321",
-            "inquiry_reff": 70291,
-            "payment_reff": 70292,
-            "totalcost": 52500,
-            "bankname": "Bank BCA"
-          }';
+        // execute request
+        $response = curl_exec($curl);
 
-        return $response;
+        // close cURL
+        curl_close($curl);
+
+        // $response = '{
+        //     "bankcode": "008",
+        //     "accountnumber": "1234566788234",
+        //     "accountname": "Henda Sujiadi",
+        //     "remark": "Syalalalal",
+        //     "serialnumber": "569861617400",
+        //     "amount": 50000,
+        //     "additionalfee": 2500,
+        //     "balance": 790000,
+        //     "time": 1082,
+        //     "dst_app": "",
+        //     "username": "LI307GXIN",
+        //     "pin": "------",
+        //     "status": "SUCCESS",
+        //     "response_code": "00",
+        //     "response_desc": "SUCCESS",
+        //     "partner_reff": "54321",
+        //     "inquiry_reff": 70291,
+        //     "payment_reff": 70292,
+        //     "totalcost": 52500,
+        //     "bankname": "Bank BCA"
+        //   }';
+
+        return null;
 
     }
 }

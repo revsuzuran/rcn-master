@@ -51,10 +51,10 @@ foreach ($data_csv as $row) {
                       <input type="radio" id="radioRegex" name="customRadio" class="form-check-input"  value="radioRegex">
                       <label class="custom-control-label" for="radioRegex">Regex Replace</label>
                     </div>
-                    <!-- <div class="custom-control custom-radio m-2">
-                      <input type="radio" id="radioSubtr" name="customRadio" class="form-check-input">
-                      <label class="custom-control-label" for="radioSubtr">Substring</label>
-                    </div> -->
+                    <div class="custom-control custom-radio m-2">
+                      <input type="radio" id="radioSubstr" name="customRadio" class="form-check-input" value="radioSubstr">
+                      <label class="custom-control-label" for="radioSubstr">Substring</label>
+                    </div>
                   </div>
                 </div>
                 
@@ -76,7 +76,6 @@ foreach ($data_csv as $row) {
                 </div>
 
                 <div class="form-group radio-element" id="elementReplace">
-
                   <div class="form-group col-lg-6">
                       <label class="form-label">Pilih Kolom Index [1 - <?= $totalKolom-1; ?>]</label>
                       <input name="rowReplaceKolomIndex" type="number" class="form-control"  value="1" min="1" max="<?= $totalKolom-1; ?>" >
@@ -122,6 +121,24 @@ foreach ($data_csv as $row) {
                     <div class="form-group">
                         <label class="form-label">New Value</label>
                         <input name="rowRegexReplaceNew" type="text" class="form-control" value="">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6 radio-element" id="elementSubstrRow">
+                  <div class="form-group">
+                      <label class="form-label">Pilih Kolom Index [1 - <?= $totalKolom-1; ?>]</label>
+                      <input name="rowSubstrKolomIndex" type="number" class="form-control"  value="1" min="1" max="<?= $totalKolom-1; ?>" >
+                  </div>
+
+                  <div class="row row-cols-auto mt-2">
+                    <div class="form-group">
+                        <label class="form-label">Start Index</label>
+                        <input name="rowSubstrStart" type="number" class="form-control" value="" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">End Index</label>
+                        <input name="rowSubstrEnd" type="number" class="form-control" value="" placeholder="">
                     </div>
                   </div>
                 </div>
@@ -272,6 +289,12 @@ foreach ($data_csv as $row) {
   $("#radioRegex").click(function() {
     hideAllElementRadio();
     $("#elementRegex").show();
+    $("#btn_save_preview").show();    
+  });
+
+  $("#radioSubstr").click(function() {
+    hideAllElementRadio();
+    $("#elementSubstrRow").show();
     $("#btn_save_preview").show();    
   });
 

@@ -64,13 +64,9 @@ class Email extends BaseController
         $emailCC = $this->request->getPost('emailCC'); 
         $subject = $this->request->getPost('subject'); 
         $bodyEmail = $this->request->getPost('bodyEmail');
-
+        $id = $this->request->getPost('id');
+        
         $loadConfig = $this->data_model->getSettingEmail();
-
-        // if($loadConfig[0]->host != null) {
-        //     $this->session->setFlashdata('error', 'Failed Send! Setting SMTP Error');
-        //     return redirect()->to(base_url('rekon/rekon_result'));
-        // }
 
         $config['SMTPHost'] = $loadConfig[0]->host;
         $config['SMTPUser'] = $loadConfig[0]->username;
@@ -89,9 +85,9 @@ class Email extends BaseController
         $this->email->setSubject($subject);
         $this->email->setMessage($bodyEmail);
         
-        $dataPDF = $this->generatePDF();
-        $dataCsvMatch = $this->export_match();
-        $dataCsvUnmatch = $this->export_unmatch();
+        $dataPDF = $this->generatePDF($id);
+        $dataCsvMatch = $this->export_match($id);
+        $dataCsvUnmatch = $this->export_unmatch($id);
         $this->email->attach($dataPDF['file_pdf'], 'attachment', $dataPDF['nama_pdf'], 'application/pdf');
         $this->email->attach($dataCsvMatch['file_data'], 'attachment', $dataCsvMatch['file_name'], 'text/csv');
         $this->email->attach($dataCsvUnmatch['file_data'], 'attachment', $dataCsvUnmatch['file_name'], 'text/csv');
@@ -103,7 +99,7 @@ class Email extends BaseController
 
     }
 
-    public function generatePDF() {
+    public function generatePDF($id) {
          /* Preparing Data */
          $id_rekon = $this->session->get('id_rekon');
          $id_rekon_result = $this->session->get('id_rekon_result');
@@ -142,12 +138,16 @@ class Email extends BaseController
         $Pdfgenerator = $this->pdfGen;
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
-        $file_pdf = $newDate . "_" . $rekonBuff->nama_rekon . "_#1";
+        $file_pdf = $newDate . "_" . $rekonBuff->nama_rekon . "_#".$id;
         $data['nama_pdf'] = $file_pdf;
         $paper = 'A4';
         $orientation = "portrait";
-        $html = view('pdf', $data);
-         
+        if($id == 1) {
+            $html = view('pdf', $data);
+        } else {
+            $html = view('pdf2', $data);
+        }
+        
         $data['file_pdf'] = $Pdfgenerator->generate($html, $file_pdf, $paper, $orientation, false);
         return $data;
     }
@@ -199,13 +199,12 @@ class Email extends BaseController
         echo "sukses";
     }
 
-    public function export_unmatch()
+    public function export_unmatch($id)
     {
          /* Preparing Data */
         $id_rekon = $this->session->get('id_rekon');
         $id_rekon_result = $this->session->get('id_rekon_result');
         $tipe = 1;
-        $id = 1;
 
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
         $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 1);
@@ -220,10 +219,15 @@ class Email extends BaseController
             if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
         }
 
-        $dataRekonUnmatch = $dataRekon2unmatch;
-        $kolomFilter = $kolomFilter2;
+        if($id == "1") {
+            $dataRekonUnmatch = $dataRekon1unmatch;
+            $kolomFilter = $kolomFilter1;
+        } else if($id == "2") {
+            $dataRekonUnmatch = $dataRekon2unmatch;
+            $kolomFilter = $kolomFilter2;
+        } 
         
-        $delimiter = ","; 
+        $delimiter = $rekonBuff->delimiter;
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
         $data['file_name'] = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH_#".$id.".csv";
@@ -257,7 +261,6 @@ class Email extends BaseController
             fputcsv($f, $dataUnmatch, $delimiter); 
         }
         
-
         // Move back to beginning of file 
         fseek($f, 0);
         
@@ -267,12 +270,11 @@ class Email extends BaseController
         
     }
 
-    public function export_match()
+    public function export_match($id)
     {
         /* Preparing Data */
         $id_rekon = $this->session->get('id_rekon');
         $id_rekon_result = $this->session->get('id_rekon_result');
-        $id = 1;
         $tipe = 1;
 
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
@@ -286,17 +288,15 @@ class Email extends BaseController
             if($rowCompare->tipe == 2) array_push($kolomFilter2, $rowCompare->kolom_index);
         }
 
-        if($id == 1) {
+        if($id == "1") {
             $dataRekonMatch = $dataRekon1match;
             $kolomFilter = $kolomFilter1;
-        } else if($id == 2) {
+        } else if($id == "2") {
             $dataRekonMatch = $dataRekon2match;
             $kolomFilter = $kolomFilter2;
-        } else {
-            die("no data");
-        }
+        } 
         
-        $delimiter = ","; 
+        $delimiter = $rekonBuff->delimiter; 
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
         $data['file_name'] = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH_#".$id.".csv";
@@ -332,15 +332,7 @@ class Email extends BaseController
 
         // Move back to beginning of file 
         fseek($f, 0);
-        
-        // Set headers to download file rather than displayed 
-        header('Content-Type: text/csv'); 
-        header('Content-Disposition: attachment; filename="' . $filename . '";'); 
-        
-        //output all remaining data on a file pointer 
-        // Move back to beginning of file 
-        fseek($f, 0);
-        
+                
         // Return the data
         $data['file_data'] = stream_get_contents($f);
         return $data;
