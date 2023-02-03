@@ -83,6 +83,17 @@ class Email extends BaseController
         $config['CRLF'] = $loadConfig[0]->crlf;
         $config['newline'] = $loadConfig[0]->newline;
         $config['mailPath'] = $loadConfig[0]->path;
+
+        $dataEmail = substr($emailTo, -1);
+        if($dataEmail == ";") {
+            $emailTo = substr($emailTo, 0, -1);
+        }
+
+        $dataCC = substr($emailCC, -1);
+        if($dataCC == ";") {
+            $emailCC = substr($emailCC, 0, -1);
+        }
+
         $this->email->initialize($config);
         $this->email->setTo(explode(";", $emailTo));
         $this->email->setCc(explode(";", $emailCC));
