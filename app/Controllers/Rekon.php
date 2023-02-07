@@ -1030,10 +1030,10 @@ class Rekon extends BaseController
         $data['data_channel'] = $this->channel_model->getChannel($rekonResult[0]->id_channel);
         $data['data_mitra'] = $this->mitra->getMitra($rekonResult[0]->id_mitra);
 
-        $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 1);
-        $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2);
-        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 1);
-        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 2);
+        $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 1, 50);
+        $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2, 50);
+        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 1, 50);
+        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 2, 50);
 
         $kolomFilter1 = array();
         $kolomFilter2 = array();
@@ -1067,10 +1067,10 @@ class Rekon extends BaseController
         $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
         $rekonResult = $this->rekon_result->getRekon($id_rekon, $id_rekon_result);
         
-        $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 1);
-        $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2);
-        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 1);
-        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 2);
+        $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 1, 50);
+        $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon, $id_rekon_result, 2, 50);
+        $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 1, 50);
+        $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon, $id_rekon_result, 2, 50);
 
         $kolomFilter1 = array();
         $kolomFilter2 = array();

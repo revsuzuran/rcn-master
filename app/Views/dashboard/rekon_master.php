@@ -135,7 +135,11 @@
                         
                       ?> 
                         <tr>
-                            <td class="check"><input type="checkbox" value="<?= $row['id_rekon_result'] ?>" class="checkBoxHehe"/></td>
+                            <td class="check">
+                              <?php if ($row['is_proses'] != "disburse" && !isset($row['settlement_status'])) { ?>                                
+                                <input type="checkbox" value="<?= $row['id_rekon_result'] ?>" class="checkBoxHehe"/>
+                              <?php } ?>
+                            </td>
                             <td><?= $no++ ?></td>
                             <td class="onlyAdmin"><?= $row['nama_mitra'] ?></td>  
                             <td><?= $row['nama_rekon'] ?></td>     
