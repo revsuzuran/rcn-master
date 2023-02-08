@@ -229,8 +229,6 @@ $('#prosesInqBtn').on('click', function(event) {
                 $('#fee').text(convertToRupiah(objHasil.additionalfee))
                 $('#inqref').text("#" + objHasil.inquiry_reff)
 
-
-
                 /* PROSES PAYMENT */
                 $('#btnProsesPay').on('click', function(event) {
 
@@ -258,8 +256,6 @@ $('#prosesInqBtn').on('click', function(event) {
                         success: function(hasilPay){
                             
                             const objHasilPay = JSON.parse(hasilPay);
-                            // console.log(objHasilPay);
-
                             $('#btnProsesPaySpinner').attr("hidden", true);
                             $('#btnProsesPay').removeAttr("disabled");
                             
@@ -278,8 +274,8 @@ $('#prosesInqBtn').on('click', function(event) {
                 });
                 
 
-            } else if(objHasil.response_code == "gagal") {
-                Swal.fire('Inquiry Gagal', 'Terjadi Kesalahan', 'warning').then((result) => {
+            } else if(objHasil.response_code == "XXX") {
+                Swal.fire('Inquiry Gagal', objHasil.response_desc, 'warning').then((result) => {
                     // pending
                 });
             }

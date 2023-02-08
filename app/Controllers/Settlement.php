@@ -101,8 +101,8 @@ class Settlement extends BaseController
             echo $response;
 
         } else {
-            
-            echo json_encode(array("response_code" => "gagal"));
+            $resDesc = isset($jsonResponse->response_desc) ? "EX : " . $jsonResponse->response_desc : "EX : Undefined Error";
+            echo json_encode(array("response_code" => "XX", "response_desc" => $resDesc));
         }        
         
     }
@@ -192,7 +192,9 @@ class Settlement extends BaseController
                 "is_settlement" => 1,
                 "is_ready_disburse" => 2,
                 "settlement_status" => '00', // set sukses
-                "is_proses" => "settlement"
+                "is_proses" => "settlement",
+                "partner_reff" => $decryptedData->id_rekon_result,
+                "inquiry_reff" => $decryptedData->id_inq_reff
             );
 
             $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
@@ -204,12 +206,14 @@ class Settlement extends BaseController
                 "is_settlement" => 1,
                 "is_ready_disburse" => 2,
                 "settlement_status" => '05', // set pending
-                "is_proses" => "settlement"
+                "is_proses" => "settlement",
+                "partner_reff" => $decryptedData->id_rekon_result,
+                "inquiry_reff" => $decryptedData->id_inq_reff
             );
 
             $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
-            
-            echo json_encode(array("response_code" => "pending"));
+            $resDesc = isset($jsonResponse->response_desc) ? "EX : " . $jsonResponse->response_desc : "EX : Undefined Error";
+            echo json_encode(array("response_code" => "XX", "response_desc" => $resDesc));
         }        
         
     }
