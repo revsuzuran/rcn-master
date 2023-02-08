@@ -87,7 +87,7 @@
                         /* disburse */
                         if(isset($row['settlement_status'])) {
                           if($row['settlement_status'] == "00") {
-                            $status = "<button class='btn btn-info btn-sm' type='button'>Sukses Disburse</button>";                           
+                            $status = "<button class='btn btn-success btn-sm' type='button'>Sukses Disburse</button>";                           
                           } else if($row['settlement_status'] == "05") {
                             $status = "<button class='btn btn-secondary btn-sm' type='button'>Pending Disburse</button>";
                           } else {

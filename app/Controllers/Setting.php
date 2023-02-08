@@ -41,7 +41,7 @@ class Setting extends BaseController
         $passw = $this->request->getPost('password');
         $name = $this->request->getPost('name');
         
-        $this->user_model->updateUser($uname, $passw, $name);
+        $this->user_model->updateUser($uname, md5($passw), $name);
         return "sukses";
 
     }
