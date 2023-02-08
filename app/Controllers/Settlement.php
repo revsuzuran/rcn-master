@@ -108,34 +108,31 @@ class Settlement extends BaseController
     }
 
     public function sender_inq($bankCodeTujuan, $bankRekTujuan, $nominal, $idInq) {
-        // // initialize cURL
+
         $curl = curl_init();
+        $transaction = [
+            "username" => getenv("USERNAME_LINKQU"),
+            "pin" => getenv("PIN_LINKQU"),
+            "bankcode" => $bankCodeTujuan,
+            "accountnumber" => $bankRekTujuan,
+            "amount" => $nominal,
+            "partner_reff" => $idInq,
+            "sendername" => getenv("SENDER_NAME_LINKQU"),
+            "category" => "04",
+            "customeridentity" => "1234567890123456",
+        ];
 
         // $transaction = [
         //     "username" => getenv("USERNAME_LINKQU"),
         //     "pin" => getenv("PIN_LINKQU"),
-        //     "bankcode" => $bankCodeTujuan,
-        //     "accountnumber" => $bankRekTujuan,
-        //     "amount" => $nominal,
-        //     "partner_reff" => $idInq,
-        //     "sendername" => getenv("SENDER_NAME_LINKQU"),
-        //     "category" => "04",
-        //     "customeridentity" => "1234567890123456",
+        //     "bankcode" => "014",
+        //     "accountnumber" => "12454695",
+        //     "amount" => 20000,
+        //     "partner_reff" => "20211223124530",
+        //     "sendername" => "name testing",
+        //     "category" => "99",
+        //     "customeridentity" => "636483743246"
         // ];
-
-        $transaction = [
-            "username" => getenv("USERNAME_LINKQU"),
-            "pin" => getenv("PIN_LINKQU"),
-            "bankcode" => "014",
-            "accountnumber" => "12454695",
-            "amount" => 20000,
-            "partner_reff" => "20211223124530",
-            "sendername" => "name testing",
-            "category" => "99",
-            "customeridentity" => "636483743246"
-        ];
-        
-
 
         $headerReq = array(
             "Content-Type:application/json",
@@ -221,39 +218,27 @@ class Settlement extends BaseController
     {
         $curl = curl_init();
 
-        // {
-        //     "username" : "{{username}}",
-        //     "pin" : "{{pin-trx}}",
-        //     "bankcode" : "014",
-        //     "accountnumber" : "12454691",
-        //     "amount" : 20000,
-        //     "partner_reff" : "testingfastpay003",
-        //     "inquiry_reff" : "108333",
-        //     "remark" : "Syalalala"
-        // }
+        $transaction = [
+            "username" => getenv("USERNAME_LINKQU"),
+            "pin" => getenv("PIN_LINKQU"),
+            "bankcode" => $bankCodeTujuan,
+            "accountnumber" => $bankRekTujuan,
+            "amount" => $nominal,
+            "partner_reff" => $idInq,
+            "inquiry_reff" => $idInqReff,
+            "remark" => getenv("REMARK_LINKQU"),
+        ];
 
         // $transaction = [
         //     "username" => getenv("USERNAME_LINKQU"),
         //     "pin" => getenv("PIN_LINKQU"),
-        //     "bankcode" => $bankCodeTujuan,
-        //     "accountnumber" => $bankRekTujuan,
-        //     "amount" => $nominal,
-        //     "partner_reff" => $idInq,
-        //     "inquiry_reff" => $idInqReff,
-        //     "remark" => getenv("REMARK_LINKQU"),
+        //     "bankcode" => "014",
+        //     "accountnumber" => "12454691",
+        //     "amount" => 20000,
+        //     "partner_reff" => "testingfastpay001",
+        //     "inquiry_reff" => "108333",
+        //     "remark" => "Syalalala"
         // ];
-
-        $transaction = [
-            "username" => getenv("USERNAME_LINKQU"),
-            "pin" => getenv("PIN_LINKQU"),
-            "bankcode" => "014",
-            "accountnumber" => "12454691",
-            "amount" => 20000,
-            "partner_reff" => "testingfastpay001",
-            "inquiry_reff" => "108333",
-            "remark" => "Syalalala"
-        ];
-
 
         $headerReq = array(
             "Content-Type:application/json",
