@@ -274,7 +274,7 @@ $('#prosesInqBtn').on('click', function(event) {
                 });
                 
 
-            } else if(objHasil.response_code == "XXX") {
+            } else if(objHasil.response_code == "XX") {
                 Swal.fire('Inquiry Gagal', objHasil.response_desc, 'warning').then((result) => {
                     // pending
                 });
