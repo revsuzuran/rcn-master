@@ -25,6 +25,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Port FTP</label>
+                        <input id="port" type="text" class="form-control" name="port" placeholder="ex : 21" value="" required>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Username</label>
                         <input id="username" type="text" class="form-control" value="" required>
                     </div>
@@ -57,13 +62,14 @@ $('#simpanFTP').on('click', function(event) {
     var password = $('#password').val();
     var domain = $('#domain').val();
     var path = $('#path').val();
+    var port = $('#port').val();
     var ftp_name = $('#ftp_name').val();
 
 
     $.ajax({
         url : "<?= base_url('mitra/save_ftp') ?>",
         method : "POST",
-        data : {username: username,password: password, domain: domain, path:path, ftp_name:ftp_name},
+        data : {username: username,password: password, domain: domain, path:path, ftp_name:ftp_name, port},
         async : true,
         dataType : 'html',
         success: function($hasil){

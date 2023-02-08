@@ -109,8 +109,8 @@
                         <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
                         <!-- <a class="collapse-item" href="<?= base_url('mitra/channel'); ?>">Channel</a>
                         <a class="collapse-item" href="<?= base_url('mitra/bank'); ?>">Bank</a> -->
-                        <a class="collapse-item" href="<?= base_url('mitra/ftp'); ?>">FTP</a>
-                        <a class="collapse-item" href="<?= base_url('mitra/database'); ?>">Database</a>
+                        <a class="collapse-item" href="<?= base_url('ftp'); ?>">FTP</a>
+                        <a class="collapse-item" href="<?= base_url('database'); ?>">Database</a>
                         <a class="collapse-item" href="<?= base_url('mail'); ?>">Mail</a>
                     <?php } ?>
                     

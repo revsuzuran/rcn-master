@@ -152,7 +152,7 @@ class Rekon extends BaseController
                 $pathFile = $dataFtp->path;
                 $source = "$pathFile$namaFile.csv";
                 $target = fopen($source, "w");
-                $conn = ftp_connect($dataFtp->domain) or die("Could not connect");
+                $conn = ftp_connect($dataFtp->domain, $dataFtp->port) or die("Could not connect");
                 ftp_login($conn,$dataFtp->username,$dataFtp->password);
                 ftp_fget($conn,$target,$source,FTP_ASCII);
                 $csv = $source;

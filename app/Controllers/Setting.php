@@ -76,6 +76,7 @@ class Setting extends BaseController
         $domain = $this->request->getPost('domain');
         $ftpName = $this->request->getPost('ftp_name');
         $path = $this->request->getPost('path');
+        $port = $this->request->getPost('port');
         $id = $this->request->getPost('id');
 
         $data = array(
@@ -84,6 +85,7 @@ class Setting extends BaseController
             "domain" => $domain,
             "ftp_name" => $ftpName,
             "path" => $path,
+            "port" => $port,
             "id_mitra" => $this->session->get('id_mitra')
         );
 
@@ -103,6 +105,7 @@ class Setting extends BaseController
         $domain = $this->request->getPost('domain');
         $ftpName = $this->request->getPost('ftp_name');
         $path = $this->request->getPost('path');
+        $port = $this->request->getPost('port');
 
         $data = array(
             "username" => $uname,
@@ -110,6 +113,7 @@ class Setting extends BaseController
             "domain" => $domain,
             "ftp_name" => $ftpName,
             "path" => $path,
+            "port" => $port,
             'id_mitra' => $this->session->get('id_mitra'),
         );
 
