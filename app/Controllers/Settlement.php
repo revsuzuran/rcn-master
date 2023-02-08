@@ -273,4 +273,77 @@ class Settlement extends BaseController
         return $response;
 
     }
+
+    public function callback() {
+
+        //     "username" : "LI801D8G7",
+        //     "transaction_time" : "2020-07-01 21:00:21",
+        //     "accountnumber": "7205022111",
+        //     "accountname": "RAHARJO",
+        //     "serialnumber": "706829105471",
+        //     "amount": 50000,
+        //     "additionalfee": 2500,
+        //     "balance": 99994499,
+        //     "status": "SUCCESS",
+        //     "partner_reff": "543214",
+        //     "payment_reff": 70311,
+        //     "totalcost": 52500, 
+        //     "bankcode" : "014",
+        //     "bankname" : "Bank BCA"
+
+        $jsonObj = $this->request->getJSON();
+        $cId = $this->request->header('client-id');
+        $cSecret = $this->request->header('client-secret');
+        $cId = str_replace("client-id: ", "", strtolower($cId));
+        $cSecret = str_replace("client-secret: ", "", strtolower($cSecret));
+        
+        if($cId == "" || $cSecret == "") {
+            return json_encode(array("response" => "OK"));
+        }
+
+        if(!isset($jsonObj->username) && $jsonObj->username != getenv("USERNAME_LINKQU")) {
+            return json_encode(array("response" => "OK"));
+        }
+        
+        $rekonResult = $this->rekon_result->getRekonSetlement($jsonObj->partner_reff);
+        if(!isset($rekonResult[0]->id_rekon_result)) {
+            return json_encode(array("response" => "OK"));
+        }
+        
+        if($jsonObj->status == "SUCCESS") {
+            $dataUp = array(
+                "is_settlement" => 1,
+                "is_ready_disburse" => 2,
+                "settlement_status" => '00', // set sukses
+                "is_proses" => "settlement",
+                "response_callback" => json_encode($jsonObj)
+            );
+    
+            $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
+        } else if($jsonObj->status == "PENDING") {
+            $dataUp = array(
+                "is_settlement" => 1,
+                "is_ready_disburse" => 2,
+                "settlement_status" => '05', // set pending
+                "is_proses" => "settlement",
+                "response_callback" => json_encode($jsonObj)
+            );
+    
+            $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
+        } else {
+            $dataUp = array(
+                "is_settlement" => 1,
+                "is_ready_disburse" => 2,
+                "settlement_status" => 'XX', // set gagal
+                "is_proses" => "settlement",
+                "response_callback" => json_encode($jsonObj)
+            );
+    
+            $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
+        }
+
+
+        return array("response" => "OK");
+
+    }
 }

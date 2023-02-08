@@ -138,6 +138,7 @@ $routes->post('settlement/proses_temp', 'Settlement::proses_temp');
 $routes->get('settlement/proses_settlement', 'Settlement::proses_settlement');
 $routes->post('settlement/proses_inq', 'Settlement::proses_inq');
 $routes->post('settlement/proses_pay', 'Settlement::proses_pay');
+$routes->post('settlement/callback', 'Settlement::callback');
 $routes->get('settlement/monit_disbursment', 'Disbursement::monitoring_disburse');
 
 
