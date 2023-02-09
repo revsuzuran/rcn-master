@@ -96,7 +96,7 @@ class Settlement extends BaseController
         $response = $this->sender_inq($dataBank->kode_bank, $dataBank->norek, $netAmount, $decryptedData->id_rekon_result);
         $jsonResponse = json_decode($response);
         
-        if(isset($jsonResponse->response_code) && $jsonResponse->response_code == "00") {
+        if(isset($jsonResponse->status) && $jsonResponse->status == "SUCCESS") {
             
             echo $response;
 
@@ -187,7 +187,7 @@ class Settlement extends BaseController
         $response = $this->sender_pay($dataBank->kode_bank, $dataBank->norek, $netAmount, $decryptedData->id_rekon_result, $decryptedData->id_inq_reff);
         $jsonResponse = json_decode($response);
 
-        if(isset($jsonResponse->response_code) && $jsonResponse->response_code == "00") {
+        if(isset($jsonResponse->status) && $jsonResponse->status == "SUCCESS") {
             $dataUp = array(
                 "is_settlement" => 1,
                 "is_ready_disburse" => 2,
