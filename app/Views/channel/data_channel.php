@@ -2,7 +2,7 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title . " " . $data_mitra->nama_mitra; ?> </h1>
-        <a type="button" class="btn btn-primary" href="<?= base_url('mitra/channel/add') ?>">Add New</a>
+        <a type="button" class="btn btn-primary" href="<?= base_url('channel/add') ?>">Add New</a>
     </div> 
 
     <div class="row mb-3">
@@ -90,13 +90,13 @@ $('.editBtn').on('click', function(e) {
     const idChannel = $(this).data("id");
 
     $.ajax({
-        url : "<?= base_url('mitra/channel/temp') ?>",
+        url : "<?= base_url('channel/temp') ?>",
         method : "POST",
         data : {id:idChannel},
         async : true,
         dataType : 'html',
         success: function($hasil){
-            window.location.replace("<?= base_url('mitra/channel/edit') ?>")
+            window.location.replace("<?= base_url('channel/edit') ?>")
         }
     });
 
@@ -118,7 +118,7 @@ $('.deleteBtn').on('click', function(event) {
             if (result.isConfirmed) {
 
                 $.ajax({
-                    url : "<?= base_url('mitra/channel/rm') ?>",
+                    url : "<?= base_url('channel/rm') ?>",
                     method : "POST",
                     data : {id:id},
                     async : true,

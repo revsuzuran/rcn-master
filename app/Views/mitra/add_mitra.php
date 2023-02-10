@@ -69,7 +69,7 @@ $('#simpanMitra').on('click', function(event) {
     var pass = $('#pass').val();
 
     $.ajax({
-        url : "<?= base_url('mitra/save_mitra') ?>",
+        url : "<?= base_url('save_mitra') ?>",
         method : "POST",
         data : {namaMitra : namaMitra, email : email, phone : phone, alamat : alamat, uname : uname, pass : pass },
         async : true,

@@ -86,7 +86,7 @@ var alamat = $('#alamat').val();
 var phone = $('#phone').val();
 
 $.ajax({
-    url : "<?= base_url('mitra/update_user') ?>",
+    url : "<?= base_url('update_user') ?>",
     method : "POST",
     data : {username: username,password: password, name: nama, email : email, alamat: alamat, phone : phone},
     async : true,

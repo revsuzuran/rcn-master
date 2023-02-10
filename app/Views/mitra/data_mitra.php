@@ -2,7 +2,7 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
-        <a type="button" class="btn btn-primary" href="<?= base_url('mitra/add') ?>">Add New</a>
+        <a type="button" class="btn btn-primary" href="<?= base_url('add') ?>">Add New</a>
     </div> 
 
     <div class="row mb-3">
@@ -66,13 +66,13 @@ $('.bankBtn').on('click', function(e) {
     const idMitra = $(this).data("id");
 
     $.ajax({
-        url : "<?= base_url('mitra/mitra_temp') ?>",
+        url : "<?= base_url('mitra_temp') ?>",
         method : "POST",
         data : {id:idMitra},
         async : true,
         dataType : 'html',
         success: function($hasil){
-            window.location.href = "<?= base_url('mitra/bank/') ?>";
+            window.location.href = "<?= base_url('bank/') ?>";
         }
     });
 
@@ -82,13 +82,13 @@ $('.channelBtn').on('click', function(e) {
     const idMitra = $(this).data("id");
 
     $.ajax({
-        url : "<?= base_url('mitra/mitra_temp') ?>",
+        url : "<?= base_url('mitra_temp') ?>",
         method : "POST",
         data : {id:idMitra},
         async : true,
         dataType : 'html',
         success: function($hasil){
-            window.location.href = "<?= base_url('mitra/channel/') ?>";
+            window.location.href = "<?= base_url('channel/') ?>";
         }
     });
 
@@ -98,13 +98,13 @@ $('.editBtn').on('click', function(e) {
     const idMitra = $(this).data("id");
 
     $.ajax({
-        url : "<?= base_url('mitra/mitra_temp') ?>",
+        url : "<?= base_url('mitra_temp') ?>",
         method : "POST",
         data : {id:idMitra},
         async : true,
         dataType : 'html',
         success: function($hasil){
-            window.location.replace("<?= base_url('mitra/edit_mitra') ?>")
+            window.location.replace("<?= base_url('edit_mitra') ?>")
         }
     });
 
@@ -126,7 +126,7 @@ $('.deleteBtn').on('click', function(event) {
             if (result.isConfirmed) {
 
                 $.ajax({
-                    url : "<?= base_url('mitra/rm_mitra') ?>",
+                    url : "<?= base_url('rm_mitra') ?>",
                     method : "POST",
                     data : {id:id},
                     async : true,

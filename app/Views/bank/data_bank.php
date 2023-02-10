@@ -2,7 +2,7 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title. " " . $data_mitra->nama_mitra;?></h1>
-        <a type="button" class="btn btn-primary" href="<?= base_url('mitra/bank/add') ?>">Add New</a>
+        <a type="button" class="btn btn-primary" href="<?= base_url('bank/add') ?>">Add New</a>
     </div> 
 
     <div class="row mb-3">
@@ -66,14 +66,14 @@
 $('.editBtn').on('click', function(e) {
     const idMitra = $(this).data("id");
     $.ajax({
-        url : "<?= base_url('mitra/bank/temp') ?>",
+        url : "<?= base_url('bank/temp') ?>",
         method : "POST",
         data : {id:idMitra},
         async : true,
         dataType : 'html',
         success: function($hasil){
             // window.location.replace("")
-            window.location.href = "<?= base_url('mitra/bank/edit') ?>";
+            window.location.href = "<?= base_url('bank/edit') ?>";
         }
     });
 
@@ -95,7 +95,7 @@ $('.deleteBtn').on('click', function(event) {
             if (result.isConfirmed) {
 
                 $.ajax({
-                    url : "<?= base_url('mitra/bank/rm') ?>",
+                    url : "<?= base_url('bank/rm') ?>",
                     method : "POST",
                     data : {id:id},
                     async : true,

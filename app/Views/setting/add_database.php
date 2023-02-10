@@ -77,12 +77,12 @@ $('#simpanDB').on('click', function(event) {
     var port = $('#port').val();
 
     $.ajax({
-        url : "<?= base_url('mitra/save_database') ?>",
+        url : "<?= base_url('save_database') ?>",
         method : "POST",
         data : {dbName: dbName, driver:driver, username:username, password: password, hostname: hostname, port:port, database:database},
         success: function($hasil){
             if($hasil == 'sukses'){
-                window.location.replace("<?= base_url('mitra/database') ?>")
+                window.location.replace("<?= base_url('database') ?>")
             }
         }
     });

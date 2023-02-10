@@ -149,13 +149,46 @@ class Rekon extends BaseController
                 $detailMode->option_id = $ftpOptionID;
                 $detailMode->tipe =  "ftp";
                 $dataFtp = $this->data_model->getFtpOne($ftpOptionID);
-                $pathFile = $dataFtp->path;
-                $source = "$pathFile$namaFile.csv";
-                $target = fopen($source, "w");
-                $conn = ftp_connect($dataFtp->domain, $dataFtp->port) or die("Could not connect");
-                ftp_login($conn,$dataFtp->username,$dataFtp->password);
-                ftp_fget($conn,$target,$source,FTP_ASCII);
-                $csv = $source;
+                
+
+                if($dataFtp->tipe_ftp == "sftp") {
+
+                    /* SFTP */
+                    $portFtp = $dataFtp->username;
+                    $connection = ssh2_connect($dataFtp->domain, $portFtp);
+                    $usernameFtp = $dataFtp->username;
+                    $passwordFtp = $dataFtp->password;
+
+                    if (ssh2_auth_password($connection,  $usernameFtp, $passwordFtp)) {
+                        $sftp = ssh2_sftp($connection);
+                        $pathFile = $dataFtp->path;
+                        $file = "$pathFile$namaFile.csv";
+
+                        $stream = fopen("ssh2.sftp://$sftp$file", 'r');
+                        $csv = '';
+                        
+                        while (!feof($stream)) {
+                            $csv .= fread($stream, 8192);
+                        }
+                        
+                        fclose($stream);
+
+                    } else {
+                        $this->session->setFlashdata('error', 'FTP Error! Authentication failed');
+                        if($tipe == 1) return redirect()->to(base_url('rekon/add'));
+                        else return redirect()->to(base_url('rekon/add_rekon_next'));
+                    }
+
+                } else {
+                    $pathFile = $dataFtp->path;
+                    $source = "$pathFile$namaFile.csv";
+                    $target = fopen($source, "w");
+                    $conn = ftp_connect($dataFtp->domain, $dataFtp->port) or die("Could not connect");
+                    ftp_login($conn,$dataFtp->username,$dataFtp->password);
+                    ftp_fget($conn,$target,$source,FTP_ASCII);
+                    $csv = $source;
+                }
+                
             } catch (\Throwable $th) {
                 $this->session->setFlashdata('error', 'FTP Error! Failed to get file or file not found');
                 if($tipe == 1) return redirect()->to(base_url('rekon/add'));

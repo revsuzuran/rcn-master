@@ -79,7 +79,7 @@ $('#simpanDB').on('click', function(event) {
     var id = $('#id').val();
 
     $.ajax({
-        url : "<?= base_url('mitra/update_database') ?>",
+        url : "<?= base_url('update_database') ?>",
         method : "POST",
         data : {dbName: db_name, driver:driver, username:username, password: password, hostname: hostname, port:port, id:id},
         async : true,

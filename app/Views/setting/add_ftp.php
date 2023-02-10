@@ -67,14 +67,14 @@ $('#simpanFTP').on('click', function(event) {
 
 
     $.ajax({
-        url : "<?= base_url('mitra/save_ftp') ?>",
+        url : "<?= base_url('save_ftp') ?>",
         method : "POST",
         data : {username: username,password: password, domain: domain, path:path, ftp_name:ftp_name, port},
         async : true,
         dataType : 'html',
         success: function($hasil){
             if($hasil == 'sukses'){
-                window.location.replace("<?= base_url('mitra/ftp') ?>")
+                window.location.replace("<?= base_url('ftp') ?>")
             }
         }
     });

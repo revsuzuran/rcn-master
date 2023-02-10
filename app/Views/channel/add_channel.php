@@ -110,14 +110,14 @@ $('#simpanMitra').on('click', function(event) {
     console.log(is_persen4);
 
     $.ajax({
-        url : "<?= base_url('mitra/channel/save') ?>",
+        url : "<?= base_url('channel/save') ?>",
         method : "POST",
         data : {namaChannel : namaChannel, feeAdmin : feeAdmin, fee1 : fee1, fee2 : fee2, fee3 : fee3, fee4 : fee4, fee5 : fee5, is_persen_admin : is_persen_admin, is_persen1 : is_persen1, is_persen2 : is_persen2, is_persen3 : is_persen3, is_persen4 : is_persen4, is_persen5 : is_persen5},
         async : true,
         dataType : 'html',
         success: function($hasil){
             if($hasil == 'sukses'){
-                window.location.replace("<?= base_url('mitra/channel') ?>")
+                window.location.replace("<?= base_url('channel') ?>")
             }
         }
     });

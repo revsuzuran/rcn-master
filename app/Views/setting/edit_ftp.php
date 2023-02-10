@@ -14,6 +14,15 @@
                 </div>
                 <div class="card-body">
 
+                    <?php $tipe = isset($data_ftp->tipe) ? $data_ftp->tipe : "ftp"; ?>
+                    <div class="form-group mt-2 col-6">
+                        <label class="form-label">Tipe</label>
+                        <select class="form-select mb-3" id="tipe">
+                            <option value="ftp">FTP</option>
+                            <option value="sftp">SFTP</option>
+                        </select>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label">FTP Name</label>
                         <input id="ftp_name" type="text" class="form-control" name="domain" placeholder="FTP SERVER LINKQU" value="<?= $data_ftp->ftp_name ?>" required>
@@ -66,11 +75,12 @@ $('#simpanFTP').on('click', function(event) {
     var path = $('#path').val();
     var port = $('#port').val();
     var id = $('#id').val();
+    var tipe = $('#tipe').find(":selected").val();
 
     $.ajax({
-        url : "<?= base_url('mitra/update_ftp') ?>",
+        url : "<?= base_url('update_ftp') ?>",
         method : "POST",
-        data : {username: username,password: password, domain: domain, path:path, ftp_name:ftp_name, id:id, port:port},
+        data : {username: username,password: password, domain: domain, path:path, ftp_name:ftp_name, id:id, port:port, tipe:tipe},
         async : true,
         dataType : 'html',
         success: function($hasil){
@@ -82,4 +92,7 @@ $('#simpanFTP').on('click', function(event) {
     });
 
 });
+
+const tipe = "<?= $tipe ?>";
+$("#tipe").val(tipe).change();
 </script>

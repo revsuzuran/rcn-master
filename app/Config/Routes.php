@@ -77,69 +77,54 @@ $routes->group('rekon', function ($routes) {
 
 $routes->group('mitra', function ($routes) {
     $routes->get('/', 'Mitra::index', ['filter' => 'isadmin']);
-    $routes->get('add', 'Mitra::add', ['filter' => 'isadmin']);
-    $routes->post('save_mitra', 'Mitra::save_mitra', ['filter' => 'isadmin']);
-    $routes->post('rm_mitra', 'Mitra::rm_mitra', ['filter' => 'isadmin']);
-    $routes->post('mitra_temp', 'Mitra::mitra_temp');
-    $routes->get('edit_mitra', 'Mitra::edit_mitra');
-    $routes->post('update_mitra', 'Mitra::update_mitra');
-
-    /* Channel */
-    $routes->group('channel', function ($routes) {
-        $routes->get('/', 'Channel::index');
-        $routes->get('add', 'Channel::add');
-        $routes->post('save', 'Channel::save_channel');
-        $routes->post('temp', 'Channel::channel_temp');
-        $routes->get('edit', 'Channel::edit_channel');
-        $routes->post('update', 'Channel::update_channel');
-        $routes->post('rm', 'Channel::rm_channel');
-    });
-
-    /* Bank */
-    $routes->group('bank', function ($routes) {
-        $routes->get('/', 'Bank::index');
-        $routes->get('add', 'Bank::add');
-        $routes->post('save', 'Bank::save_bank');
-        $routes->post('temp', 'Bank::bank_temp');
-        $routes->get('edit', 'Bank::edit_bank');
-        $routes->post('update', 'Bank::update_bank');
-        $routes->post('rm', 'Bank::rm_bank');
-    });
-
-    /* Lain lain */
- $routes->get('profil', 'Setting::profil_mitra');
- $routes->post('update_user', 'Setting::update_user_mitra');
- $routes->get('ftp', 'Setting::ftp');
- $routes->get('add_ftp', 'Setting::add_ftp');
- $routes->post('save_ftp', 'Setting::save_ftp');
- $routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
- $routes->post('update_ftp', 'Setting::update_ftp');
- $routes->post('rm_ftp', 'Setting::rm_ftp');
- $routes->get('database', 'Setting::database');
- $routes->get('add_database', 'Setting::add_database');
- $routes->post('save_database', 'Setting::save_database');
- $routes->get('edit_database/(:any)', 'Setting::edit_database');
- $routes->post('update_database', 'Setting::update_database');
- $routes->post('rm_database', 'Setting::rm_database');
-    
 });
 
- /* Lain lain */
- $routes->get('profil', 'Setting::profil_mitra');
- $routes->post('update_user', 'Setting::update_user_mitra');
- $routes->get('ftp', 'Setting::ftp');
- $routes->get('add_ftp', 'Setting::add_ftp');
- $routes->post('save_ftp', 'Setting::save_ftp');
- $routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
- $routes->post('update_ftp', 'Setting::update_ftp');
- $routes->post('rm_ftp', 'Setting::rm_ftp');
- $routes->get('database', 'Setting::database');
- $routes->get('add_database', 'Setting::add_database');
- $routes->post('save_database', 'Setting::save_database');
- $routes->get('edit_database/(:any)', 'Setting::edit_database');
- $routes->post('update_database', 'Setting::update_database');
- $routes->post('rm_database', 'Setting::rm_database');
+$routes->post('mitra_temp', 'Mitra::mitra_temp');
+$routes->get('add', 'Mitra::add', ['filter' => 'isadmin']);
+$routes->post('save_mitra', 'Mitra::save_mitra', ['filter' => 'isadmin']);
+$routes->post('rm_mitra', 'Mitra::rm_mitra', ['filter' => 'isadmin']);
+$routes->get('edit_mitra', 'Mitra::edit_mitra');
+$routes->post('update_mitra', 'Mitra::update_mitra');
 
+/* Channel */
+$routes->group('channel', function ($routes) {
+    $routes->get('/', 'Channel::index');
+    $routes->get('add', 'Channel::add');
+    $routes->post('save', 'Channel::save_channel');
+    $routes->post('temp', 'Channel::channel_temp');
+    $routes->get('edit', 'Channel::edit_channel');
+    $routes->post('update', 'Channel::update_channel');
+    $routes->post('rm', 'Channel::rm_channel');
+});
+
+/* Bank */
+$routes->group('bank', function ($routes) {
+    $routes->get('/', 'Bank::index');
+    $routes->get('add', 'Bank::add');
+    $routes->post('save', 'Bank::save_bank');
+    $routes->post('temp', 'Bank::bank_temp');
+    $routes->get('edit', 'Bank::edit_bank');
+    $routes->post('update', 'Bank::update_bank');
+    $routes->post('rm', 'Bank::rm_bank');
+});
+
+/* Lain lain */
+$routes->get('profil', 'Setting::profil_mitra');
+$routes->post('update_user', 'Setting::update_user_mitra');
+$routes->get('ftp', 'Setting::ftp');
+$routes->get('add_ftp', 'Setting::add_ftp');
+$routes->post('save_ftp', 'Setting::save_ftp');
+$routes->get('edit_ftp/(:any)', 'Setting::edit_ftp');
+$routes->post('update_ftp', 'Setting::update_ftp');
+$routes->post('rm_ftp', 'Setting::rm_ftp');
+$routes->get('database', 'Setting::database');
+$routes->get('add_database', 'Setting::add_database');
+$routes->post('save_database', 'Setting::save_database');
+$routes->get('edit_database/(:any)', 'Setting::edit_database');
+$routes->post('update_database', 'Setting::update_database');
+$routes->post('rm_database', 'Setting::rm_database');
+
+/* Administrastion  */
 $routes->get('profil', 'Setting::profil', ['filter' => 'isadmin']);
 $routes->post('update_user', 'Setting::update_user', ['filter' => 'isadmin']);
 $routes->post('get_setting', 'Setting::get_setting');
@@ -154,7 +139,6 @@ $routes->post('settlement/proses_inq', 'Settlement::proses_inq');
 $routes->post('settlement/proses_pay', 'Settlement::proses_pay');
 $routes->post('settlement/callback', 'Settlement::callback');
 $routes->get('settlement/monit_disbursment', 'Disbursement::monitoring_disburse');
-
 
 /* Mail */
 $routes->get('mail', 'Email::get_email');

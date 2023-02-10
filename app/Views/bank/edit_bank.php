@@ -48,14 +48,14 @@ $('#simpanBank').on('click', function(event) {
     var kode_bank = $('#kode_bank').val();
 
     $.ajax({
-        url : "<?= base_url('mitra/bank/update') ?>",
+        url : "<?= base_url('bank/update') ?>",
         method : "POST",
         data : {nama_bank : nama_bank, norek : norek, kode_bank : kode_bank},
         async : true,
         dataType : 'html',
         success: function($hasil){
             if($hasil == 'sukses'){
-                window.location.replace("<?= base_url('mitra/bank') ?>")
+                window.location.replace("<?= base_url('bank') ?>")
             }
         }
     });

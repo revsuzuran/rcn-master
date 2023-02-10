@@ -107,15 +107,15 @@
 
                     <?php if(isset($_SESSION['masukAdmin'])) { ?>
                         <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
-                        <!-- <a class="collapse-item" href="<?= base_url('mitra/channel'); ?>">Channel</a>
-                        <a class="collapse-item" href="<?= base_url('mitra/bank'); ?>">Bank</a> -->
+                        <!-- <a class="collapse-item" href="<?= base_url('channel'); ?>">Channel</a>
+                        <a class="collapse-item" href="<?= base_url('bank'); ?>">Bank</a> -->
                         <a class="collapse-item" href="<?= base_url('ftp'); ?>">FTP</a>
                         <a class="collapse-item" href="<?= base_url('database'); ?>">Database</a>
                         <a class="collapse-item" href="<?= base_url('mail'); ?>">Mail</a>
                     <?php } ?>
                     
                     <?php if(isset($_SESSION['masukMitra'])) { ?>
-                        <a class="collapse-item" href="<?= base_url('mitra/profil'); ?>">Profil</a>
+                        <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
                     <?php } ?>
                     
                 </div>

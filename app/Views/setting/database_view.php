@@ -2,7 +2,7 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800"><?= $title; ?></h1>
-        <a type="button" class="btn btn-primary" href="<?= base_url('mitra/add_database') ?>">Add New</a>
+        <a type="button" class="btn btn-primary" href="<?= base_url('add_database') ?>">Add New</a>
     </div> 
 
     <div class="row mb-3">
@@ -81,7 +81,7 @@ $('.deleteBtn').on('click', function(event) {
             if (result.isConfirmed) {
 
                 $.ajax({
-                    url : "<?= base_url('mitra/rm_database') ?>",
+                    url : "<?= base_url('rm_database') ?>",
                     method : "POST",
                     data : {id:id},
                     async : true,
