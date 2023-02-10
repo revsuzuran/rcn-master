@@ -30,7 +30,17 @@ class UserModel {
 
             return $usr;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while fetching rekon with ID: ' . $id . $ex->getMessage(), 500);
+            show_error('Error while fetching rekon with ID: ' . $ex->getMessage(), 500);
+        }
+    }
+
+    function getUserById($id) {
+        try {
+            $usr = $this->user->findOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+
+            return $usr;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekon with ID: ' . $ex->getMessage(), 500);
         }
     }
 
@@ -62,7 +72,7 @@ class UserModel {
 
             return false;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
-            show_error('Error while updating a rekon with ID: ' . $id . $ex->getMessage(), 500);
+            show_error('Error while updating a rekon with ID: ' . $ex->getMessage(), 500);
         }
     }
     

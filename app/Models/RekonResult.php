@@ -220,11 +220,7 @@ class RekonResult {
     function getRekonDisburseAll($limit = 0) {
         try {
             $desc = -1;
-            // if ($this->session->has('masukAdmin')) {
-                $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], "is_ready_disburse" => (int) 2, "is_settlement" => (int) 1], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
-            // } else {
-            //     $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], "is_ready_disburse" => (int) 2, "is_settlement" => (int) 1, "id_mitra" => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
-            // }
+            $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], "is_ready_disburse" => (int) 2, "is_settlement" => (int) 1], ['limit' => $limit, 'sort' => ['updatedAt' => 1] ]);
             $rekon = $cursor->toArray();
 
             return $rekon;

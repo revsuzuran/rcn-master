@@ -7,6 +7,7 @@ use App\Models\RekonResult;
 use App\Models\RekonUnmatch;
 use App\Models\RekonMatch;
 use App\Models\DataModels;
+use App\Models\UserModel;
 use App\Models\DBModel;
 use App\Models\Postgres;
 use App\Models\ChannelModel;
@@ -29,6 +30,7 @@ class Settlement extends BaseController
         $this->rekon_match = new RekonMatch();
         $this->data_model = new DataModels();
         $this->bank_model = new BankModel();
+        $this->user_model = new UserModel();
         $this->dbModel = new DBModel();
         $this->pg = new Postgres();
         $this->channel_model = new ChannelModel();
@@ -315,6 +317,7 @@ class Settlement extends BaseController
                 "is_settlement" => 1,
                 "is_ready_disburse" => 2,
                 "settlement_status" => '00', // set sukses
+                "settlement_desc" => 'SUCCESS', // set pending
                 "is_proses" => "settlement",
                 "response_callback" => json_encode($jsonObj)
             );
@@ -325,6 +328,7 @@ class Settlement extends BaseController
                 "is_settlement" => 1,
                 "is_ready_disburse" => 2,
                 "settlement_status" => '05', // set pending
+                "settlement_desc" => 'PENDING', // set pending
                 "is_proses" => "settlement",
                 "response_callback" => json_encode($jsonObj)
             );
@@ -335,6 +339,7 @@ class Settlement extends BaseController
                 "is_settlement" => 1,
                 "is_ready_disburse" => 2,
                 "settlement_status" => 'XX', // set gagal
+                "settlement_desc" => 'FAILED', // set pending
                 "is_proses" => "settlement",
                 "response_callback" => json_encode($jsonObj)
             );
@@ -345,5 +350,34 @@ class Settlement extends BaseController
 
         return array("response" => "OK");
 
+    }
+
+    public function manual_action() {
+
+        /* decrypt internal */
+        $encryptedData = $this->request->getPost('encryptedData');
+        $key = getenv('encryption_key');
+        $Encryption = new Encryption();
+        $decryptedData = $Encryption->decrypt($encryptedData, $key);
+        if ($decryptedData === false) {
+            echo "gagal";
+            die;
+        }
+
+        $decryptedData = json_decode($decryptedData);
+        $rekonResult = $this->rekon_result->getRekonSetlement($decryptedData->id_rekon_result);
+
+        $unamePic = $this->session->get("uname_admin");
+
+        $dataUp = array(
+            "is_settlement" => 1,
+            "is_ready_disburse" => 2,
+            "settlement_status" => '01', // set gagal
+            "settlement_desc" => "SUCCESS MANUAL BY $unamePic", // set pending
+            "is_proses" => "settlement",
+            "response_callback" => ""
+        );
+        $this->rekon_result->updateRekonResult($rekonResult[0]->id_rekon_result, $dataUp);
+        echo json_encode(array("response_code" => "00", "response_desc" => "SUKSES"));
     }
 }

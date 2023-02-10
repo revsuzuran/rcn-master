@@ -118,6 +118,10 @@
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="prosesInqSpinner" hidden></span>
                             Proses Inquiry
                         </button>
+                        <button class="btn btn-danger justify-content-md-end" type="button" id="prosesManualBtn">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="prosesManualSpinner" hidden></span>
+                            Proses Manual
+                        </button>
                     </div>
                     
                 </div>
@@ -185,6 +189,61 @@
 
 
 <script>
+$('#prosesManualBtn').on('click', function(event) {
+
+    Swal.fire({
+        title: 'Warning',
+        text: "Anda yakin ingin memproses data manual?",
+        showDenyButton: true,
+        icon: 'warning',
+        confirmButtonColor: '#0d6efd',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            prosesManual();
+        }        
+    });
+    
+});
+
+function prosesManual() {
+    $('#prosesManualBtn').attr("disabled", true);
+    $('#prosesManualSpinner').removeAttr("hidden");
+    var idBank = $('#bank_opt').find(":selected").val();
+    // console.log(idBank)
+    var dataRekon = {
+        'id_rekon_result' : "<?= $data_rekon[0]->id_rekon_result ?>",
+        'id_mitra' : "<?= $data_rekon[0]->id_mitra ?>",
+        'id_bank' : idBank
+    };
+
+    var key = "<?= getenv("encryption_key") ?>";        
+    var plaintext = JSON.stringify(dataRekon);
+    let encryption = new Encryption();
+    var encryptedData = encryption.encrypt(plaintext, key);
+
+    $.ajax({
+        url : "<?= base_url('settlement/manual_action') ?>",
+        method : "POST",
+        data : {'encryptedData': encryptedData},
+        async : true,
+        dataType : 'html',
+        success: function(hasil){
+            const objHasil = JSON.parse(hasil);
+            $('#prosesManualSpinner').attr("hidden", true);
+            $('#prosesManualBtn').removeAttr("disabled");
+
+            if(objHasil.response_code == "00") {
+                Swal.fire('Success!', 'Cek status Disbursment di menu Monitoring Disburse', 'success').then((result) => {
+                    window.location.replace("<?= base_url('settlement/monit_disbursment') ?>");
+                });
+            } else {
+                Swal.fire('Failed!', objHasil.response_desc, 'error');
+            }
+        }
+    });
+}
+
+
 $('#prosesInqBtn').on('click', function(event) {
 
     $('#prosesInqBtn').attr("disabled", true);

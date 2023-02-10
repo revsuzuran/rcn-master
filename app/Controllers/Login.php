@@ -28,7 +28,7 @@ class Login extends BaseController
         if(isset($hasil->name))
         {
             // set session admin
-            $sess_data = array('masukAdmin' => TRUE, 'uname' => $hasil->name, 'uname_admin' => $hasil->username, 'isLogin' => TRUE);
+            $sess_data = array('masukAdmin' => TRUE, 'uname' => $hasil->name, 'uname_admin' => $hasil->username, 'isLogin' => TRUE, "id_admin" => $hasil->_id->__toString());
             $this->session->set($sess_data);
             return redirect()->to(base_url());
         } else if(isset($mitra->id_mitra) && password_verify($pwd, $mitra->passw) == true)

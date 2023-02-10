@@ -45,5 +45,19 @@ class RekonUnmatch {
             show_error('Error while fetching rekon with ID: ' . $id . $ex->getMessage(), 500);
         }
     }
+
+    function deleteRekonMany($id_rekon_result) {
+        try {
+            $result = $this->rekon_unmatch->deleteMany(['id_rekon_result' => $id_rekon_result]);
+
+            if($result->getDeletedCount() == 1) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while deleting a rekon with ID: ' . $ex->getMessage(), 500);
+        }
+    }    
     
 }

@@ -49,12 +49,14 @@
                         if (!isset($row['settlement_status']) || $row['settlement_status'] == "") continue; 
                         
                         if($row['settlement_status'] == "00") {
-                          $status = "<button class='btn btn-info btn-sm' type='button'>Sukses</button>";
-                          
+                          $status = "<button class='btn btn-success btn-sm p-1 fw-light' style='font-size:11px;' type='button'>SUCCESS</button>";
                         } else if($row['settlement_status'] == "05") {
-                          $status = "<button class='btn btn-secondary btn-sm' type='button'>Pending</button>";
+                          $status = "<button class='btn btn-secondary btn-sm p-1 fw-light' style='font-size:11px;' type='button'>PENDING</button>";
+                        } else if($row['settlement_status'] == "01") {
+                          $textStatus = $row['settlement_desc'];
+                          $status = "<button class='btn btn-success btn-sm p-1 fw-light' style='font-size:11px;' type='button'>$textStatus</button>";
                         } else {
-                          $status = "<button class='btn btn-danger btn-sm' type='button'>Gagal</button>";
+                          $status = "<button class='btn btn-danger btn-sm p-1 fw-light' style='font-size:11px;' type='button'>FAILED</button>";
                         }
 
                         $btnAct = "<button class='btn btn-primary btn-sm btnShowResult mt-1' type='button' data-id='". $row['id_rekon'] ."' data-id_rekon_result='". $row['data_result1']['id_rekon_result'] ."' id='btnShowResult' data-bs-toggle='tooltip' data-bs-placement='top' title='Detail'><i class='fas fa-file-alt'></i></button>";

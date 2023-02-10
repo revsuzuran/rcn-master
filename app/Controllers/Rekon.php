@@ -12,6 +12,7 @@ use App\Models\DBModel;
 use App\Models\Postgres;
 use App\Models\ChannelModel;
 use App\Libraries\PdfGenerator;
+use App\Libraries\Encryption;
 
 
 class Rekon extends BaseController
@@ -1271,7 +1272,7 @@ class Rekon extends BaseController
             die("no data");
         }
         
-        $delimiter = ","; 
+        $delimiter = $rekonBuff->delimiter;
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
         $filename = $newDate . "_" . $rekonBuff->nama_rekon . "_UNMATCH_#".$id.".csv";
@@ -1347,7 +1348,7 @@ class Rekon extends BaseController
             die("no data");
         }
         
-        $delimiter = ","; 
+        $delimiter = $rekonBuff->delimiter; 
         $originalDate = $rekonBuff->tanggal_rekon;
         $newDate = date("Ymd", strtotime($originalDate));
         $filename = $newDate . "_" . $rekonBuff->nama_rekon . "_MATCH_#".$id.".csv";
@@ -1391,6 +1392,89 @@ class Rekon extends BaseController
         //output all remaining data on a file pointer 
         fpassthru($f); 
         
+    }
+
+    public function export_all(){
+        /* Preparing Data */       
+        $encryptedData = $this->uri->getSegment(3);        
+        $key = getenv('encryption_key');
+        $Encryption = new Encryption();
+        $decryptedData = $Encryption->decrypt($encryptedData, $key);
+        if ($decryptedData === false) {
+            echo "gagal";
+        }
+        
+        $decryptedData = json_decode($decryptedData);
+        $tipe = $decryptedData->tipe;
+        $id_rekon = $decryptedData->id_rekon;
+        $id_rekon_result = $decryptedData->id_rekon_result;
+        $rekonBuff = $this->rekon_buff->getRekon($id_rekon);
+
+
+        if($decryptedData->mode == "match") {
+            $dataRekon1match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 1);
+            $dataRekon2match = $this->rekon_match->getRekonAll($id_rekon,$id_rekon_result, 2);
+            if($tipe == 1) {
+                $dataRekon = $dataRekon1match;
+            } else if($tipe == 2) {
+                $dataRekon = $dataRekon2match;
+            } else {
+                die("no data");
+            }
+        } else {
+            $dataRekon1unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 1);
+            $dataRekon2unmatch = $this->rekon_unmatch->getRekonAll($id_rekon,$id_rekon_result, 2);
+            if($tipe == 1) {
+                $dataRekon = $dataRekon1unmatch;
+            } else if($tipe == 2) {
+                $dataRekon = $dataRekon2unmatch;
+            } else {
+                die("no data");
+            }
+        }     
+        
+        $delimiter = $rekonBuff->delimiter;
+        $originalDate = $rekonBuff->tanggal_rekon;
+        $newDate = date("Ymd", strtotime($originalDate));
+        $filename = $newDate . "_" . $rekonBuff->nama_rekon . "#".$tipe.".csv";
+        
+        // Create a file pointer 
+        $f = fopen('php://memory', 'w'); 
+
+        $dataHeader = $this->rekon_buff_detail->getHeader($id_rekon, $tipe, 1);
+        foreach($dataHeader as $row) {
+            $dataUnmatch = array();
+            foreach ($row['data_row'] as $key => $rowData) {
+                array_push($dataUnmatch, $rowData);
+            }
+            fputcsv($f, $dataUnmatch, $delimiter); 
+        }
+        
+        foreach($dataRekon as $row) {
+            $dataMatch = array();
+            foreach ($row['row_data'] as $key => $rowData) {
+                if($tipe == 1) {
+                    array_push($dataMatch, $rowData);
+                } else if($tipe == 2) {
+                    array_push($dataMatch, $rowData);
+                } else {
+                    die("no data");
+                }
+                
+            }
+            fputcsv($f, $dataMatch, $delimiter); 
+        }
+        
+
+        // Move back to beginning of file 
+        fseek($f, 0);
+        
+        // Set headers to download file rather than displayed 
+        header('Content-Type: text/csv'); 
+        header('Content-Disposition: attachment; filename="' . $filename . '";'); 
+        
+        //output all remaining data on a file pointer 
+        fpassthru($f); 
     }
 
 
@@ -1780,6 +1864,27 @@ class Rekon extends BaseController
     
             $this->rekon_buff->updateRekonPush($id_rekon, $dataSave);
         }       
+    }
+
+    public function retry_process() {
+        /* decrypt internal */
+        $encryptedData = $this->uri->getSegment(3);
+        $key = getenv('encryption_key');
+        $Encryption = new Encryption();
+        $decryptedData = $Encryption->decrypt($encryptedData, $key);
+        if ($decryptedData === false) {
+            echo "gagal";
+            die;
+        }
+
+        $decryptedData = json_decode($decryptedData);
+        $id_rekon_result = $decryptedData;
+        $this->rekon_unmatch->deleteRekonMany($id_rekon_result);
+        $this->rekon_match->deleteRekonMany($id_rekon_result);
+        $this->rekon_result->updateRekonResult($id_rekon_result, ["is_proses" => "pending"]);
+
+        return redirect()->to(base_url('rekon'));
+
     }
 }
 

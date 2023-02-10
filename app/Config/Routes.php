@@ -72,11 +72,16 @@ $routes->group('rekon', function ($routes) {
     
     $routes->get('export_unmatch/(:any)/(:any)', 'Rekon::export_unmatch');
     $routes->get('export_match/(:any)/(:any)', 'Rekon::export_match');
+    $routes->get('export_all/(:any)', 'Rekon::export_all');
+
+
+    $routes->get('retry_process/(:any)', 'Rekon::retry_process');
 });
 
 
 $routes->group('mitra', function ($routes) {
     $routes->get('/', 'Mitra::index', ['filter' => 'isadmin']);
+    $routes->get('profil', 'Setting::profil_mitra');
 });
 
 $routes->post('mitra_temp', 'Mitra::mitra_temp');
@@ -109,7 +114,6 @@ $routes->group('bank', function ($routes) {
 });
 
 /* Lain lain */
-$routes->get('profil', 'Setting::profil_mitra');
 $routes->post('update_user', 'Setting::update_user_mitra');
 $routes->get('ftp', 'Setting::ftp');
 $routes->get('add_ftp', 'Setting::add_ftp');
@@ -137,6 +141,7 @@ $routes->post('settlement/proses_temp', 'Settlement::proses_temp');
 $routes->get('settlement/proses_settlement', 'Settlement::proses_settlement');
 $routes->post('settlement/proses_inq', 'Settlement::proses_inq');
 $routes->post('settlement/proses_pay', 'Settlement::proses_pay');
+$routes->post('settlement/manual_action', 'Settlement::manual_action');
 $routes->post('settlement/callback', 'Settlement::callback');
 $routes->get('settlement/monit_disbursment', 'Disbursement::monitoring_disburse');
 

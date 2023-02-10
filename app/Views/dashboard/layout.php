@@ -218,6 +218,7 @@
 
 
  $(document).ready(function () {
+      $('#dataTableMaster').DataTable({order: [[1, 'asc']]}); // ID From dataTable 
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTable2').DataTable(); // ID From dataTable
       $('#dataTable3').DataTable(); // ID From dataTable 

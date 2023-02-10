@@ -49,7 +49,7 @@
                         if (!isset($row['is_proses']) || $row['is_proses'] == "") continue; 
                         
                         if($row['is_proses'] == "disburse") {
-                          $status = "<button class='btn btn-info btn-sm' type='button'>Ready Disburse</button>";
+                          $status = "<button class='btn btn-primary btn-sm p-1 fw-light' style='font-size:11px;' type='button'>READY DISBURSE</button>";
                           $btnAct = "<button class='btn btn-primary btn-sm btnShowResult mt-1' type='button' data-id='". $row['id_rekon'] ."' data-id_rekon_result='". $row['data_result1']['id_rekon_result'] ."' id='btnShowResult' data-bs-toggle='tooltip' data-bs-placement='top' title='Detail'><i class='fas fa-file-alt'></i></button>";
                           $btnActDetail = "<button class='btn btn-success btn-sm btnShowResultAmount mt-1' type='button' data-id='". $row['id_rekon'] ."' data-id_rekon_result='". $row['data_result1']['id_rekon_result'] ."' id='btnShowResultAmount' data-bs-toggle='tooltip' data-bs-placement='top' title='Detail Amount'><i class='fas fa-file-invoice-dollar'></i></button>";
                           $btnActDisburse = "<button class='btn btn-danger btn-sm btnDisburse mt-1' type='button' data-id='". $row['id_rekon'] ."' data-id_rekon_result='". $row['data_result1']['id_rekon_result'] ."' id='btnDisburse' data-bs-toggle='tooltip' data-bs-placement='top' title='Proses Disburse'><i class='fas fa-donate'></i></button>";
