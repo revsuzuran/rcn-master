@@ -35,7 +35,7 @@
 
                   <div class="form-group form-file">
                     <div class="custom-file">
-                      <input type="file" name="csvFile" id="csvFile" accept=".csv">
+                      <input type="file" name="csvFile" id="csvFile" >
                     </div>
                   </div>
                   
@@ -55,7 +55,7 @@
                           <div class="input-group mb-3">
                             <input type="text" class="form-control" placeholder="File Name on Ftp Server" aria-label="Recipient's username" aria-describedby="basic-addon2" name="nama_file">
                             <div class="input-group-append">
-                              <span class="input-group-text" id="basic-addon2">.csv</span>
+                              <!-- <span class="input-group-text" id="basic-addon2">.csv</span> -->
                             </div>
                           </div>
                         </div>
@@ -113,7 +113,7 @@
       <div class="modal-body">
         <div class="form-group col-6 mt-2">
             <label class="form-label">Pilih Setting</label>
-            <input type="file" name="csvFile_" id="csvFile_" accept=".csv" hidden>
+            <input type="file" name="csvFile_" id="csvFile_"  hidden>
             <select class="form-select mb-3" name="opt_setting" id="opt_setting">
               <option value="0">-</option>
               <?php foreach ($data_setting as $rowData) { ?>

@@ -151,27 +151,27 @@ class Rekon extends BaseController
                 $detailMode->tipe =  "ftp";
                 $dataFtp = $this->data_model->getFtpOne($ftpOptionID);
                 
-
-                if($dataFtp->tipe_ftp == "sftp") {
-
+                if(isset($dataFtp->tipe_ftp) && $dataFtp->tipe_ftp  == "sftp") {
+                    $radioTipe = "sftp"; //change mode
                     /* SFTP */
-                    $portFtp = $dataFtp->port;
+                    $portFtp = isset($dataFtp->port) ? $dataFtp->port : 22;
                     $connection = ssh2_connect($dataFtp->domain, $portFtp);
+                    
                     $usernameFtp = $dataFtp->username;
                     $passwordFtp = $dataFtp->password;
-
                     if (ssh2_auth_password($connection,  $usernameFtp, $passwordFtp)) {
                         $sftp = ssh2_sftp($connection);
                         $pathFile = $dataFtp->path;
-                        $file = "$pathFile$namaFile.csv";
+                        $file = "$pathFile$namaFile";
 
                         $stream = fopen("ssh2.sftp://$sftp$file", 'r');
-                        $csv = '';
-                        
-                        while (!feof($stream)) {
-                            $csv .= fread($stream, 8192);
-                        }
-                        
+                        $fileStream = fread($stream, filesize("ssh2.sftp://$sftp$file"));
+                        file_put_contents($namaFile, $fileStream);
+                        $csv = $namaFile;
+                        // while (!feof($stream)) {
+                        //     $csv .= fread($stream, filesize("ssh2.sftp://$sftp$file"));
+                        // }
+                        // var_dump();
                         fclose($stream);
 
                     } else {
@@ -182,15 +182,17 @@ class Rekon extends BaseController
 
                 } else {
                     $pathFile = $dataFtp->path;
-                    $source = "$pathFile$namaFile.csv";
+                    $source = "$pathFile$namaFile";
+                    $portFtp = isset($dataFtp->port) ? $dataFtp->port : 21;
                     $target = fopen($source, "w");
-                    $conn = ftp_connect($dataFtp->domain, $dataFtp->port) or die("Could not connect");
+                    $conn = ftp_connect($dataFtp->domain, $portFtp) or die("Could not connect");
                     ftp_login($conn,$dataFtp->username,$dataFtp->password);
                     ftp_fget($conn,$target,$source,FTP_ASCII);
                     $csv = $source;
                 }
                 
             } catch (\Throwable $th) {
+                var_dump($th);die;
                 $this->session->setFlashdata('error', 'FTP Error! Failed to get file or file not found');
                 if($tipe == 1) return redirect()->to(base_url('rekon/add'));
                 else return redirect()->to(base_url('rekon/add_rekon_next'));
@@ -290,8 +292,8 @@ class Rekon extends BaseController
             else return redirect()->to(base_url('rekon/add_rekon_next'));
         }
 
-        $file = file($csv);
-        if($radioTipe == "ftp") unlink("$namaFile.csv"); // remove ftp files
+        $file = file($csv);        
+        if($radioTipe == "ftp") unlink("$namaFile"); // remove ftp files
         $arrData = array();
         $strDataPreview = "";
         foreach($file as $key => $hehe) {
