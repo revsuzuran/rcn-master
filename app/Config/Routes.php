@@ -137,13 +137,16 @@ $routes->post('save_setting', 'Setting::save_setting');
 /* disbursement and settlement */
 $routes->post('add_disbursement', 'Disbursement::add_disbursement', ['filter' => 'isadmin']);
 $routes->get('settlement', 'Settlement::data_settlement');
-$routes->post('settlement/proses_temp', 'Settlement::proses_temp');
-$routes->get('settlement/proses_settlement', 'Settlement::proses_settlement');
-$routes->post('settlement/proses_inq', 'Settlement::proses_inq');
-$routes->post('settlement/proses_pay', 'Settlement::proses_pay');
-$routes->post('settlement/manual_action', 'Settlement::manual_action');
-$routes->post('settlement/callback', 'Settlement::callback');
-$routes->get('settlement/monit_disbursment', 'Disbursement::monitoring_disburse');
+$routes->group('settlement', function ($routes) {
+    $routes->get('monit_disbursment', 'Disbursement::monitoring_disburse');
+    $routes->get('proses_settlement', 'Settlement::proses_settlement', ['filter' => 'isadmin']);
+    $routes->post('proses_temp', 'Settlement::proses_temp', ['filter' => 'isadmin']);
+    $routes->post('proses_inq', 'Settlement::proses_inq', ['filter' => 'isadmin']);
+    $routes->post('proses_pay', 'Settlement::proses_pay', ['filter' => 'isadmin']);
+    $routes->post('manual_action', 'Settlement::manual_action', ['filter' => 'isadmin']);
+    $routes->post('callback', 'Settlement::callback');
+});
+
 
 /* Mail */
 $routes->get('mail', 'Email::get_email');

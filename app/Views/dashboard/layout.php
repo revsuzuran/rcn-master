@@ -74,6 +74,12 @@
             <span>Rekon Schedule Master</span></a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('settlement/monit_disbursment'); ?>">
+            <i class="fas fa-business-time"></i>
+            <span>Monitoring Disbursement</span></a>
+        </li>
+
         <?php if(isset($_SESSION['masukAdmin'])) { ?>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('rekon/add'); ?>">
@@ -84,11 +90,6 @@
                 <a class="nav-link" href="<?= base_url('settlement'); ?>">
                 <i class="fas fa-money-check-alt"></i>
                 <span>Settlement</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('settlement/monit_disbursment'); ?>">
-                <i class="fas fa-business-time"></i>
-                <span>Monitoring Disbursement</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('mitra'); ?>">
@@ -107,8 +108,6 @@
 
                     <?php if(isset($_SESSION['masukAdmin'])) { ?>
                         <a class="collapse-item" href="<?= base_url('profil'); ?>">Profil</a>
-                        <!-- <a class="collapse-item" href="<?= base_url('channel'); ?>">Channel</a>
-                        <a class="collapse-item" href="<?= base_url('bank'); ?>">Bank</a> -->
                         <a class="collapse-item" href="<?= base_url('ftp'); ?>">FTP</a>
                         <a class="collapse-item" href="<?= base_url('database'); ?>">Database</a>
                         <a class="collapse-item" href="<?= base_url('mail'); ?>">Mail</a>
