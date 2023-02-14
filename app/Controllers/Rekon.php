@@ -155,7 +155,7 @@ class Rekon extends BaseController
                 if($dataFtp->tipe_ftp == "sftp") {
 
                     /* SFTP */
-                    $portFtp = $dataFtp->username;
+                    $portFtp = $dataFtp->port;
                     $connection = ssh2_connect($dataFtp->domain, $portFtp);
                     $usernameFtp = $dataFtp->username;
                     $passwordFtp = $dataFtp->password;
