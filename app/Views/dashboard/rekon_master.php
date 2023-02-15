@@ -147,7 +147,10 @@
                             $status = "<button class='btn btn-success btn-sm p-1 fw-light' style='font-size:11px;' type='button'>SUCCESS DISBURSE</button>";                           
                           } else if($row['settlement_status'] == "05") {
                             $status = "<button class='btn btn-secondary btn-sm p-1 fw-light' style='font-size:11px;' type='button'>PENDING DISBURSE</button>";
-                          } else {
+                          } else if($row['settlement_status'] == "01") {
+                            $textStatus = $row['settlement_desc'];
+                            $status = "<button class='btn btn-success btn-sm p-1 fw-light' style='font-size:11px;' type='button'>$textStatus</button>";
+                          }else {
                             $status = "<button class='btn btn-danger btn-sm p-1 fw-light' style='font-size:11px;' type='button'>FAILED DISBURSE</button>";
                           }
 
