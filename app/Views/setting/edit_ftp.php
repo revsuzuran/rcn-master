@@ -86,7 +86,7 @@ $('#simpanFTP').on('click', function(event) {
         success: function($hasil){
             if($hasil == 'sukses'){
                 Swal.fire('Updated!', 'Successfully Updated FTP Data', 'success' )
-                location.reload();
+               window.location.replace("<?= base_url('ftp') ?>")
             }
         }
     });
