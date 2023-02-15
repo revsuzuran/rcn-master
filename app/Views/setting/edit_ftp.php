@@ -14,7 +14,7 @@
                 </div>
                 <div class="card-body">
 
-                    <?php $tipe = isset($data_ftp->tipe) ? $data_ftp->tipe : "ftp"; ?>
+                    <?php $tipe = isset($data_ftp->tipe_ftp) ? $data_ftp->tipe_ftp : "ftp"; ?>
                     <div class="form-group mt-2 col-6">
                         <label class="form-label">Tipe</label>
                         <select class="form-select mb-3" id="tipe">
