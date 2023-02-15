@@ -192,7 +192,6 @@ class Rekon extends BaseController
                 }
                 
             } catch (\Throwable $th) {
-                var_dump($th);die;
                 $this->session->setFlashdata('error', 'FTP Error! Failed to get file or file not found');
                 if($tipe == 1) return redirect()->to(base_url('rekon/add'));
                 else return redirect()->to(base_url('rekon/add_rekon_next'));
