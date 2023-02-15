@@ -14,6 +14,15 @@
                 </div>
                 <div class="card-body">
 
+                    <?php $tipe = isset($data_ftp->tipe_ftp) ? $data_ftp->tipe_ftp : "ftp"; ?>
+                    <div class="form-group mt-2 col-6">
+                        <label class="form-label">Tipe</label>
+                        <select class="form-select mb-3" id="tipe">
+                            <option value="ftp">FTP</option>
+                            <option value="sftp">SFTP</option>
+                        </select>
+                    </div>
+                    
                     <div class="mb-3">
                         <label class="form-label">FTP Name</label>
                         <input id="ftp_name" type="text" class="form-control" name="domain" placeholder="FTP SERVER LINKQU" value="" required>
@@ -64,12 +73,12 @@ $('#simpanFTP').on('click', function(event) {
     var path = $('#path').val();
     var port = $('#port').val();
     var ftp_name = $('#ftp_name').val();
-
+    var tipe = $('#tipe').find(":selected").val();
 
     $.ajax({
         url : "<?= base_url('save_ftp') ?>",
         method : "POST",
-        data : {username: username,password: password, domain: domain, path:path, ftp_name:ftp_name, port},
+        data : {username: username,password: password, domain: domain, path:path, ftp_name:ftp_name, port, tipe: tipe},
         async : true,
         dataType : 'html',
         success: function($hasil){
