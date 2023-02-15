@@ -87,7 +87,7 @@ class Setting extends BaseController
             "ftp_name" => $ftpName,
             "path" => $path,
             "port" => $port,
-            "tipe" => $tipe,
+            "tipe_ftp" => $tipe,
             "id_mitra" => $this->session->get('id_mitra')
         );
 
@@ -117,7 +117,7 @@ class Setting extends BaseController
             "ftp_name" => $ftpName,
             "path" => $path,
             "port" => $port,
-            "tipe" => $tipe,
+            "tipe_ftp" => $tipe,
             'id_mitra' => $this->session->get('id_mitra'),
         );
 
