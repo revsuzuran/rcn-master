@@ -16,7 +16,7 @@
                 <div class="card-body m-1">
                     <!-- <label>Rekening Pembayaran</label> -->
                     <div class="form-group pt-0">
-                        <label class="form-label">Data CSV</label>
+                        <label class="form-label"><span class="fw-bolder">Data CSV</span> - (<?= $total_lines ?> lines)</label>
                         <textarea rows="6" id="sample_rekon" type="text" class="form-control" placeholder="" name="sampleCsv"><?= $csv_preview ?></textarea>
                     </div>
                 </div>

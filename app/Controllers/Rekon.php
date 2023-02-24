@@ -160,20 +160,10 @@ class Rekon extends BaseController
                     $usernameFtp = $dataFtp->username;
                     $passwordFtp = $dataFtp->password;
                     if (ssh2_auth_password($connection,  $usernameFtp, $passwordFtp)) {
-                        $sftp = ssh2_sftp($connection);
                         $pathFile = $dataFtp->path;
                         $file = "$pathFile$namaFile";
-
-                        $stream = fopen("ssh2.sftp://$sftp$file", 'r');
-                        $fileStream = fread($stream, filesize("ssh2.sftp://$sftp$file"));
-                        file_put_contents($namaFile, $fileStream);
+                        ssh2_scp_recv($connection, $file, $namaFile);
                         $csv = $namaFile;
-                        // while (!feof($stream)) {
-                        //     $csv .= fread($stream, filesize("ssh2.sftp://$sftp$file"));
-                        // }
-                        // var_dump();
-                        fclose($stream);
-
                     } else {
                         $this->session->setFlashdata('error', 'FTP Error! Authentication failed');
                         if($tipe == 1) return redirect()->to(base_url('rekon/add'));
@@ -334,6 +324,7 @@ class Rekon extends BaseController
 
         $data['title'] = 'Add New Rekon';
         $data['view'] = 'dashboard/add_rekon_delimiter';
+        $data['total_lines'] = count($dataRekon);
         $data['csv_preview'] = $strDataPreview;
         return view('dashboard/layout', $data);
     }
