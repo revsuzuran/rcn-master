@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 use App\Models\LoginModel;
+use CodeIgniter\HTTP\RequestInterface;
 
 class Login extends BaseController
 {
@@ -16,6 +17,10 @@ class Login extends BaseController
 		$this->request = \Config\Services::request(); //memanggil class request
         $this->uri = $this->request->uri; //class request digunakan untuk request uri/url
         $this->login_model = new LoginModel();
+        
+        //Key ReChapta
+        $this->siteKey = '6LcrV9wZAAAAAI2P97WdwKv2Da6HmE4U1ZNtriJq';
+        $this->secretKey = '6LcrV9wZAAAAABPGFjOFOUN1J48VkLHf1Nve4leo';
     }
 
     public function do_auth(){
@@ -24,6 +29,13 @@ class Login extends BaseController
         $pwd = $this->request->getPost('password');
         $hasil = $this->login_model->getUserOne($uname, md5($pwd));
         $mitra = $this->login_model->getUserMitra($uname);
+
+        //verifReChapta
+        $status = $this->verifReChapta();
+        if(!$status['success']){
+            $this->session->setFlashdata('errors', ['reCAPTCHA validation failed.']);
+            return redirect()->to(base_url('/login'));
+        }
 
         if(isset($hasil->name))
         {
@@ -45,6 +57,24 @@ class Login extends BaseController
         }
 		
     }
+    public function verifReChapta(){
+        $recaptchaResponse = trim($this->request->getVar('g-recaptcha-response'));
+        $userIp=$this->request->getIPAddress();
+        
+        $credential = array(
+                'secret' => $this->secretKey,
+                'response' => $this->request->getVar('g-recaptcha-response')
+            );
+    
+        $verify = curl_init();
+        curl_setopt($verify, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
+        curl_setopt($verify, CURLOPT_POST, true);
+        curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($credential));
+        curl_setopt($verify, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($verify);
+        return json_decode($response, true);
+    }
     
     public function do_unauth(){
 
@@ -63,6 +93,7 @@ class Login extends BaseController
         {
         	return redirect()->to(base_url());
         }
+        $data['sitekey'] = $this->siteKey;
         $data['title'] = 'Selamat Datang!';
         $data['view'] = 'auth/login';
         return view('auth/layout', $data);

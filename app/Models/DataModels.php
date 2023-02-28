@@ -196,7 +196,7 @@ class DataModels {
     /* Email Config Setting */
     function getSettingEmail() {
         try {
-            $cursor = $this->mailconf->find([]);
+            $cursor = $this->mailconf->find([],['sort' => ['_id' => -1]]);
             $rekon = $cursor->toArray();
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {

@@ -37,6 +37,9 @@
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- chart.js -->
+    <script src="<?= base_url('assets/dashboard'); ?>/vendor/chart.js/Chart.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script> -->
 </head>
 
 <body id="page-top">
@@ -63,7 +66,7 @@
         </a>
         <hr class="sidebar-divider my-0">
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('/'); ?>">
+            <a class="nav-link" href="<?= base_url('/rekon'); ?>">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Data Rekon</span></a>
         </li>
@@ -96,7 +99,19 @@
                 <i class="fas fa-address-card"></i>
                 <span>Data Mitra</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('mutasiSaldo'); ?>">
+                <i class="fas fa-address-card"></i>
+                <span>Mutasi Saldo</span></a>
+            </li>
+
         <?php } ?>
+
+        <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('/'); ?>">
+                <i class="fas fa-address-card"></i>
+                <span>Home</span></a>
+            </li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
@@ -201,7 +216,7 @@
 <script src="<?= base_url('assets/dashboard'); ?>/js/ruang-admin.js"></script>
 
 <!-- cart -->
-<script src="<?= base_url('assets/dashboard'); ?>/vendor/chart.js/Chart.min.js"></script>
+<!-- <script src="<?= base_url('assets/dashboard'); ?>/vendor/chart.js/Chart.min.js"></script> -->
 <script src="<?= base_url('assets/dashboard'); ?>/js/demo/chart-area-demo.js"></script>
 <?php $isError = isset($_SESSION['error']) ? $_SESSION['error'] : ""; ?>
 <!-- Page level custom scripts -->

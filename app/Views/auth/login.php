@@ -42,9 +42,15 @@
                                                 Me</label>
                                         </div>
                                     </div> -->
+                                    <br>
+                                    <div class="form-group">
+                                        <div class="g-recaptcha" data-sitekey="<?php echo $sitekey ?>"></div>
+                                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                                    </div>
                                     <div class="d-grid gap-2 mt-4">
                                         <button type="submit" class="btn btn-danger btn-block">Login</button>
                                     </div>
+                                    
                                 </form>
                                 <hr>
                                 <div class="text-center">

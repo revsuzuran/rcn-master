@@ -36,7 +36,8 @@ $routes->set404Override();
 $routes->get('/login', 'Login::login');
 $routes->post('/do_auth', 'Login::do_auth');
 $routes->get('/do_unauth', 'Login::do_unauth');
-$routes->get('/', 'Rekon::data_rekon_master');
+// $routes->get('/', 'Rekon::data_rekon_master');
+$routes->get('/', 'homeController::index');
 $routes->get('rekon', 'Rekon::data_rekon_master');
 
 $routes->group('rekon', function ($routes) {
@@ -152,6 +153,17 @@ $routes->group('settlement', function ($routes) {
 $routes->get('mail', 'Email::get_email');
 $routes->post('update_smtp', 'Email::update_email');
 $routes->post('send_email', 'Email::kirim_email');
+
+// HOME
+$routes->group('home', function ($routes) {
+    $routes->get('/', 'homeController::index', ['filter' => 'isadmin']);
+});
+
+//mutasi saldo
+$routes->group('mutasiSaldo', function ($routes) {
+    $routes->get('/', 'MutasiSaldoController::index', ['filter' => 'isadmin']);
+    $routes->post('getData', 'MutasiSaldoController::getDataAPI', ['filter' => 'isadmin']);
+});
 
 
 /*
