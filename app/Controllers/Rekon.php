@@ -1027,13 +1027,13 @@ class Rekon extends BaseController
 
 
         /* Get Data Rekon Master */
-        // $dataRekon = $this->rekon_buff->getRekon($id_rekon);
-        // foreach($dataRekon->kolom_sum as $dataRow) {
-        //     if($dataRow->to_compare_index == "") {
-        //         $this->session->setFlashdata('error', 'Semua data wajib di compare');
-        //         return redirect()->to(base_url('rekon/rekon_preview_sum'));
-        //     }
-        // }
+        $dataRekon = $this->rekon_buff->getRekon($id_rekon);
+        foreach($dataRekon->kolom_compare as $dataRow) {
+            if($dataRow->to_compare_index == "") {
+                $this->session->setFlashdata('error', 'Semua data wajib di compare');
+                return redirect()->to(base_url('rekon/rekon_preview_sum'));
+            }
+        }
 
         $this->rekon_buff->updateRekon($id_rekon, ["is_proses" => "pending"]);
 
@@ -1042,7 +1042,7 @@ class Rekon extends BaseController
         unset($dataRekon->_id);
         $dataRekon->detail_result1 = (object) array();
         $dataRekon->detail_result2 = (object)  array();
-        $dataRekon->id_rekon_result = rand(100000,999999);
+        $dataRekon->id_rekon_result = rand(1000000,9999999);
         $this->rekon_result->insertRekon($dataRekon);
         
         return redirect()->to(base_url('rekon'));

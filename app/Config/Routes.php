@@ -79,6 +79,26 @@ $routes->group('rekon', function ($routes) {
     $routes->get('retry_process/(:any)', 'Rekon::retry_process');
 });
 
+$routes->group('rekon_unmatch_bulanan', function ($routes) {
+    $routes->get('/', 'RekonUnmatchBulanan::data_rekon');
+    $routes->get('add', 'RekonUnmatchBulanan::add_rekon');
+    $routes->post('proses', 'RekonUnmatchBulanan::proses_rekon'); 
+    $routes->get('cleansing_data/(:any)', 'RekonUnmatchBulanan::cleansing_data');
+    $routes->get('cleansing_data', 'RekonUnmatchBulanan::cleansing_data');
+    $routes->get('cleansing_data_dua/(:any)', 'RekonUnmatchBulanan::cleansing_data_dua');
+    $routes->get('cleansing_data_dua', 'RekonUnmatchBulanan::cleansing_data_dua');
+    $routes->post('save_cleansing', 'RekonUnmatchBulanan::save_cleansing');
+    $routes->get('add_compare', 'RekonUnmatchBulanan::add_rekon_data_to_compare');
+    $routes->post('add_kolom_compare', 'RekonUnmatchBulanan::add_kolom_compare');
+    $routes->post('rm_kolom_compare', 'RekonUnmatchBulanan::rm_kolom_compare');
+    $routes->post('add_kolom_sum', 'RekonUnmatchBulanan::add_kolom_sum');
+    $routes->post('rm_kolom_sum', 'RekonUnmatchBulanan::rm_kolom_sum');
+    $routes->get('rekon_preview', 'RekonUnmatchBulanan::add_rekon_preview');
+    $routes->get('add_rekon_finish', 'RekonUnmatchBulanan::add_rekon_finish');
+    $routes->post('save_compare', 'RekonUnmatchBulanan::save_compare');
+
+});
+
 
 $routes->group('mitra', function ($routes) {
     $routes->get('/', 'Mitra::index', ['filter' => 'isadmin']);

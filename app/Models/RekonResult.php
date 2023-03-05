@@ -229,4 +229,35 @@ class RekonResult {
         }
     }
     
+
+    /* Rekon Unmatch Akhir Bulan */
+    function getRekonsUnmatchAkhirBulan($limit = 0) {
+        try {
+            $desc = -1;
+            if ($this->session->has('masukAdmin')) {
+                $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], 'is_rekon_unmatch_bulanan' => 1], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            } else {
+                $cursor = $this->rekon_result->find(["id_rekon_result" => [ '$exists' => true ], 'is_rekon_unmatch_bulanan' => 1, "id_mitra" => (int) $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1] ]);
+            }
+            $rekon = $cursor->toArray();
+
+            return $rekon;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
+
+    function getRekonsByIdChannel($id_channel, $tglAwal, $tglAkhir) {
+        try {
+            $cursor = $this->rekon_result->find([
+                "id_channel" => $id_channel, 
+                "tanggal_rekon" => ['$gte' => $tglAwal, '$lte' => $tglAkhir]], 
+                ['sort' => ['_id' => -1] ]);
+            $rekon = $cursor->toArray();
+
+            return $rekon;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
 }

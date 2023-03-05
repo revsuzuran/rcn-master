@@ -16,7 +16,7 @@ class RekonBuffDetail {
 
     function getRekons($id_rekon, $tipe, $limit = 0) {
         try {
-            $cursor = $this->rekon_buff_detail->find(['id_rekon' => $id_rekon, "tipe" => $tipe], ['limit' => $limit]);
+            $cursor = $this->rekon_buff_detail->find(['id_rekon' => $id_rekon, "tipe" => (string) $tipe], ['limit' => $limit]);
             $rekons = $cursor->toArray();
 
             return $rekons;
@@ -155,4 +155,5 @@ class RekonBuffDetail {
             show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
         }
     }
+
 }

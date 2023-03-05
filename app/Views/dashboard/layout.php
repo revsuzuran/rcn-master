@@ -22,6 +22,9 @@
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/jquery/jquery.min.js"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/vendor/crypto-js-4.1.1/crypto-js.js"></script>
     <script src="<?= base_url('assets/dashboard'); ?>/js/Encryption.js"></script>
+
+    <link href="<?= base_url('assets/dashboard'); ?>/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
+    <script src="<?= base_url('assets/dashboard/'); ?>/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <!-- Bootstrap DatePicker -->  
         <!-- <link href="<?php echo base_url() ?>/assets/dashboard/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" >
         <script src="<?php echo base_url() ?>/assets/dashboard/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script> -->
@@ -88,6 +91,11 @@
                 <a class="nav-link" href="<?= base_url('rekon/add'); ?>">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Add Data Rekon</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('rekon_unmatch_bulanan'); ?>">
+                <i class="fas fa-reply-all"></i>
+                <span>Rekon Unmatch Bulanan</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('settlement'); ?>">

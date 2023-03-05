@@ -59,5 +59,16 @@ class RekonUnmatch {
             show_error('Error while deleting a rekon with ID: ' . $ex->getMessage(), 500);
         }
     }    
+
+    function getRekonsByIdRekonResult($id_rekon_result, $tipe) {
+        try {
+            $cursor = $this->rekon_unmatch->find(['id_rekon_result' => $id_rekon_result, "tipe" => $tipe]);
+            $rekon = $cursor->toArray();
+
+            return $rekon;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
+        }
+    }
     
 }

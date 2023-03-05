@@ -222,4 +222,16 @@ class RekonBuff {
         return $ret->seq;
     }
     
+    function insertRekonUnmatchBulanan($dataRekon) {
+        try {
+            $insertOneResult = $this->rekon_buff->insertOne($dataRekon);
+            if($insertOneResult->getInsertedCount() == 1) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
+        }
+    }
 }
