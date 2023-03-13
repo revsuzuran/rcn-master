@@ -213,7 +213,13 @@ class Setting extends BaseController
     /* config setting */
     public function get_setting() {
         $id = $this->request->getPost('id');
-        echo json_encode($this->data_model->getSettingOne($id));
+
+        if($id == "0") {
+            echo "";
+        } else {
+            echo json_encode($this->data_model->getSettingOne($id));
+        }
+       
     }
 
     public function save_setting() {

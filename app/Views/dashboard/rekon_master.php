@@ -104,7 +104,7 @@
                                 <li><a class="dropdown-item" href="' . $linkRekonEmpat . '" target="_blank">Data UnMatch #2</a></li>
                             </ul>
                           </div>';
-                          $retryBtn = "";
+                          $retryBtn = "<a class='btn btn-warning btn-sm btnRetry mt-1' type='button' href='$linkRetry' data-bs-toggle='tooltip' data-bs-placement='top' title='Retry Proses'><i class='fas fa-history'></i></a>";
                         } else if($row['is_proses'] == "proses") {
                           $status = "<button class='btn btn-warning btn-sm p-1 fw-light' style='font-size:11px;' type='button'>OnProses</button>";
                           $btnAct = "";

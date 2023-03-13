@@ -15,7 +15,7 @@ class AuthAdmin implements FilterInterface
         // check if the current path is auth path, just return true
         // don't forget to use named routes to simplify the call
         // die($currentURIPath);
-        if (in_array($currentURIPath, [route_to('login'), route_to('do_auth'), route_to('settlement/callback')])) {
+        if (in_array($currentURIPath, [route_to('login'), route_to('do_auth'), route_to('settlement/callback'), route_to('rekon_sch/process_data_sch')])) {
             return;
         } 
 

@@ -18,6 +18,7 @@
                     <thead class="thead-light">
                       <tr>
                         <th>No</th>
+                        <th>Mitra</th>
                         <th>Nama Rekon</th>
                         <th>Jadwal Rekon</th>
                         <th>Aksi</th>
@@ -26,6 +27,7 @@
                     <tfoot>
                       <tr>
                         <th>No</th>
+                        <th>Mitra</th>
                         <th>Nama Rekon</th>
                         <th>Jadwal Rekon</th>
                         <th>Aksi</th>
@@ -41,8 +43,9 @@
                       ?> 
                         <tr>
                             <td><?= $no++ ?></td>
+                            <td><?= $row['nama_mitra'] ?> - <?= $row['nama_channel'] ?></td>    
                             <td><?= $row['nama_rekon'] ?></td>     
-                            <td><?= "Jam " . $row['detail_schedule']['time']; ?></td>  
+                            <td><?= "Jam " . $row['detail_schedule']['waktu_rekon']; ?></td>  
                             <td><?= $btnAct ?></td>                      
                         </tr>
                       <?php } ?>
@@ -64,12 +67,12 @@
         var id_rekon= $(this).data('id');
 
         $.ajax({
-            url : "<?= base_url('rekon/data_rekon_sch_temp') ?>",
+            url : "<?= base_url('rekon_sch/data_rekon_sch_temp') ?>",
             method : "POST",
             data : {id_rekon: id_rekon},
             async : true,
             success: function($hasil){
-                window.location.replace("<?= base_url('rekon/data_rekon_sch') ?>");
+                window.location.replace("<?= base_url('rekon_sch/data_rekon_sch') ?>");
             }
         });
     });

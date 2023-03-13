@@ -40,7 +40,7 @@ class RekonBuff {
 
     function getRekonSch($id) {
         try {
-            $rekon = $this->rekon_buff->findOne(['id_rekon' => (int)  $id]);
+            $rekon = $this->rekon_buff->findOne(['id_rekon' => (int)  $id, "is_schedule" => 1]);
 
             return $rekon;
         } catch(\MongoDB\Exception\RuntimeException $ex) {
@@ -70,9 +70,9 @@ class RekonBuff {
     function getRekonSchAll($limit = 10) {
         try {
             if ($this->session->has('masukAdmin')) {
-                $cursor = $this->rekon_buff->find(["is_schedule" => ['$ne' => null]], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+                $cursor = $this->rekon_buff->find(["is_schedule" => 1], ['limit' => $limit, 'sort' => ['_id' => -1]]);
             } else {
-                $cursor = $this->rekon_buff->find(["is_schedule" => ['$ne' => null], 'id_mitra' => $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
+                $cursor = $this->rekon_buff->find(["is_schedule" => 1, 'id_mitra' => $this->id_mitra], ['limit' => $limit, 'sort' => ['_id' => -1]]);
             }
             
             $rekon = $cursor->toArray();
@@ -117,7 +117,7 @@ class RekonBuff {
     function updateRekon($id, $data) {
         try {
             $result = $this->rekon_buff->updateOne(
-                ['id_rekon' => $id],
+                ['id_rekon' => (int) $id],
                 ['$set' => $data ]
             );
 
@@ -234,4 +234,20 @@ class RekonBuff {
             show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
         }
     }
+
+
+    /* Rekon Sch */
+    function insertRekonSch($dataRekon) {
+        try {
+            $insertOneResult = $this->rekon_buff->insertOne($dataRekon);
+            if($insertOneResult->getInsertedCount() == 1) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
+        }
+    }
+
 }

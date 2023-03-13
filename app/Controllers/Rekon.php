@@ -71,33 +71,6 @@ class Rekon extends BaseController
         return view('dashboard/layout', $data);
     }
 
-    public function add_rekon_sch()
-    {
-        $data['title'] = 'Data Rekon Schedule';
-        $data['view'] = 'dashboard/rekon_master_sch';
-        $dataRekon = $this->rekon_buff->getRekonSchAll(0);
-        $data['data_rekon'] = $dataRekon;
-        return view('dashboard/layout', $data);
-    }
-
-    public function data_rekon_sch_temp() {
-        $id_rekon = $this->request->getPost('id_rekon');
-        $this->session->set('id_rekon', $id_rekon);
-    }
-
-    public function data_rekon_sch()
-    {
-        $id_rekon = $this->session->get('id_rekon');
-        $dataRekon = $this->rekon_buff->getRekonSch($id_rekon);
-        $data['title'] = 'Data Rekon Schedule';
-        $data['view'] = 'dashboard/data_rekon_sch';
-        $data['data_rekon'] = $dataRekon;
-        $data['dataFtp'] = $this->data_model->getFtp();
-        $data['dataDb'] = $this->data_model->getDatabase();
-        $data['data_setting'] = $this->data_model->getSetting();
-        return view('dashboard/layout', $data);
-    }
-
     public function add_rekon_master()
     {
         $data['title'] = 'Add New Rekon';
@@ -249,7 +222,6 @@ class Rekon extends BaseController
                 }
 
                 /* untuk diinsert ulang */
-                $row = utf8_encode($row);
                 $drow = array(
                     "row_index" => $index+1,
                     "data_asli" => $row,

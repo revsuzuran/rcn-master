@@ -68,40 +68,62 @@
             <div class="sidebar-brand-text mx-3"><?= SITE_NAME; ?></div>
         </a>
         <hr class="sidebar-divider my-0">
-        <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('/rekon'); ?>">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Data Rekon</span></a>
-        </li>
-        
-        <li class="nav-item" hidden>
-            <a class="nav-link" href="<?= base_url('rekon/rekon_sch'); ?>">
-            <i class="fas fa-stopwatch"></i>
-            <span>Rekon Schedule Master</span></a>
-        </li>
+       
 
-        <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('settlement/monit_disbursment'); ?>">
-            <i class="fas fa-business-time"></i>
-            <span>Monitoring Disbursement</span></a>
-        </li>
 
         <?php if(isset($_SESSION['masukAdmin'])) { ?>
+
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('rekon/add'); ?>">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Add Data Rekon</span></a>
+                <a class="nav-link" href="<?= base_url('/'); ?>">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Home</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('/rekon'); ?>">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Data Rekon</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('rekon_sch'); ?>">
+                <i class="fas fa-calendar-check"></i>
+                <span>Rekon Schedule</span></a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('rekon_unmatch_bulanan'); ?>">
-                <i class="fas fa-reply-all"></i>
+                <i class="fas fa-calendar-times"></i>
                 <span>Rekon Unmatch Bulanan</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseAddRekon" aria-expanded="true" aria-controls="collapseAddRekon">
+                    <i class="fas fa-briefcase-medical "></i>
+                    <span>Add Data Rekon</span></a>
+                </a>
+                <div id="collapseAddRekon" class="collapse dropdown-menu" aria-labelledby="headingBootstrap" data-bs-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+
+                            <a class="collapse-item" href="<?= base_url('rekon/add'); ?>">Rekon</a>
+                            <a class="collapse-item" href="<?= base_url('rekon_unmatch_bulanan/add'); ?>">Rekon Unmatch Bulanan</a>
+                            <a class="collapse-item" href="<?= base_url('rekon_sch/add'); ?>">Rekon Sch</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('settlement/monit_disbursment'); ?>">
+                <i class="fas fa-business-time"></i>
+                <span>Monitoring Disbursement</span></a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('settlement'); ?>">
                 <i class="fas fa-money-check-alt"></i>
                 <span>Settlement</span></a>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('mitra'); ?>">
                 <i class="fas fa-address-card"></i>
@@ -114,12 +136,6 @@
             </li>
 
         <?php } ?>
-
-        <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('/'); ?>">
-                <i class="fas fa-address-card"></i>
-                <span>Home</span></a>
-            </li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">

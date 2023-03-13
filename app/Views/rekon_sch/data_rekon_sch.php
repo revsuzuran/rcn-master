@@ -232,10 +232,12 @@
       autoclose: true
   });
 
-  const modeTipe = "<?= $data_rekon->detail_mode->tipe ?>";
+
   const namaRekon = "<?= $data_rekon->nama_rekon ?>";
-  const tglRekon = "<?= $data_rekon->tanggal_rekon ?>";
-  const waktuSch = "<?= $data_rekon->detail_schedule->time ?>";
+  const waktuSch = "<?= $data_rekon->detail_schedule->waktu_rekon ?>";
+
+  const modeTipeSatu = "<?= $data_rekon->detail_schedule->data_satu->tipe ?>";
+  
   $("#waktuText").val(waktuSch);  
   $("#tanggal_rekon").val(tglRekon);  
   $("#namaRekon").val(namaRekon);  

@@ -39,6 +39,7 @@ $routes->get('/do_unauth', 'Login::do_unauth');
 // $routes->get('/', 'Rekon::data_rekon_master');
 $routes->get('/', 'homeController::index');
 $routes->get('rekon', 'Rekon::data_rekon_master');
+$routes->get('rekon_sch', 'RekonSch::data_rekon_master');
 
 $routes->group('rekon', function ($routes) {
     $routes->get('rekon_sch', 'Rekon::add_rekon_sch');
@@ -64,8 +65,6 @@ $routes->group('rekon', function ($routes) {
     $routes->post('rekon_result_post', 'Rekon::rekon_result_post');
     $routes->get('delimiter', 'Rekon::add_rekon_delimiter');
     $routes->post('upload_with_setting', 'Rekon::upload_with_setting');
-    $routes->get('data_rekon_sch', 'Rekon::data_rekon_sch');
-    $routes->post('data_rekon_sch_temp', 'Rekon::data_rekon_sch_temp');
 
     $routes->get('generate_pdf', 'Rekon::generate_pdf');
     $routes->get('generate_pdf2', 'Rekon::generate_pdf2');
@@ -77,6 +76,15 @@ $routes->group('rekon', function ($routes) {
 
 
     $routes->get('retry_process/(:any)', 'Rekon::retry_process');
+});
+
+$routes->group('rekon_sch', function ($routes) {
+    $routes->get('add', 'RekonSch::add_rekon');
+    $routes->post('submit', 'RekonSch::save_data_sch');
+    $routes->get('data_rekon_sch', 'RekonSch::data_rekon_sch');
+    $routes->post('data_rekon_sch_temp', 'RekonSch::data_rekon_sch_temp');
+    $routes->post('process_data_sch', 'RekonSch::process_data_sch');
+    $routes->post('update_rekon', 'RekonSch::update_rekon');
 });
 
 $routes->group('rekon_unmatch_bulanan', function ($routes) {

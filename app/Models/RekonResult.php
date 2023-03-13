@@ -260,4 +260,19 @@ class RekonResult {
             show_error('Error while fetching rekons: ' . $ex->getMessage(), 500);
         }
     }
+
+
+    /* Rekon Result Sch */
+    function insertRekonResultSch($data) {
+        try {
+            $insertOneResult = $this->rekon_result->insertOne($data);
+            if($insertOneResult->getInsertedCount() == 1) {
+                return $insertOneResult;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while creating a rekon: ' . $ex->getMessage(), 500);
+        }
+    }
 }
