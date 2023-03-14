@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-6 mt-3" hidden>
+                    <div class="form-group col-6 mt-3">
                       <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" id="is_schedule" name="is_schedule">
                         <label class="form-check-label" for="is_schedule">Jadwalkan Rekon Otomatis</label>

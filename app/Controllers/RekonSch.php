@@ -83,15 +83,14 @@ class RekonSch extends BaseController
         $data['dataFtp'] = $this->data_model->getFtp();
         $data['dataDb'] = $this->data_model->getDatabase();
         $data['data_setting'] = $this->data_model->getSetting();
-
+        
         $dataChannel = $this->channel_model->getAllChannel();        
         foreach($dataChannel as $key => $row) {
             $dataMitra = $this->mitra->getMitra($row->id_mitra);
             $dataChannel[$key]->nama_mitra = $dataMitra->nama_mitra;
         }
         
-        $data['data_channel'] = $dataChannel;  
-
+        $data['data_channel'] = $dataChannel; 
         return view('dashboard/layout', $data);
     }
 
@@ -196,6 +195,7 @@ class RekonSch extends BaseController
         /* get sequence idrekon */
         log_message('info', '== PROSES SAVE REKON SCH ==');
         $id_rekon = $this->rekon_buff->getNextSequenceRekon(); // get id sequence
+        $this->session->set('id_rekon', $id_rekon);
 
         /* decode and parsing json */
         $decryptedData = json_decode($decryptedData);
@@ -219,7 +219,6 @@ class RekonSch extends BaseController
         $dataChannel = $this->channel_model->getChannel($idChannel);
         $this->session->set('id_mitra', $dataChannel->id_mitra);
         $id_mitra = $dataChannel->id_mitra;
-        $id_rekon = $this->rekon_buff->getNextSequenceRekon(); // get id sequence
 
         $dataRekon = array(
             'id_rekon' => $id_rekon,
@@ -231,7 +230,7 @@ class RekonSch extends BaseController
             'timestamp' => date("Y-m-d H:i:s"),
             'timestamp_complete' => "-",
             'detail_mode' => [],
-            'is_schedule' => 1,
+            'is_schedule' => 0,
             'detail_schedule' => $decryptedData,
             'id_channel' => $idChannel,
             'id_mitra' => $id_mitra,
@@ -246,7 +245,6 @@ class RekonSch extends BaseController
 
     public function process_data_sch() {
         /* decrypt internal */
-       
         $jsonObj = $this->request->getJSON();
         // var_dump($jsonObj->encryptedData);
         $encryptedData = $jsonObj->encryptedData;
@@ -257,9 +255,6 @@ class RekonSch extends BaseController
             echo json_encode(array("response_code" => "XX", "response_desc" => "Failed Decrypt"));
             die;
         }
-        /* get sequence idrekon */
-        log_message('info', '== PROSES SAVE REKON SCH ==');
-        $id_rekon = $this->rekon_buff->getNextSequenceRekon(); // get id sequence
 
         /* decode and parsing json */
         $decryptedData = json_decode($decryptedData);
@@ -270,38 +265,47 @@ class RekonSch extends BaseController
         $namaRekon = $dataRekonSchDetail->nama_rekon;
         $idChannel = $dataRekonSchDetail->opt_channel;
         $waktuRekon = $dataRekonSchDetail->waktu_rekon;
-        
+
+        /* Delete / Clean Data Clean,Compare,SUM */
+        $dataSave = array(
+            "kolom_compare" => [],
+            "kolom_sum" => [],
+            "clean_rule" => [],
+        );
+        $this->rekon_buff->updateRekon($id_rekon, $dataSave);
+
+        /* Data Rekon Satu */
+        log_message('info', 'PROCESS DATA SATU');
         $dataSatu = $dataRekonSchDetail->data_satu;
         $IDsettingSatu = $dataSatu->setting; 
         $dataSettingSatu = $this->data_model->getSettingOne($IDsettingSatu);
-
-        /* Data Rekon Satu */
         $updateDataSatu = $this->upload_data_sch($dataRekonSchDetail->data_satu, $id_rekon, $idChannel, "1");
         if($updateDataSatu != "sukses") {
             return $this->response("XX", $updateDataSatu);
         }
 
-        $this->save_delimiter($dataSettingSatu->delimiter, $id_rekon, "1");
+        $this->save_delimiter($dataSettingSatu->delimiter, $id_rekon, $dataRekonSchDetail->data_satu->tipe, "1");
         $this->auto_cleaning($dataSettingSatu->clean_rule, $id_rekon, "1");   
         $this->auto_save_compare($dataSettingSatu->kolom_compare, $id_rekon, "1");
         $this->auto_save_sum($dataSettingSatu->kolom_sum, $id_rekon, "1");
        
 
+        /* Data Rekon Dua */
+        log_message('info', 'PROCESS DATA DUA');
         $dataDua = $dataRekonSchDetail->data_dua;
         $IDsettingDua = $dataDua->setting; 
         $dataSettingDua = $this->data_model->getSettingOne($IDsettingDua);
-        /* Data Rekon Dua */
         $updateDataDua = $this->upload_data_sch($dataRekonSchDetail->data_dua, $id_rekon, $idChannel, "2");
         if($updateDataDua != "sukses") {
             return $this->response("XX", $updateDataDua);
         }
-        $this->save_delimiter($dataSettingDua->delimiter, $id_rekon, "2");
+        $this->save_delimiter($dataSettingDua->delimiter, $id_rekon, $dataRekonSchDetail->data_dua->tipe, "2");
         $this->auto_cleaning($dataSettingDua->clean_rule, $id_rekon, "2");   
         $this->auto_save_compare($dataSettingDua->kolom_compare, $id_rekon, "2");
         $this->auto_save_sum($dataSettingDua->kolom_sum, $id_rekon, "2");
 
         /* IF DONE */
-        $this->rekon_buff->updateRekon($id_rekon, ["is_proses" => "pending"]);
+        $this->rekon_buff->updateRekon($id_rekon, ["is_proses" => "proses"]);
 
         /* pindah ke rekon result */
         $dataRekon = $this->rekon_buff->getRekon($id_rekon);
@@ -313,6 +317,69 @@ class RekonSch extends BaseController
         $this->rekon_result->insertRekonResultSch($dataRekon);
 
         return $this->response("00", "sukses", $dataRekon);
+
+    }
+
+    public function process_data_sch_cek() {
+        
+        $id_rekon = $this->session->get('id_rekon');
+        $dataRekon = $this->rekon_buff->getRekon($id_rekon);
+        $dataRekonSchDetail = $dataRekon->detail_schedule;
+        $idChannel = $dataRekonSchDetail->opt_channel;
+
+        /* Delete / Clean Data Clean,Compare,SUM */
+        $dataSave = array(
+            "kolom_compare" => [],
+            "kolom_sum" => [],
+            "clean_rule" => [],
+        );
+        $this->rekon_buff->updateRekon($id_rekon, $dataSave);
+
+        /* Data Rekon Satu */
+        log_message('info', 'PROCESS DATA SATU');
+        $dataSatu = $dataRekonSchDetail->data_satu;
+        $IDsettingSatu = $dataSatu->setting; 
+        $dataSettingSatu = $this->data_model->getSettingOne($IDsettingSatu);
+        $updateDataSatu = $this->upload_data_sch($dataRekonSchDetail->data_satu, $id_rekon, $idChannel, "1");
+        if($updateDataSatu != "sukses") {
+            return $this->response("XX", $updateDataSatu);
+        }
+
+        $this->save_delimiter($dataSettingSatu->delimiter, $id_rekon, $dataRekonSchDetail->data_satu->tipe, "1");
+        $this->auto_cleaning($dataSettingSatu->clean_rule, $id_rekon, "1");   
+        $this->auto_save_compare($dataSettingSatu->kolom_compare, $id_rekon, "1");
+        $this->auto_save_sum($dataSettingSatu->kolom_sum, $id_rekon, "1");
+       
+
+        /* Data Rekon Dua */
+        log_message('info', 'PROCESS DATA DUA');
+        $dataDua = $dataRekonSchDetail->data_dua;
+        $IDsettingDua = $dataDua->setting; 
+        $dataSettingDua = $this->data_model->getSettingOne($IDsettingDua);
+        $updateDataDua = $this->upload_data_sch($dataRekonSchDetail->data_dua, $id_rekon, $idChannel, "2");
+        if($updateDataDua != "sukses") {
+            return $this->response("XX", $updateDataDua);
+        }
+        $this->save_delimiter($dataSettingDua->delimiter, $id_rekon, $dataRekonSchDetail->data_dua->tipe, "2");
+        $this->auto_cleaning($dataSettingDua->clean_rule, $id_rekon, "2");   
+        $this->auto_save_compare($dataSettingDua->kolom_compare, $id_rekon, "2");
+        $this->auto_save_sum($dataSettingDua->kolom_sum, $id_rekon, "2");
+
+        /* IF DONE */
+        // $this->rekon_buff->updateRekon($id_rekon, ["is_proses" => "pending"]);
+
+        // /* pindah ke rekon result */
+        // $dataRekon = $this->rekon_buff->getRekon($id_rekon);
+        // unset($dataRekon->_id);
+        // $dataRekon->nama_rekon = $this->do_syntax_formater($dataRekonSchDetail->nama_rekon, $idChannel);
+        // $dataRekon->detail_result1 = (object) array();
+        // $dataRekon->detail_result2 = (object)  array();
+        // $dataRekon->id_rekon_result = rand(1000000,9999999);
+        // $this->rekon_result->insertRekonResultSch($dataRekon);
+
+        // return $this->response("00", "sukses", $dataRekon);
+        $this->session->set('id_rekon', $id_rekon); 
+        return redirect()->to(base_url('rekon_sch/rekon_preview'));
 
     }
 
@@ -407,16 +474,21 @@ class RekonSch extends BaseController
                 /* Langsung Save Data Ke DB tanpa pilih delimiter */
                 $dataCsvArr = array();
 
-                /* Insert Header */
+                 /* Insert Header */
+                $dataHeader = array();
                 $arrData = array_keys($result[0]);
                 $drow = array(
                     "row_index" => 0,
                     "data_asli" => "header",
                     "data_row" => $arrData,
-                    "tipe" =>  (string)  $tipe,
+                    "tipe" => (string) $tipe,
                     "id_rekon" => $id_rekon,
                 );
-                array_push($dataCsvArr, $drow);
+                array_push($dataHeader, $drow);
+
+                /* insert header */
+                $this->rekon_buff_detail->deleteRekonManyHeader($id_rekon, $tipe);
+                $this->rekon_buff_detail->insertRekonManyHeader($dataHeader);
 
                 foreach($result as $index => $row) {
 
@@ -456,13 +528,12 @@ class RekonSch extends BaseController
 
     }
 
-    public function save_delimiter($delimiter, $id_rekon, $tipe) {
+    public function save_delimiter($delimiter, $id_rekon, $tipeKoneksi, $tipe) {
         
-        // var_dump($delimiter);
-        if($delimiter == "") {
+        if($tipeKoneksi == "db") {
             return "";
         }
-        
+
         $sampleCsv = $this->rekon_buff_detail->getRekons($id_rekon, $tipe, 0);
         /* Split data and save to Array to preview in tables */
         $dataCsvArr = array();
@@ -666,6 +737,137 @@ class RekonSch extends BaseController
             $this->rekon_buff->updateRekonPush($id_rekon, $dataSave);
         }       
     }
+
+    /* Preview rekon and choose compare */
+    public function add_rekon_preview() {
+
+        log_message('info', 'Prepare Preview..');
+        $id_rekon = $this->session->get('id_rekon');
+
+        /* Get Data Rekon Master */
+        $dataRekon = $this->rekon_buff->getRekon($id_rekon);
+
+        /* get All rekons limit 5 */
+        $dataRekon1DB = $this->rekon_buff_detail->getRekons($id_rekon, "1", 5);
+        $dataRekon2DB = $this->rekon_buff_detail->getRekons($id_rekon, "2", 5);
+
+        /* Get Data Index Compare DB */
+        $dataIndexCompare1DB = array();
+        foreach($dataRekon->kolom_compare as $dataRow) {
+            if($dataRow->tipe == "1") array_push($dataIndexCompare1DB, $dataRow);
+        }
+        $dataIndexCompare2DB = array();
+        foreach($dataRekon->kolom_compare as $dataRow) {
+            if($dataRow->tipe == "2") array_push($dataIndexCompare2DB, $dataRow);
+        }
+
+        /* Get Data Index SUM DB */
+        $dataKolomSumDB = array();
+        foreach($dataRekon->kolom_sum as $dataRow) {
+            array_push($dataKolomSumDB, $dataRow);
+        }
+
+        /* collect data kolom compare */
+        $dataKolomCompareArr = array();
+        foreach($dataIndexCompare1DB as $rowCompare) {
+            $dataRow = array();
+            foreach ($dataRekon1DB as $rowDataRekon) {
+
+                array_push($dataRow, $rowDataRekon->data_row[$rowCompare->kolom_index]);
+
+            }
+            $rowCompare["data_row"] = $dataRow;
+            array_push($dataKolomCompareArr, $rowCompare);
+        }
+
+        /* collect data kolom compare #2 */
+        $dataKolomCompareArr2 = array();
+        foreach($dataIndexCompare2DB as $rowCompare) {
+            $dataRow = array();
+            foreach ($dataRekon2DB as $rowDataRekon) {
+
+                array_push($dataRow, $rowDataRekon->data_row[$rowCompare->kolom_index]);
+
+            }
+            $rowCompare["data_row"] = $dataRow;
+            array_push($dataKolomCompareArr2, $rowCompare);
+        }
+        
+
+        $data['title'] = 'Compare Data Rekon Sch';
+        $data['view'] = 'rekon_sch/add_rekon_data_preview'; 
+        $data['data_compare_satu'] = $dataKolomCompareArr; 
+        $data['data_compare_satu_db'] = $dataRekon1DB; 
+        $data['data_compare_dua'] = $dataKolomCompareArr2; 
+        $data['data_compare_dua_db'] = $dataRekon2DB; 
+        log_message('info', 'Done Preview..');
+
+        return view('dashboard/layout', $data);
+    }
+
+    public function save_compare() {
+        $tipe = $this->request->getPost('tipe');
+        $id_rekon = $this->session->get('id_rekon'); 
+
+        if($tipe == 1) {
+            $rule = $this->request->getPost('compareRadioSatu'); 
+            $ruleValue = $this->request->getPost($rule);
+            $kolIndex = $this->request->getPost('kolom_compare_satu');
+            $kolName = "KOLOM " . ((int) $kolIndex + 1);
+            $toKolIndex = $this->request->getPost('kolom_compare_satu2');
+            $toKolName = "KOLOM " . ((int) $toKolIndex + 1);
+        } else {
+            $rule = $this->request->getPost('compareRadioDua'); 
+            $ruleValue = $this->request->getPost($rule);
+            $kolIndex = $this->request->getPost('kolom_compare_dua');
+            $kolName = "KOLOM " . ((int) $kolIndex + 1);
+            $toKolIndex = $this->request->getPost('kolom_compare_dua2');
+            $toKolName = "KOLOM " . ((int) $toKolIndex + 1);
+        }
+
+        if($rule == null) {
+            return redirect()->to(base_url('rekon_sch/rekon_preview'));
+        }
+        
+
+        $objData = array(
+            "kolom_index" => $kolIndex,
+            "kolom_name" => $kolName,
+            "tipe" => $tipe,
+            "rule" => $rule,
+            "rule_value" => $ruleValue,
+            "to_compare_index" => $toKolIndex,
+            "to_compare_name" => $toKolName,
+        );
+        
+        $dataSave = array(
+            "kolom_compare" => $objData
+        );
+        /* Update Setting */
+        $dataRekon = $this->rekon_buff->getRekon($id_rekon);
+        if($tipe == "1") {
+            $idSetting = $dataRekon->detail_schedule->data_satu->setting;
+            $this->data_model->deleteKolomCompare($idSetting, $tipe, $kolIndex, $kolName);
+            $this->data_model->updateSettingPush($idSetting, $dataSave);
+        } else if($tipe == "2") {
+            $idSetting = $dataRekon->detail_schedule->data_dua->setting;
+            $this->data_model->deleteKolomCompare($idSetting, $tipe, $kolIndex, $kolName);
+            $this->data_model->updateSettingPush($idSetting, $dataSave);
+        }
+
+        $this->rekon_buff->deleteKolomCompare($id_rekon, $tipe, $kolIndex, $kolName);
+        $this->rekon_buff->updateRekonPush($id_rekon, $dataSave);
+
+        return redirect()->to(base_url('rekon_sch/rekon_preview'));
+    }
+
+
+    public function add_rekon_finish() {
+        $id_rekon = $this->session->get('id_rekon');
+        $this->rekon_buff->updateRekon($id_rekon, ["is_schedule" => 1]);
+        return redirect()->to(base_url('rekon_sch'));
+    }
+
 
     public function response($rc, $desc, $data = null) {
 

@@ -85,6 +85,10 @@ $routes->group('rekon_sch', function ($routes) {
     $routes->post('data_rekon_sch_temp', 'RekonSch::data_rekon_sch_temp');
     $routes->post('process_data_sch', 'RekonSch::process_data_sch');
     $routes->post('update_rekon', 'RekonSch::update_rekon');
+    $routes->get('process_data_sch_cek', 'RekonSch::process_data_sch_cek');    
+    $routes->get('rekon_preview', 'RekonSch::add_rekon_preview');
+    $routes->post('save_compare', 'RekonSch::save_compare');
+    $routes->get('add_rekon_finish', 'RekonSch::add_rekon_finish');
 });
 
 $routes->group('rekon_unmatch_bulanan', function ($routes) {

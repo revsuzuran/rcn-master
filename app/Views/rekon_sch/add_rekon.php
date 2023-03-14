@@ -40,7 +40,7 @@
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                       <button class="btn btn-primary d-grid" type="button" id="btnProses">
                           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="btnProsesSpinner" hidden></span>
-                          Submit Data
+                          Next
                       </button>
                     </div>
                     
@@ -450,7 +450,7 @@
             $('#btnProsesSpinner').attr("hidden", true);
 
             if(hasil == 'sukses'){
-                window.location.replace("<?= base_url('rekon_sch') ?>")
+                window.location.replace("<?= base_url('rekon_sch/process_data_sch_cek') ?>");
             }
             
           }

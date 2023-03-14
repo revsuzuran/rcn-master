@@ -178,6 +178,48 @@ class DataModels {
         }
     }
 
+    function updateSettingPush($id, $data) {
+        try {
+            $result = $this->setting->updateOne(
+                ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                ['$push' => $data]
+            );
+
+            if($result->getModifiedCount()) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while updating a rekon with ID: ' . $id . $ex->getMessage(), 500);
+        }
+    }
+
+    function deleteKolomCompare($id, $tipe, $kolomIndex, $kolomName) {
+        try {
+            $result = $this->setting->updateOne(
+                ['_id' => new \MongoDB\BSON\ObjectId($id)],
+                ['$pull' => 
+                    [
+                        "kolom_compare" => [
+                            'tipe' => $tipe,
+                            'kolom_index' => $kolomIndex,
+                            'kolom_name' => $kolomName
+                        ]
+                    ]
+                ]
+            );
+
+            if($result->getModifiedCount()) {
+                return true;
+            }
+
+            return false;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while deleting a rekon with ID: ' . $id_rekon . $ex->getMessage(), 500);
+        }
+    }
+
     function saveSetting($data) {
         try {
             $result = $this->setting->insertOne($data);

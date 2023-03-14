@@ -147,7 +147,7 @@ class Rekon extends BaseController
                     $pathFile = $dataFtp->path;
                     $source = "$pathFile$namaFile";
                     $portFtp = isset($dataFtp->port) ? $dataFtp->port : 21;
-                    $target = fopen($source, "w");
+                    $target = fopen($source, "r+");
                     $conn = ftp_connect($dataFtp->domain, $portFtp) or die("Could not connect");
                     ftp_login($conn,$dataFtp->username,$dataFtp->password);
                     ftp_fget($conn,$target,$source,FTP_ASCII);
@@ -204,6 +204,7 @@ class Rekon extends BaseController
             $dataCsvArr = array();
 
             /* Insert Header */
+            $dataHeader = array();
             $arrData = array_keys($result[0]);
             $drow = array(
                 "row_index" => 0,
@@ -212,7 +213,11 @@ class Rekon extends BaseController
                 "tipe" => $tipe,
                 "id_rekon" => $id_rekon,
             );
-            array_push($dataCsvArr, $drow);
+            array_push($dataHeader, $drow);
+
+            /* insert header */
+            $this->rekon_buff_detail->deleteRekonManyHeader($id_rekon, $tipe);
+            $this->rekon_buff_detail->insertRekonManyHeader($dataHeader);
 
             foreach($result as $index => $row) {
 
@@ -253,8 +258,8 @@ class Rekon extends BaseController
             else return redirect()->to(base_url('rekon/add_rekon_next'));
         }
 
-        $file = file($csv);        
-        if($radioTipe == "ftp") unlink("$namaFile"); // remove ftp files
+        $file = file($csv);       
+        // if($radioTipe == "ftp") unlink($namaFile); // remove ftp files
         $arrData = array();
         $strDataPreview = "";
         foreach($file as $key => $hehe) {

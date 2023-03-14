@@ -268,7 +268,7 @@
                   contentHehe += `<tr>
                     <td class="fw-lighter"># Kolom to Compare</td>
                     <td class="fw-lighter">&nbsp;:&nbsp;</td>
-                    <td>${row.kolom_name} </td>
+                    <td>${row.kolom_name} => ${row.to_compare_name}</td>
                   </tr>`;
                   
               }
@@ -326,7 +326,7 @@
                   contentHehe += `<tr>
                     <td class="fw-lighter"># Kolom to Compare</td>
                     <td class="fw-lighter">&nbsp;:&nbsp;</td>
-                    <td>${row.kolom_name} </td>
+                    <td>${row.kolom_name} => ${row.to_compare_name}</td>
                   </tr>`;
                   
               }
@@ -399,33 +399,41 @@
   const modeTipeSatu = "<?= $data_rekon->detail_schedule->data_satu->tipe ?>";
   if(modeTipeSatu == "ftp") {
       const ftpText = "<?= isset($data_rekon->detail_schedule->data_satu->input) ? $data_rekon->detail_schedule->data_satu->input : "" ?>";
-      console.log(ftpText);
+      const koneksi = "<?= isset($data_rekon->detail_schedule->data_satu->koneksi) ? $data_rekon->detail_schedule->data_satu->koneksi : "" ?>";
       $("#nama_file").val(ftpText);
       $("#radioFtp").prop("checked", true);
       $(".form-ftp").show();  
       $(".form-db").hide();    
+      $("#ftp_option").val(koneksi).change();
   } else if(modeTipeSatu == "db") {
     const queryText = "<?= isset($data_rekon->detail_schedule->data_satu->input) ? $data_rekon->detail_schedule->data_satu->input : "" ?>";
+    const koneksi = "<?= isset($data_rekon->detail_schedule->data_satu->koneksi) ? $data_rekon->detail_schedule->data_satu->koneksi : "" ?>";
     $("#radioDb").prop("checked", true);
     $("#query").text(queryText);
     $(".form-ftp").hide();
     $(".form-db").show();
+    $("#db_option").val(koneksi).change();
   }
 
   const modeTipeDua = "<?= $data_rekon->detail_schedule->data_dua->tipe ?>";
   if(modeTipeDua == "ftp") {
       const ftpText = "<?= isset($data_rekon->detail_schedule->data_dua->input) ? $data_rekon->detail_schedule->data_dua->input : "" ?>";
+      const koneksi2 = "<?= isset($data_rekon->detail_schedule->data_dua->koneksi) ? $data_rekon->detail_schedule->data_dua->koneksi : "" ?>";
       console.log(ftpText);
       $("#nama_file2").val(ftpText);
       $("#radioFtp2").prop("checked", true);
       $(".form-ftp2").show();  
-      $(".form-db2").hide();    
+      $(".form-db2").hide();
+      $("#ftp_option2").val(koneksi2).change();    
   } else if(modeTipeDua == "db") {
-    const queryText = "<?= isset($data_rekon->detail_schedule->data_dua->input) ? $data_rekon->detail_schedule->data_dua->input : "" ?>";
+    const queryText2 = "<?= isset($data_rekon->detail_schedule->data_dua->input) ? $data_rekon->detail_schedule->data_dua->input : "" ?>";
+    const koneksi2 = "<?= isset($data_rekon->detail_schedule->data_dua->koneksi) ? $data_rekon->detail_schedule->data_dua->koneksi : "" ?>";
     $("#radioDb2").prop("checked", true);
-    $("#query2").text(queryText);
+    $("#query2").text(queryText2);
     $(".form-ftp2").hide();
     $(".form-db2").show();
+    $("#db_option2").val(koneksi2).change();
+
   }
   
 
