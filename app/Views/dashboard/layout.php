@@ -108,6 +108,21 @@
                             <a class="collapse-item" href="<?= base_url('rekon/add'); ?>">Rekon</a>
                             <a class="collapse-item" href="<?= base_url('rekon_unmatch_bulanan/add'); ?>">Rekon Unmatch Bulanan</a>
                             <a class="collapse-item" href="<?= base_url('rekon_sch/add'); ?>">Rekon Sch</a>
+                            <a class="collapse-item" href="<?= base_url('rekon_transaksi/add'); ?>">Rekon Transaksi</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseDataTransaksi" aria-expanded="true" aria-controls="collapseDataTransaksi">
+                    <i class="fas fa-briefcase-medical "></i>
+                    <span>Data Transaksi</span></a>
+                </a>
+                <div id="collapseDataTransaksi" class="collapse dropdown-menu" aria-labelledby="headingBootstrap" data-bs-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+
+                            <a class="collapse-item" href="<?= base_url('data_transaksi'); ?>">Data Transaksi</a>
+                            <a class="collapse-item" href="<?= base_url('data_transaksi/add'); ?>">Add Data Transaksi</a>
                     </div>
                 </div>
             </li>

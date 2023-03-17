@@ -40,6 +40,7 @@ $routes->get('/do_unauth', 'Login::do_unauth');
 $routes->get('/', 'homeController::index');
 $routes->get('rekon', 'Rekon::data_rekon_master');
 $routes->get('rekon_sch', 'RekonSch::data_rekon_master');
+$routes->get('data_transaksi', 'DataTransaksi::data_master');
 
 $routes->group('rekon', function ($routes) {
     $routes->get('rekon_sch', 'Rekon::add_rekon_sch');
@@ -111,6 +112,59 @@ $routes->group('rekon_unmatch_bulanan', function ($routes) {
 
 });
 
+$routes->group('data_transaksi', function ($routes) {
+    $routes->get('add', 'DataTransaksi::add_transaksi');
+    $routes->post('upload', 'DataTransaksi::upload_data_transaksi');
+    $routes->post('get_collection_view', 'DataTransaksi::get_collection_view');
+    $routes->post('save_collection_view', 'DataTransaksi::save_collection_view');
+    $routes->get('delimiter', 'DataTransaksi::add_transaksi_delimiter');
+    $routes->post('save_delimiter', 'DataTransaksi::save_delimiter');
+    $routes->get('cleansing_data/(:any)', 'DataTransaksi::cleansing_data');
+    $routes->get('cleansing_data', 'DataTransaksi::cleansing_data');
+    $routes->post('save_cleansing', 'DataTransaksi::save_cleansing');
+    $routes->get('add_compare', 'DataTransaksi::add_transaksi_data_to_compare');
+    $routes->post('add_kolom_compare', 'DataTransaksi::add_kolom_compare');
+    $routes->post('rm_kolom_compare', 'DataTransaksi::rm_kolom_compare');
+    $routes->post('add_kolom_sum', 'DataTransaksi::add_kolom_sum');
+    $routes->post('rm_kolom_sum', 'DataTransaksi::rm_kolom_sum');
+});
+
+$routes->group('rekon_transaksi', function ($routes) {
+    $routes->get('add', 'RekonTransaksi::add_rekon_master');
+    $routes->post('upload', 'RekonTransaksi::upload_data_rekon');
+    $routes->post('save_delimiter', 'RekonTransaksi::save_delimiter');
+    $routes->get('cleansing_data/(:any)', 'RekonTransaksi::cleansing_data');
+    $routes->get('cleansing_data', 'RekonTransaksi::cleansing_data');
+    $routes->post('save_cleansing', 'RekonTransaksi::save_cleansing');
+    $routes->get('add_rekon_next', 'RekonTransaksi::add_rekon_next');
+    $routes->get('add_compare', 'RekonTransaksi::add_rekon_data_to_compare');
+    $routes->post('add_kolom_compare', 'RekonTransaksi::add_kolom_compare');
+    $routes->post('rm_kolom_compare', 'RekonTransaksi::rm_kolom_compare');
+    $routes->post('add_kolom_sum', 'RekonTransaksi::add_kolom_sum');
+    $routes->post('rm_kolom_sum', 'RekonTransaksi::rm_kolom_sum');
+    $routes->get('rekon_preview', 'RekonTransaksi::add_rekon_preview');
+    $routes->get('add_rekon_finish', 'RekonTransaksi::add_rekon_finish');
+    $routes->post('save_compare', 'RekonTransaksi::save_compare');
+    $routes->get('rekon_preview_sum', 'RekonTransaksi::add_rekon_preview_sum');
+    $routes->post('save_compare_sum', 'RekonTransaksi::save_compare_sum');
+    $routes->get('rekon_result', 'RekonTransaksi::rekon_result');
+    $routes->get('rekon_result_amount', 'RekonTransaksi::rekon_result_amount');
+    $routes->post('rekon_result_post', 'RekonTransaksi::rekon_result_post');
+    $routes->get('delimiter', 'RekonTransaksi::add_rekon_delimiter');
+    $routes->post('upload_with_setting', 'RekonTransaksi::upload_with_setting');
+
+    $routes->get('generate_pdf', 'RekonTransaksi::generate_pdf');
+    $routes->get('generate_pdf2', 'RekonTransaksi::generate_pdf2');
+    $routes->get('hehepdf', 'RekonTransaksi::hehepdf');
+    
+    $routes->get('export_unmatch/(:any)/(:any)', 'RekonTransaksi::export_unmatch');
+    $routes->get('export_match/(:any)/(:any)', 'RekonTransaksi::export_match');
+    $routes->get('export_all/(:any)', 'RekonTransaksi::export_all');
+
+    $routes->get('retry_process/(:any)', 'RekonTransaksi::retry_process');
+
+    $routes->post('get_collection_view', 'RekonTransaksi::get_collection_view');
+});
 
 $routes->group('mitra', function ($routes) {
     $routes->get('/', 'Mitra::index', ['filter' => 'isadmin']);
@@ -166,6 +220,8 @@ $routes->get('profil', 'Setting::profil', ['filter' => 'isadmin']);
 $routes->post('update_user', 'Setting::update_user', ['filter' => 'isadmin']);
 $routes->post('get_setting', 'Setting::get_setting');
 $routes->post('save_setting', 'Setting::save_setting');
+$routes->post('get_setting_transaksi', 'Setting::get_setting_transaksi');
+$routes->post('save_setting_transaksi', 'Setting::save_setting_transaksi');
 
 /* disbursement and settlement */
 $routes->post('add_disbursement', 'Disbursement::add_disbursement', ['filter' => 'isadmin']);

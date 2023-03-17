@@ -263,4 +263,17 @@ class DataModels {
         }
     }
 
+
+
+    /* Settings Transaksi*/
+    function getSettingTransaksi() {
+        try {
+            $cursor = $this->setting->find(['is_transaksi' => 1]);
+            $data = $cursor->toArray();
+            return $data;
+        } catch(\MongoDB\Exception\RuntimeException $ex) {
+            show_error('Error while fetching data: ' . $ex->getMessage(), 500);
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ use App\Models\UserModel;
 use App\Models\DataModels;
 use App\Models\RekonBuff;
 use App\Models\MitraModel;
+use App\Models\TransaksiModel;
 
 class Setting extends BaseController
 {
@@ -14,6 +15,8 @@ class Setting extends BaseController
     protected $uri;
     protected $session;
     protected $rekon_buff;
+
+    protected $transaksi_model;
 
     public function __construct()
     {
@@ -25,6 +28,7 @@ class Setting extends BaseController
         $this->data_model = new DataModels();
         $this->rekon_buff = new RekonBuff();
         $this->mitra = new MitraModel();
+        $this->transaksi_model = new TransaksiModel();
     }
 
     public function profil() {
@@ -300,6 +304,41 @@ class Setting extends BaseController
         }
         
         $this->mitra->updateMitra($id, $data);
+        return "sukses";
+
+    }
+
+    public function save_setting_transaksi() {
+        $id_transaksi = $this->session->get('id_transaksi');
+        $transaksiBuff = $this->transaksi_model->getTransaksiOne($id_transaksi);
+        $nama_setting = $this->request->getPost('nama_setting');
+
+        $kolomCompare = array();
+        foreach($transaksiBuff->kolom_compare as $row) {
+            array_push($kolomCompare, $row);
+        }
+
+        $kolomSum = array();
+        foreach($transaksiBuff->kolom_sum as $row) {
+            array_push($kolomSum, $row);
+        }
+
+        $cleanRule = array();
+        foreach($transaksiBuff->clean_rule as $row) {
+            array_push($cleanRule, $row);
+        }
+
+        $data = array(
+            "kolom_compare" => $kolomCompare,
+            "kolom_sum" => $kolomSum,
+            "delimiter" => $transaksiBuff->delimiter,
+            "clean_rule" => $cleanRule,
+            "nama_setting" => $nama_setting,
+            "id_mitra" => $transaksiBuff->id_mitra,
+            "is_transaksi" => 1
+        );
+        
+        $this->data_model->saveSetting($data);
         return "sukses";
 
     }

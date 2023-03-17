@@ -1008,7 +1008,7 @@ class Rekon extends BaseController
         foreach($dataRekon->kolom_compare as $dataRow) {
             if($dataRow->to_compare_index == "") {
                 $this->session->setFlashdata('error', 'Semua data wajib di compare');
-                return redirect()->to(base_url('rekon/rekon_preview_sum'));
+                return redirect()->to(base_url('rekon/rekon_preview'));
             }
         }
 
