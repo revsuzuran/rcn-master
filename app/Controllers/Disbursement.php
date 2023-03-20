@@ -10,6 +10,7 @@ use App\Models\DataModels;
 use App\Models\DBModel;
 use App\Models\Postgres;
 use App\Models\ChannelModel;
+use App\Models\SettlementModel;
 use App\Libraries\PdfGenerator;
 use App\Libraries\Encryption;
 
@@ -31,7 +32,7 @@ class Disbursement extends BaseController
         $this->pg = new Postgres();
         $this->channel_model = new ChannelModel();
         $this->pdfGen = new PdfGenerator();
-
+        $this->settlement_model = new SettlementModel();
         $this->uri = $this->request->uri;
     }
 
@@ -60,8 +61,16 @@ class Disbursement extends BaseController
 
     function monitoring_disburse() {
         $data['title'] = 'Monitoring Disbursement';
-        $data['view'] = 'dashboard/monit_disburse';
+        $data['view'] = 'disbursment/monit_disburse';
         $rekonResult = $this->rekon_result->getRekonDisburseAll();
+        $data['data_rekon'] = $rekonResult;
+        return view('dashboard/layout', $data);
+    }
+
+    function order_disbursment() {
+        $data['title'] = 'Order Disbursement';
+        $data['view'] = 'disbursment/order_disbursment';
+        $rekonResult = $this->settlement_model->getDisburseAll();
         $data['data_rekon'] = $rekonResult;
         return view('dashboard/layout', $data);
     }

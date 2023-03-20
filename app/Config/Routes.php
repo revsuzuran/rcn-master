@@ -166,6 +166,19 @@ $routes->group('rekon_transaksi', function ($routes) {
     $routes->post('get_collection_view', 'RekonTransaksi::get_collection_view');
 });
 
+$routes->group('rekon_transaksi_sch', function ($routes) {
+    $routes->get('add', 'RekonTransaksiSch::add_rekon');
+    $routes->post('submit', 'RekonTransaksiSch::save_data_sch');
+    $routes->get('data_rekon_sch', 'RekonTransaksiSch::data_rekon_sch');
+    $routes->post('data_rekon_sch_temp', 'RekonTransaksiSch::data_rekon_sch_temp');
+    $routes->post('process_data_sch', 'RekonTransaksiSch::process_data_sch');
+    $routes->post('update_rekon', 'RekonTransaksiSch::update_rekon');
+    $routes->get('process_data_sch_cek', 'RekonTransaksiSch::process_data_sch_cek');    
+    $routes->get('rekon_preview', 'RekonTransaksiSch::add_rekon_preview');
+    $routes->post('save_compare', 'RekonTransaksiSch::save_compare');
+    $routes->get('add_rekon_finish', 'RekonTransaksiSch::add_rekon_finish');
+});
+
 $routes->group('mitra', function ($routes) {
     $routes->get('/', 'Mitra::index', ['filter' => 'isadmin']);
     $routes->get('profil', 'Setting::profil_mitra');
@@ -232,8 +245,16 @@ $routes->group('settlement', function ($routes) {
     $routes->post('proses_temp', 'Settlement::proses_temp', ['filter' => 'isadmin']);
     $routes->post('proses_inq', 'Settlement::proses_inq', ['filter' => 'isadmin']);
     $routes->post('proses_pay', 'Settlement::proses_pay', ['filter' => 'isadmin']);
+    $routes->post('proses_payment', 'Settlement::proses_payment', ['filter' => 'isadmin']);
     $routes->post('manual_action', 'Settlement::manual_action', ['filter' => 'isadmin']);
     $routes->post('callback', 'Settlement::callback');
+    $routes->post('proses_settlement_choosen', 'Settlement::proses_settlement_choosen');
+    $routes->post('proses_cek_split', 'Settlement::proses_cek_split', ['filter' => 'isadmin']);
+    $routes->post('proses_split', 'Settlement::proses_split', ['filter' => 'isadmin']);
+    $routes->post('detail_disbursment_temp', 'Settlement::detail_disbursment_temp', ['filter' => 'isadmin']);
+    $routes->get('detail_disbursment', 'Settlement::detail_disbursment', ['filter' => 'isadmin']);
+    $routes->get('order_disbursment', 'Disbursement::order_disbursment');
+    
 });
 
 
